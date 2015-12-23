@@ -2,7 +2,7 @@
 @import 'header';
 @import 'sidebar';
 @import 'content';
-
+@import 'teams';
 
 
 body {
@@ -17,7 +17,8 @@ body {
 }
 
 .main {
-    width: 100vw;
+    width: calc(100vw - 80px);
+    left: 80px;
     position: absolute;
     top: 30px;
     height: calc(100vh - 30px);

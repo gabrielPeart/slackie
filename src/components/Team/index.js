@@ -2,9 +2,8 @@ import React from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import _ from 'lodash';
 
-
-import TeamsStore from '../../stores/teamsEngineStore';
-import TeamsActions from '../../actions/teamsEngineActions';
+import Sidebar from './components/Sidebar';
+import Chat from './components/Chat';
 
 export
 default React.createClass({
@@ -17,11 +16,9 @@ default React.createClass({
     },
 
     componentWillMount() {
-        TeamsStore.listen(this.update);
     },
 
     componentWillUnmount() {
-        TeamsStore.unlisten(this.update);
     },
 
     update() {
@@ -32,9 +29,12 @@ default React.createClass({
     },
     render() {
         return (
-            <div className="main">
+        <div >
+            <Sidebar/>
+            <Chat/>
 
-            </div>
+        </div>
+
         );
     }
 });

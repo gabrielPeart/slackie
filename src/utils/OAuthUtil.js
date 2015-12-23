@@ -1,56 +1,31 @@
 import Promise from 'bluebird';
 import {
-    BrowserWindow
+    remote
 }
-from 'remote';
+from 'electron';
 
+const BrowserWindow = remote.BrowserWindow;
 
 module.exports = {
     getAuthorization() {
-        var authWindow = new browserWindow({
+        var authWindow = new BrowserWindow({
             'use-content-size': true,
             center: true,
             show: false,
             resizable: true,
-            'always-on-top': true,
+            'always-on-top': false,
             'standard-window': true,
             'auto-hide-menu-bar': true,
             'node-integration': false
         });
 
-        var scopes = [
-            'channels:write',
-            'channels:history',
-            'channels:read',
+        var client_id = '8772351907.17263173446';
 
-            'chat:write:user',
-
-            'emoji:read',
-            'files:read',
-
-            'groups:write',
-            'groups:history',
-            'groups:read',
-
-            'im:write',
-            'im:history',
-            'im:read',
-
-            'mpim:write',
-            'mpim:history',
-            'mpim:read',
-
-            'pins:write',
-            'pins:read'
-        ];
-
-        var authUrl = 'https://slack.com/oauth/authorize?client_id=' + client_id + '&scope=' + scopes.join('%3A');
-
-        console.log(authUrl);
-
+        var authUrl = 'https://slack.com/oauth/authorize?client_id=' + client_id + '&scope=client';
 
         authWindow.loadUrl(authUrl);
         authWindow.show();
+
         return new Promise((resolve, reject) => {
             authWindow.webContents.on('did-get-redirect-request', (event, oldUrl, newUrl) => {
                 var raw_code = /code=([^&]*)/.exec(newUrl) || null,
@@ -59,12 +34,10 @@ module.exports = {
                 if (code || error)
                     authWindow.close();
                 if (code) {
-
-                    console.log(code);
-
-
+                    resolve(code)
                 } else if (error) {
                     alert("Oops! Something went wrong and we couldn't log into slack. Please try again.");
+                    reject();
                 }
             });
         });

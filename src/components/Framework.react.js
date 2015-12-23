@@ -15,6 +15,8 @@ import {
 from 'electron';
 
 import Header from './Header';
+import TeamSelector from './TeamSelector';
+
 import updaterActions from '../actions/updateActions';
 import analyticsActions from '../actions/analyticsActions';
 
@@ -61,9 +63,12 @@ const Framework = React.createClass({
 
     render() {
         return (
-            <div>
+            <div className="full-contain">
               <Header/>
-              {React.cloneElement(this.props.children, {query: this.props.query})}
+              <TeamSelector/>
+              <div className="main">
+              	{React.cloneElement(this.props.children, {query: this.props.query})}
+              </div>
             </div>
         );
     }

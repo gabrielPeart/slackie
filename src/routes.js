@@ -5,12 +5,12 @@ import {
 from 'react-router';
 
 import Framework from './components/Framework.react';
-import Dashboard from './components/Dashboard';
+import Team from './components/Team';
 
 export
 default (
     <Route path="/" component={Framework}>
-      <IndexRoute component={Dashboard}/>
+      <IndexRoute component={Team}/>
       
     </Route>
 );
