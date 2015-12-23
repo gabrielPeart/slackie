@@ -1,0 +1,24 @@
+@import 'electron';
+@import 'header';
+@import 'sidebar';
+@import 'content';
+
+
+
+body {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 200;
+    color: #ffffff;
+    height: 100vh;
+    width: 100vw;
+    overflow: none;
+    position: fixed;
+    background-color: #202B33;
+}
+
+.main {
+    width: 100vw;
+    position: absolute;
+    top: 30px;
+    height: calc(100vh - 30px);
+}
