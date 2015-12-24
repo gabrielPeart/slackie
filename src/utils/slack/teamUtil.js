@@ -85,7 +85,7 @@ class Team extends EventEmitter {
         const messageCahePath = path.join(message_cacheDir, this.slack.team.id + '.json');
         commonUtil.readJson(messageCahePath)
             .then(json => {
-                this.messages = _.merge(this.messages, json);
+                _.merge(this.messages, json);
                 this.loadedCachedMessages = true;
             }).catch(() => {
                 console.log('No cached messages for', this.slack.team.id);
