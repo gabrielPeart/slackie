@@ -2,13 +2,28 @@ import React from 'react';
 import _ from 'lodash';
 
 import teamsEngineStore from '../../../../stores/teamsEngineStore';
-import sidebarStore from './store';
+import SidebarStore from './store';
+import SidebarActions from './actions';
 
-let If = React.createClass({
+const If = React.createClass({
     render() {
         return this.props.test ? this.props.children : false;
     }
 });
+
+const SidebarTab = React.createClass({
+    handelSelect(id){
+        SidebarActions.setActive(id);
+    },
+    render() {
+        return (
+            <li key={this.props.key} onClick={this.handelSelect.bind(this, this.props.id)} >
+                {this.props.name}
+            </li>
+        );
+    }
+});
+
 
 export
 default React.createClass({
@@ -16,22 +31,22 @@ default React.createClass({
     getInitialState() {
         return {
             team: teamsEngineStore.getState().selectedTeam ? teamsEngineStore.getState().teams[teamsEngineStore.getState().selectedTeam].slack : false,
-            active: sidebarStore.getState().activeChannel
+            active: SidebarStore.getState().activeChannel
         };
     },
     componentWillMount() {
         teamsEngineStore.listen(this.update);
-        sidebarStore.listen(this.update);
+        SidebarStore.listen(this.update);
     },
     componentWillUnmount() {
         teamsEngineStore.unlisten(this.update);
-        sidebarStore.unlisten(this.update);
+        SidebarStore.unlisten(this.update);
     },
     update() {
         if (this.isMounted()) {
             this.setState({
                 team: teamsEngineStore.getState().selectedTeam ? teamsEngineStore.getState().teams[teamsEngineStore.getState().selectedTeam].slack : false,
-                active: sidebarStore.getState().activeChannel
+                active: SidebarStore.getState().activeChannel
             });
         }
     },
@@ -47,16 +62,12 @@ default React.createClass({
                 if (starred) {
                     if (channel.is_member && !channel.is_archived && channel.is_starred)
                         channels.push(
-                            <li key={idx} >
-                                #{channel.name}
-                            </li>
+                            <SidebarTab key={idx} id={channel.id} name={'#'+channel.name} />
                         );
                 } else {
                     if (channel.is_member && !channel.is_archived && !channel.is_starred)
                         channels.push(
-                            <li key={idx} >
-                                #{channel.name}
-                            </li>
+                            <SidebarTab key={idx} id={channel.id} name={'#'+channel.name} />
                         );
                 }
             });
@@ -72,9 +83,7 @@ default React.createClass({
             _.forEach(this.state.team.dms, (dm, idx) => {
                 if (dm.is_open && dm.is_im && !dm.is_starred)
                     dms.push(
-                        <li key={idx} >
-                            {dm.name}
-                        </li>
+                        <SidebarTab key={idx} id={dm.id} name={dm.name} />
                     );
             });
         return dms;
@@ -90,16 +99,12 @@ default React.createClass({
                 if (starred) {
                     if (group.is_open && group.is_group && !group.is_archived && group.is_starred)
                         groups.push(
-                            <li key={idx} >
-                                {group.name}
-                            </li>
+                            <SidebarTab key={idx} id={group.id} name={group.name} />
                         );
                 } else {
                     if (group.is_open && group.is_group && !group.is_archived && !group.is_starred)
                         groups.push(
-                            <li key={idx} >
-                                {group.name}
-                            </li>
+                            <SidebarTab key={idx} id={group.id} name={group.name} />
                         );
                 }
             });
