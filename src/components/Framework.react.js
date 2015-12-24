@@ -40,14 +40,12 @@ const Framework = React.createClass({
     },
 
     componentWillMount() {
-        this.props.bindShortcut('ctrl+d', () => {
-            ipcRenderer.send('app:toggleDevTools');
-        });
+        this.props.bindShortcut('ctrl+d', () => ipcRenderer.send('app:toggleDevTools'));
     },
 
     componentDidMount() {
         const TeamsPath = path.join(app.getPath('userData'), 'teams.json');
-        
+
         commonUtil.readJson(TeamsPath)
             .then(teams => {
                 _.forEach(teams, team => {
@@ -77,7 +75,9 @@ const Framework = React.createClass({
                     });
                 });
             })
-            .catch();
+            .catch(() => {
+                console.info('No teams logged in');
+            });
     },
 
     componentWillUnmount() {},
