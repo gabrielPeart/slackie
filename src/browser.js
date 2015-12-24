@@ -79,8 +79,8 @@ app.on('ready', () => {
         if (!minimzeInfoShown) {
             minimzeInfoShown = true;
             appIcon.displayBalloon({
-                title: 'Netify Jump has been minimized to tray',
-                content: 'Netify Jump is still running and can be restored by clicking its tray icon.'
+                title: 'Slackie has been minimized to tray',
+                content: 'Slackie is still running and can be restored by clicking its tray icon.'
             });
         }
     });
