@@ -65,7 +65,14 @@ class Team extends EventEmitter {
         });
 
 
-        this.slack.on('message', message => this.addMessage(message.channel, message));
+        this.slack.on('message', message => {
+            this.addMessage(message.channel, {
+                text: message.text,
+                ts: message.ts,
+                user: message.user,
+                type: message.type
+            });
+        });
 
 
         this.slack.on('error', error => this.emit('error', error));
