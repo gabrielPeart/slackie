@@ -42,37 +42,43 @@ default React.createClass({
     },
     update() {
         if (this.isMounted()) {
-            var TeamEngine = teamsEngineStore.getState();
-            var SelectedChannel = SidebarStore.getState().activeChannel;
+
+            if (SidebarStore.getState().activeChannel !== this.state.SelectedChannel && teamsEngineStore.getState().selectedTeam && teamsEngineStore.getState().teams[teamsEngineStore.getState().selectedTeam])
+                this.listenForNew();
+
             this.setState({
-                team: TeamEngine.selectedTeam ? TeamEngine.teams[TeamEngine.selectedTeam] : false,
-                selectedTeam: TeamEngine.selectedTeam ? TeamEngine.selectedTeam : false,
+                team: teamsEngineStore.getState().selectedTeam ? teamsEngineStore.getState().teams[teamsEngineStore.getState().selectedTeam] : false,
                 selectedChannel: SidebarStore.getState().activeChannel,
-                messages: (TeamEngine.selectedTeam && SelectedChannel) ? TeamEngine.teams[TeamEngine.selectedTeam].messages[SelectedChannel] : false
+                messages: (teamsEngineStore.getState().selectedTeam && SidebarStore.getState().activeChannel) ? teamsEngineStore.getState().teams[teamsEngineStore.getState().selectedTeam].messages[SidebarStore.getState().activeChannel] : false
             });
         }
     },
 
+    listenForNew() {
+        if (!this.state.team)
+            return;
+        this.state.team.removeAllListeners('new:message');
+
+        
+
+        this.state.team.on('new:message', this.update)
+    },
+
+
     getMessages() {
         if (!this.state.messages)
             return [];
-
-
         var messages = [];
         _.forEach(this.state.messages, (message, idx) => {
             messages.push(
                 <p className="messsage" key={idx}>{message.text}</p>
             );
         });
-
-
         return messages;
     },
 
     render() {
-
         var messages = this.getMessages();
-        console.log(messages)
         return (
             <div className="page">
 
