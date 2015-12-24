@@ -33,8 +33,10 @@ const getHistoryQueue = async.queue((task, next) => {
                 channel: task.channel,
                 team: task.team
             });
+            process.nextTick(next);
         } else {
             console.error(err || resp.statusCode);
+            process.nextTick(next);
         }
     });
 }, 2);
