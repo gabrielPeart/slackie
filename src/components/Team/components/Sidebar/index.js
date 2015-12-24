@@ -35,7 +35,6 @@ default React.createClass({
         var channels = [];
         if (this.state.team && this.state.team.channels)
             _.forEach(this.state.team.channels, (channel, idx) => {
-                console.log(channel)
                 if (channel.is_member && !channel.is_archived && !channel.is_starred)
                     channels.push(
                         <li key={idx} >
@@ -60,6 +59,10 @@ default React.createClass({
     },
     getGroups() {
         var groups = [];
+
+        if (!this.state.team)
+            return false;
+
         if (this.state.team && this.state.team.groups)
             _.forEach(this.state.team.groups, (group, idx) => {
                 if (group.is_open && group.is_group && !group.is_archived && !group.is_starred)
@@ -86,7 +89,7 @@ default React.createClass({
         });
 
         _.forEach(this.state.team.channels, (channel, idx) => {
-           if (channel.is_member && !channel.is_archived && channel.is_starred)
+            if (channel.is_member && !channel.is_archived && channel.is_starred)
                 starred.push(
                     <li key={idx} >
                         #{channel.name}
@@ -100,17 +103,20 @@ default React.createClass({
         console.log(this.state.team)
 
         var starred = this.getStarred();
+        var Groups = this.getGroups();
+
+
 
         return (
             <aside className="sidebar">
 
-                <If test={starred}>
-                <div>
-                    <h1>Starred</h1>
-                    <ul>
-                        {starred}
-                    </ul>
-                </div>
+                <If test={(starred && starred.length > 0)}>
+                    <div>
+                        <h1>Starred</h1>
+                        <ul>
+                            {starred}
+                        </ul>
+                    </div>
                 </If> 
 
                 <h1>Channels</h1>
@@ -129,13 +135,14 @@ default React.createClass({
                     </ul>
                 </If> 
                 
-                <h1>Groups</h1>
-
-                <If test={this.state.team}>
-                    <ul>
-                        {this.getGroups()}
-                    </ul>
-                </If> 
+                <If test={(Groups && Groups.length > 0)}>
+                    <div>
+                        <h1>Groups</h1>
+                        <ul>
+                            {Groups}
+                        </ul>
+                    </div>
+                </If>
             </aside>
         );
     }
