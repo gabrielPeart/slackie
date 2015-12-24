@@ -4,10 +4,11 @@
     height: 100%;
     position: absolute;
     background-color: #ffffff;
+    overflow: scroll;
 }
 
-.page section {
-    margin-bottom: 20px;
-}
 
-.page section h1 {}
+.page .messsage{
+	color: black;
+    white-space: pre-wrap;
+}

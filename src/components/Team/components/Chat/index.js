@@ -8,6 +8,14 @@ import SidebarStore from '../Sidebar/store';
 import ChatStore from './store';
 import ChatActions from './actions';
 
+const If = React.createClass({
+    render() {
+        return this.props.test ? this.props.children : false;
+    }
+});
+
+
+
 export
 default React.createClass({
 
@@ -44,11 +52,31 @@ default React.createClass({
             });
         }
     },
+
+    getMessages() {
+        if (!this.state.messages)
+            return [];
+
+
+        var messages = [];
+        _.forEach(this.state.messages, (message, idx) => {
+            messages.push(
+                <p className="messsage" key={idx}>{message.text}</p>
+            );
+        });
+
+
+        return messages;
+    },
+
     render() {
+
+        var messages = this.getMessages();
+        console.log(messages)
         return (
             <div className="page">
 
-
+            {messages}
 
 
             </div>
