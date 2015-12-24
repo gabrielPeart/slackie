@@ -5,6 +5,25 @@ import TeamSelectorActions from './actions';
 import teamsEngineStore from '../../stores/teamsEngineStore';
 
 
+const Team = React.createClass({
+
+    handelSelect(){
+        TeamSelectorActions.select(this.props.team.id)
+    },
+
+    render() {
+
+        var icon = this.props.meta ? 'url("' + this.props.meta.icon.image_original + '")' : false;
+
+        return (
+            <div onClick={this.handelSelect} className="team" style={{backgroundImage: icon}}>
+                <p>{this.props.team.name}</p>
+            </div>
+        );
+    }
+});
+
+
 export
 default React.createClass({
 
@@ -33,11 +52,7 @@ default React.createClass({
             <aside className="teams">
                 {
                     Object.keys(this.state.teams).map((team, idx) => {
-                        return (
-                            <div key={idx} >
-                                {this.state.teams[team].api.team.name}
-                            </div>
-                            )
+                        return <Team key={idx} team={this.state.teams[team].slack.team} meta={this.state.teams[team].meta ? this.state.teams[team].meta : false} />;
                     }, this)
                 }
                 <div onClick={TeamSelectorActions.add} className="add">

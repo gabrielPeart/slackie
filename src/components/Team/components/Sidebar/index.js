@@ -14,7 +14,7 @@ default React.createClass({
 
     getInitialState() {
         return {
-            team: teamsEngineStore.getState().selectedTeam ? teamsEngineStore.getState().teams[teamsEngineStore.getState().selectedTeam].api : false
+            team: teamsEngineStore.getState().selectedTeam ? teamsEngineStore.getState().teams[teamsEngineStore.getState().selectedTeam].slack : false
         };
     },
     componentWillMount() {
@@ -26,7 +26,7 @@ default React.createClass({
     update() {
         if (this.isMounted()) {
             this.setState({
-                team: teamsEngineStore.getState().selectedTeam ? teamsEngineStore.getState().teams[teamsEngineStore.getState().selectedTeam].api : false
+                team: teamsEngineStore.getState().selectedTeam ? teamsEngineStore.getState().teams[teamsEngineStore.getState().selectedTeam].slack : false
             });
         }
     },
@@ -89,6 +89,7 @@ default React.createClass({
                         {this.getDMS()}
                     </ul>
                 </If> 
+                
                 <h1>Groups</h1>
 
                 <If test={this.state.team}>

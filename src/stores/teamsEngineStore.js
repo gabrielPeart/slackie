@@ -8,20 +8,32 @@ class TeamsEngineStore {
     constructor() {
         this.bindActions(teamsEngineActions);
         this.bindActions(TeamSelectorActions);
+
         this.teams = {};
         this.selectedTeam = false;
 
     }
 
-    onAdded(team) {
-        this.teams[team.token.team_id] = team;
+    onSelect(id) {
         this.setState({
-            teams: this.teams,
-            selectedTeam: team.token.team_id
+            selectedTeam: id
         });
-
     }
 
+    onAdded(slack) {
+        this.teams[slack.slack.team.id] = slack;
+        this.setState({
+            teams: this.teams,
+            selectedTeam: slack.slack.team.id
+        });
+    }
+
+    onMeta(meta) {
+        this.teams[meta.id].meta = meta.meta;
+        this.setState({
+            teams: this.teams
+        });
+    }
 
 }
 

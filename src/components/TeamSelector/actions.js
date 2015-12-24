@@ -1,60 +1,64 @@
 import Slack from 'slack-client';
+import path from 'path';
+import alt from '../../alt';
+import OAuthUtil from '../../utils/OAuthUtil';
+import Team from '../../utils/slack/teamUtil';
+import commonUtil from '../../utils/commonUtil';
 import {
     app
 }
 from 'remote';
-import path from 'path';
-import alt from '../../alt';
-import OAuthUtil from '../../utils/OAuthUtil';
-import commonUtil from '../../utils/commonUtil';
 
-const ConfPath = path.join(app.getPath('userData'), 'teams.conf');
 
-console.log(ConfPath);
+const TeamsPath = path.join(app.getPath('userData'), 'teams.json');
+
 
 class TeamselectorActions {
     constructor() {
         this.generateActions(
+            'select',
             'added',
-            'loggedin'
+            'meta'
         );
     }
 
     add() {
         this.dispatch();
-
-        return OAuthUtil.getAuthorization()
+        OAuthUtil.getAuthorization()
             .then(token => {
-                var slackClient = new Slack(token.access_token, true, false);
+                const SlackTeam = new Team(token.access_token);
+                SlackTeam.on('logged-in', () => {
+                    this.actions.added(SlackTeam);
 
-                var slackObj = {
-                    api: slackClient,
-                    token: token
-                };
 
-                slackClient.on('open', () => {
-                    let unreads = slackClient.getUnreadCount();
 
-                    commonUtil.saveJson(ConfPath, token).then(() => {
-                        this.actions.added(slackObj)
-                    }).catch(e => {
-                        console.error(e);
+                });
+                SlackTeam.on('meta-refreshed', meta => {
+                    this.actions.meta({
+                        id: SlackTeam.slack.team.id,
+                        meta: meta
                     });
-
-                    console.log('Welcome to Slack. You are @', slackClient.self.name, 'of', slackClient.team.name);
-                    console.log('You have', unreads, 'unread', (unreads === 1) ? 'message' : 'messages');
+                    commonUtil.readJson(TeamsPath)
+                        .then((json = {}) => {
+                            json[SlackTeam.slack.team.id] = {
+                                meta: meta,
+                                token: SlackTeam.slack.token
+                            };
+                            commonUtil.saveJson(TeamsPath, json)
+                        }).catch(() => {
+                            var json = {};
+                            json[SlackTeam.slack.team.id] = {
+                                meta: meta,
+                                token: SlackTeam.slack.token
+                            };
+                            commonUtil.saveJson(TeamsPath, json)
+                        });
                 });
-                slackClient.on('error', error => {
-                    if (error) console.error("Error: " + error);
-                });
-
-                slackClient.login();
             })
-            .catch(() => {
-
+            .catch(err => {
+                console.error(err)
             });
     }
-
 
 }
 

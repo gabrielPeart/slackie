@@ -32,7 +32,6 @@ default React.createClass({
         <div >
             <Sidebar/>
             <Chat/>
-
         </div>
 
         );
