@@ -1,4 +1,4 @@
-#Slakie
+#Slackie
 
 [![Dependency Status](https://david-dm.org/luigiplr/slakie.svg)](https://david-dm.org/luigiplr/slakie) 
 [![devDependency Status](https://david-dm.org/luigiplr/slakie/dev-status.svg)](https://david-dm.org/luigiplr/slakie#info=devDependencies) 

@@ -23,7 +23,7 @@ app.on('ready', () => {
         resizable: true,
         backgroundColor: '#202B33',
         icon: path.join(__dirname, '../images/icon.png'),
-        title: 'Slakie',
+        title: 'Slackie',
         center: true,
         frame: false,
         show: false

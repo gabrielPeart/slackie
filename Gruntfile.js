@@ -9,7 +9,7 @@ module.exports = function(grunt) {
     require('load-grunt-tasks')(grunt);
     var target = grunt.option('target') || 'development';
 
-    var BASENAME = 'Netify Jump';
+    var BASENAME = 'Slackie';
     var arch = grunt.option('arch') ? grunt.option('arch') : 'ia32';
     var env = process.env;
     env.NODE_ENV = 'development';

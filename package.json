@@ -1,15 +1,15 @@
 {
-  "name": "slakie",
+  "name": "slackie",
   "version": "0.0.0",
   "author": "Luigi Poole",
   "description": "",
-  "homepage": "https://github.com/luigiplr/slakie",
+  "homepage": "https://github.com/luigiplr/slackie",
   "main": "js/browser.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/luigiplr/slakie.git"
+    "url": "https://github.com/luigiplr/slackie.git"
   },
-  "bugs": "https://github.com/luigiplr/slakie/issues",
+  "bugs": "https://github.com/luigiplr/slackie/issues",
   "scripts": {
     "start": "grunt",
     "release": "grunt release"
