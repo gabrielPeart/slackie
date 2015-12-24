@@ -31,7 +31,7 @@ default React.createClass({
         }
     },
 
-    getChannels() {
+    getChannels(starred) {
         var channels = [];
         if (this.state.team && this.state.team.channels)
             _.forEach(this.state.team.channels, (channel, idx) => {
@@ -57,7 +57,7 @@ default React.createClass({
             });
         return dms;
     },
-    getGroups() {
+    getGroups(starred) {
         var groups = [];
 
         if (!this.state.team)

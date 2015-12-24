@@ -28,6 +28,18 @@ class Team extends EventEmitter {
             this.getTeaminfo();
         });
 
+
+        this.slack.on('message', message => {
+            this.emit('new:message', {
+                team: this.slack.team,
+                user: this.slack.getUserByID(message.user),
+                text: message.text,
+                channel: this.slack.getChannelGroupOrDMByID(message.channel),
+                message: message
+            });
+        });
+
+
         this.slack.on('error', error => this.emit('error', error));
 
         this.slack.login();
