@@ -57,16 +57,8 @@ class Team extends EventEmitter {
         this.slack = new Slack(access_token, true, false);
 
         this.slack.on('open', () => {
-
             this.emit('logged-in');
-
-            let unreads = this.slack.getUnreadCount();
-
-            console.log(this.slack.channels);
-
-
             console.log('You are @', this.slack.self.name, 'of', this.slack.team.name);
-            console.log('You have', unreads, 'unread', (unreads === 1) ? 'message' : 'messages');
 
             this.getTeaminfo();
             this.loadCachedMessages();
@@ -81,7 +73,11 @@ class Team extends EventEmitter {
         this.slack.login();
 
         HistoryEmitter.on('new:history', history => {
-            console.log(history);
+            if (this.slack && this.slack.authenticated && history.team === this.slack.team.id) {
+                if (!this.messages[history.channel]) this.messages[history.channel] = [];
+                _.merge(this.messages[history.channel], history.messages);
+                this.cacheMessages();
+            }
         });
     }
 
@@ -122,13 +118,7 @@ class Team extends EventEmitter {
         if (!this.messages[channel]) this.messages[channel] = [];
         this.messages[channel].push(message);
 
-        this.emit('new:message', {
-            team: this.slack.team,
-            user: this.slack.getUserByID(message.user),
-            text: message.text,
-            channel: this.slack.getChannelGroupOrDMByID(message.channel),
-            message: message
-        });
+        this.emit('new:message', message);
 
         this.cacheMessages();
     }
