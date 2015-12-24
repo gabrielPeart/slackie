@@ -27,12 +27,7 @@ class TeamselectorActions {
         OAuthUtil.getAuthorization()
             .then(token => {
                 const SlackTeam = new Team(token.access_token);
-                SlackTeam.on('logged-in', () => {
-                    this.actions.added(SlackTeam);
-
-
-
-                });
+                SlackTeam.on('logged-in', () => this.actions.added(SlackTeam));
                 SlackTeam.on('meta-refreshed', meta => {
                     this.actions.meta({
                         id: SlackTeam.slack.team.id,
