@@ -26,7 +26,7 @@ module.exports = {
 
 		const authUrl = 'https://slack.com/oauth/authorize?client_id=' + client_id + '&scope=client';
 
-		authWindow.loadUrl(authUrl);
+		authWindow.loadURL(authUrl);
 		authWindow.show();
 
 		authWindow.webContents.on('did-finish-load', () => authWindow.focus());

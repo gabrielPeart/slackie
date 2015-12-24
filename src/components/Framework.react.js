@@ -63,14 +63,14 @@ const Framework = React.createClass({
                                     meta: meta,
                                     token: SlackTeam.slack.token
                                 };
-                                commonUtil.saveJson(TeamsPath, json)
+                                commonUtil.saveJson(TeamsPath, json);
                             }).catch(() => {
                                 var json = {};
                                 json[SlackTeam.slack.team.id] = {
                                     meta: meta,
                                     token: SlackTeam.slack.token
                                 };
-                                commonUtil.saveJson(TeamsPath, json)
+                                commonUtil.saveJson(TeamsPath, json);
                             });
                     });
                 });
