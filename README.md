@@ -1,7 +1,7 @@
 #Slackie
 
-[![Dependency Status](https://david-dm.org/luigiplr/slakie.svg)](https://david-dm.org/luigiplr/slakie) 
-[![devDependency Status](https://david-dm.org/luigiplr/slakie/dev-status.svg)](https://david-dm.org/luigiplr/slakie#info=devDependencies) 
+[![Dependency Status](https://david-dm.org/luigiplr/slackie.svg)](https://david-dm.org/luigiplr/slakie) 
+[![devDependency Status](https://david-dm.org/luigiplr/slackie/dev-status.svg)](https://david-dm.org/luigiplr/slakie#info=devDependencies) 
 [![license](https://img.shields.io/badge/license-GPLv3-brightgreen.svg)](LICENSE) 
 [![donate](https://img.shields.io/badge/paypal-donate-blue.svg)](https://www.paypal.me/luigipoole) 
 
