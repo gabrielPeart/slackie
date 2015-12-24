@@ -21,19 +21,34 @@ class TeamselectorActions {
     }
 
     add() {
-    	this.dispatch();
-    	
+        this.dispatch();
+
         return OAuthUtil.getAuthorization()
             .then(token => {
+                var slackClient = new Slack(token.access_token, true, false);
+
                 var slackObj = {
-                    api: new Slack(token.access_token, true, false),
+                    api: slackClient,
                     token: token
                 };
-                commonUtil.saveJson(ConfPath, token).then(() => {
-                    this.actions.added(slackObj)
-                }).catch(e => {
-                    console.error(e);
+
+                slackClient.on('open', () => {
+                    let unreads = slackClient.getUnreadCount();
+
+                    commonUtil.saveJson(ConfPath, token).then(() => {
+                        this.actions.added(slackObj)
+                    }).catch(e => {
+                        console.error(e);
+                    });
+
+                    console.log('Welcome to Slack. You are @', slackClient.self.name, 'of', slackClient.team.name);
+                    console.log('You have', unreads, 'unread', (unreads === 1) ? 'message' : 'messages');
                 });
+                slackClient.on('error', error => {
+                    if (error) console.error("Error: " + error);
+                });
+
+                slackClient.login();
             })
             .catch(() => {
 

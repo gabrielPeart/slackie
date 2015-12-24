@@ -1,5 +1,4 @@
 import React from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import _ from 'lodash';
 
 import TeamSelectorActions from './actions';
@@ -9,12 +8,10 @@ import teamsEngineStore from '../../stores/teamsEngineStore';
 export
 default React.createClass({
 
-    mixins: [PureRenderMixin],
-
     getInitialState() {
         return {
             active: false,
-            teams: {}
+            teams: teamsEngineStore.getState().teams
         };
     },
 
@@ -32,12 +29,17 @@ default React.createClass({
     },
 
     render() {
-        console.log(this.state.teams)
-
         return (
             <aside className="teams">
-                <div className="team">
-                </div> 
+                {
+                    Object.keys(this.state.teams).map((team, idx) => {
+                        return (
+                            <div key={idx} >
+                                {this.state.teams[team].api.team.name}
+                            </div>
+                            )
+                    }, this)
+                }
                 <div onClick={TeamSelectorActions.add} className="add">
                     <i className="ion-plus-round"/>
                 </div>

@@ -15,6 +15,11 @@ class TeamsEngineStore {
 
     onAdded(team) {
         this.teams[team.token.team_id] = team;
+        this.setState({
+            teams: this.teams,
+            selectedTeam: team.token.team_id
+        });
+
     }
 
 
