@@ -12,11 +12,14 @@ export
 default React.createClass({
 
     getInitialState() {
+        var TeamEngine = teamsEngineStore.getState();
+        var SelectedChannel = SidebarStore.getState().activeChannel;
+
         return {
-            team: teamsEngineStore.getState().selectedTeam ? teamsEngineStore.getState().teams[teamsEngineStore.getState().selectedTeam] : false,
-            selectedTeam: teamsEngineStore.getState().selectedTeam ? teamsEngineStore.getState().teams[teamsEngineStore.getState().selectedTeam].slack.team.id : false,
+            team: TeamEngine.selectedTeam ? TeamEngine.teams[TeamEngine.selectedTeam] : false,
+            selectedTeam: TeamEngine.selectedTeam ? TeamEngine.selectedTeam : false,
             selectedChannel: SidebarStore.getState().activeChannel,
-            messages: teamsEngineStore.getState().selectedTeam ? ChatStore.getState().messages[teamsEngineStore.getState().selectedTeam] : {}
+            messages: (TeamEngine.selectedTeam && SelectedChannel) ? TeamEngine.teams[TeamEngine.selectedTeam].messages[SelectedChannel] : false
         };
     },
     componentWillMount() {
@@ -31,26 +34,17 @@ default React.createClass({
     },
     update() {
         if (this.isMounted()) {
-            var selectedTeam = this.state.selectedTeam;
+            var TeamEngine = teamsEngineStore.getState();
+            var SelectedChannel = SidebarStore.getState().activeChannel;
             this.setState({
-                selectedTeam: teamsEngineStore.getState().selectedTeam ? teamsEngineStore.getState().teams[teamsEngineStore.getState().selectedTeam].slack.team.id : false,
-                team: teamsEngineStore.getState().selectedTeam ? teamsEngineStore.getState().teams[teamsEngineStore.getState().selectedTeam] : false,
+                team: TeamEngine.selectedTeam ? TeamEngine.teams[TeamEngine.selectedTeam] : false,
+                selectedTeam: TeamEngine.selectedTeam ? TeamEngine.selectedTeam : false,
                 selectedChannel: SidebarStore.getState().activeChannel,
-                messages: teamsEngineStore.getState().selectedTeam ? ChatStore.getState().messages[teamsEngineStore.getState().selectedTeam] : {}
+                messages: (TeamEngine.selectedTeam && SelectedChannel) ? TeamEngine.teams[TeamEngine.selectedTeam].messages[SelectedChannel] : false
             });
-            if (selectedTeam && selectedTeam !== this.state.selectedTeam);
-            this.refreshListeners();
         }
     },
-    refreshListeners() {
-        if (!this.state.team)
-            return;
-        this.state.team.removeAllListeners();
-
-        this.state.team.on('new:message', message => ChatActions.newMessage(message));
-    },
     render() {
-        console.log(this.state.selectedChannel, this.state.messages)
         return (
             <div className="page">
 

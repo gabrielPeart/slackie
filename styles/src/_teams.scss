@@ -1,19 +1,21 @@
 .teams {
     top: 30px;
     height: calc(100vh - 30px);
-    width: 80px;
+    width: 70px;
     position: absolute;
 }
 
 .teams .team {
-    margin: 15px;
+    margin: 10px;
+    margin-left: 13px;
     background-image: url("../images/magics.jpg");
-    height: 50px;
+    height: 45px;
+    width: 45px;
     border-radius: 4px;
     background-size: cover;
     background-repeat: no-repeat;
     cursor: pointer;
-    margin-bottom: 50px;
+    margin-bottom: 40px;
 }
 
 
@@ -21,8 +23,9 @@
     bottom: 0;
     position: absolute;
     height: 45px;
-    margin: 15px;
-    width: 50px;
+    margin: 10px;
+    margin-left: 13px;
+    width: 45px;
     background-color: rgba(240, 248, 255, 0.12);
     border-radius: 4px;
     cursor: pointer;
@@ -32,17 +35,18 @@
     font-size: 25px;
     position: absolute;
     margin-top: 10px;
-    margin-left: 15px; 
+    margin-left: 13px; 
 }
 
 
 .teams .team p {
     position: absolute;
-    margin-top: 55px;
-    font-size: 13px;
+    margin-top: 48px;
+    font-size: 12px;
+    text-align: center;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    width: 55px;
+    width: 45px;
     font-weight: 500;
 }

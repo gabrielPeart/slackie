@@ -12,7 +12,7 @@ const If = React.createClass({
 });
 
 const SidebarTab = React.createClass({
-    handelSelect(id){
+    handelSelect(id) {
         SidebarActions.setActive(id);
     },
     render() {
@@ -60,15 +60,17 @@ default React.createClass({
         if (this.state.team && this.state.team.channels)
             _.forEach(this.state.team.channels, (channel, idx) => {
                 if (starred) {
-                    if (channel.is_member && !channel.is_archived && channel.is_starred)
+                    if (channel.is_member && !channel.is_archived && channel.is_starred) {
                         channels.push(
                             <SidebarTab key={idx} id={channel.id} name={'#'+channel.name} />
                         );
+                    }
                 } else {
-                    if (channel.is_member && !channel.is_archived && !channel.is_starred)
+                    if (channel.is_member && !channel.is_archived && !channel.is_starred) {
                         channels.push(
                             <SidebarTab key={idx} id={channel.id} name={'#'+channel.name} />
                         );
+                    }
                 }
             });
         return channels;

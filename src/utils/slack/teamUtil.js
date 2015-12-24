@@ -83,6 +83,7 @@ class Team extends EventEmitter {
             if (this.slack && this.slack.authenticated && history.team === this.slack.team.id) {
                 if (!this.messages[history.channel]) this.messages[history.channel] = [];
                 _.merge(this.messages[history.channel], history.messages);
+                this.emit('loaded:history');
                 this.cacheMessages();
             }
         });
@@ -94,6 +95,7 @@ class Team extends EventEmitter {
             .then(json => {
                 _.merge(this.messages, json);
                 this.loadedCachedMessages = true;
+                this.emit('loaded:messages');
             }).catch(() => {
                 console.log('No cached messages for', this.slack.team.id);
                 this.initHistory();
@@ -124,9 +126,7 @@ class Team extends EventEmitter {
     addMessage(channel, message) {
         if (!this.messages[channel]) this.messages[channel] = [];
         this.messages[channel].push(message);
-
         this.emit('new:message', message);
-
         this.cacheMessages();
     }
 
