@@ -23,6 +23,10 @@ if (!fs.existsSync(message_cacheDir))
 
 var HistoryEmitter = new EventEmitter();
 
+
+
+
+
 const getHistoryQueue = async.queue((task, next) => {
     request('https://slack.com/api/channels.history?token=' + task.token + '&inclusive=1&channel=' + task.channel + '&count=1000&unreads=1', {
         json: true
@@ -49,6 +53,8 @@ class Team extends EventEmitter {
         super();
         this.token = access_token;
 
+
+        this.fetchingHistory = false;
         this.loadedCachedMessages = false;
         this.messages = {};
 
@@ -80,17 +86,67 @@ class Team extends EventEmitter {
         this.slack.login();
 
         HistoryEmitter.on('new:history', history => {
-            if (this.slack && this.slack.authenticated && history.team === this.slack.team.id) {
+            if (history.team === this.slack.team.id) {
+
                 if (!this.messages[history.channel]) this.messages[history.channel] = [];
                 _.merge(this.messages[history.channel], history.messages);
-                this.emit('loaded:history');
-                this.cacheMessages();
+
+                history.messages = this.messages[history.channel];
+                this.cacheMessages(history);
             }
         });
     }
 
+
+    fetchHistory(latest = 'now', channel) {
+        this.fetchingHistory = true;
+        request('https://slack.com/api/channels.history?token=' + this.token + '&inclusive=1&channel=' + channel + '&count=100&unreads=1&latest=' + start, {
+            json: true
+        }, (error, response, body) => {
+            if (!error && response.statusCode == 200) {
+                HistoryEmitter.emit('new:history', {
+                    messages: body.messages ? body.messages.reverse() : [],
+                    channel: channel,
+                    team: this.slack.team.id
+                });
+            } else {
+                console.error(err || resp.statusCode);
+            }
+            this.fetchingHistory = false;
+        });
+    }
+
+
     loadCachedMessages() {
-        const messageCahePath = path.join(message_cacheDir, this.slack.team.id + '.json');
+
+        if (!fs.existsSync(path.join(message_cacheDir, this.slack.team.id)))
+            fs.mkdirSync(path.join(message_cacheDir, this.slack.team.id));
+
+
+        var Channels = Object.assign(this.slack.channels, this.slack.dms, this.slack.groups);
+
+        _.forEach(Channels, channel => {
+            if (fs.existsSync(path.join(message_cacheDir, this.slack.team.id, channel + '.json'))) {
+                commonUtil.readJson(path.join(message_cacheDir, this.slack.team.id, channel + '.json'))
+                    .then(json => {
+                        if (!this.messages[history.channel])
+                            this.messages[history.channel] = [];
+
+                        _.merge(this.messages[history.channel], json);
+                    });
+            } else {
+                getHistoryQueue.push({
+                    team: this.slack.team.id,
+                    token: this.token,
+                    channel: channel.id
+                });
+            }
+        });
+
+
+
+
+        /*
 
         commonUtil.readJson(messageCahePath)
             .then(json => {
@@ -101,38 +157,13 @@ class Team extends EventEmitter {
                 console.log('No cached messages for', this.slack.team.id);
                 this.initHistory();
                 this.loadedCachedMessages = true;
-            });
-
+            }); */
     }
 
     initHistory() {
-        _.forEach(this.slack.channels, channel => {
-            if (channel.is_channel && !channel.is_archived && channel.is_member) {
-                getHistoryQueue.push({
-                    team: this.slack.team.id,
-                    token: this.token,
-                    channel: channel.id
-                });
-            }
-        });
-        _.forEach(this.slack.dms, dm => {
-            if (dm.is_open && dm.is_im) {
-                getHistoryQueue.push({
-                    team: this.slack.team.id,
-                    token: this.token,
-                    channel: dm.id
-                });
-            }
-        });
-        _.forEach(this.slack.groups, group => {
-            if (group.is_open && group.is_group && !group.is_archived) {
-                getHistoryQueue.push({
-                    team: this.slack.team.id,
-                    token: this.token,
-                    channel: group.id
-                });
-            }
-        });
+
+        var Channels = Object.assign(this.slack.channels, this.slack.dms, this.slack.groups);
+
     }
 
     getHistory(channel) {
@@ -154,15 +185,17 @@ class Team extends EventEmitter {
     }
 
 
-    cacheMessages() {
-        if (!this.loadedCachedMessages)
-            return false;
-
-        const messageCahePath = path.join(message_cacheDir, this.slack.team.id + '.json');
-
-        commonUtil.saveJson(messageCahePath, this.messages);
+    cacheMessages(messages) {
+        if (messages) {
+            var channelCahe = path.join(message_cacheDir, messages.team, messages.channel + '.json');
+            commonUtil.saveJson(channelCahe, messages.messages);
+        } else {
+            _.forEach(this.messages, (messages, channel) => {
+                let channelCahe = path.join(message_cacheDir, this.slack.team.id, channel + '.json');
+                commonUtil.saveJson(channelCahe, messages);
+            });
+        }
     }
-
 
     getTeaminfo() {
         request('https://slack.com/api/team.info?token=' + this.token, {
