@@ -47,9 +47,7 @@ const MessageQueue = async.queue((task, next) => {
 });
 
 
-const stateThrottle = _.throttle((throttled, messages) => {
-    MessageEmitter.emit('set:messages', messages.concat(throttled))
-}, 500);
+const stateThrottle = _.throttle((throttled, messages) => MessageEmitter.emit('set:messages', messages.concat(throttled)), 500);
 
 export
 default React.createClass({
@@ -89,8 +87,7 @@ default React.createClass({
     addMessage(message) {
         this.state.throttleMessages.push(message)
 
-        stateThrottle(this.state.throttleMessages, this.state.messages);
-        
+        stateThrottle(this.state.throttleMessages, this.state.messages);  
     },
 
     getMessages() {
