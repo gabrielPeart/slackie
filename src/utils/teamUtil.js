@@ -19,27 +19,27 @@ const parseTeams = teams => {
     _.forEach(teams, team => {
         switch (team.type) {
             case 'slack':
-                let SlackTeam = new SlackTeam(team.token, team.meta);
-                SlackTeam.once('logged-in', () => TeamSelectorActions.added(SlackTeam));
+                let Team = new SlackTeam(team.token, team.meta);
+                Team.once('logged-in', () => TeamSelectorActions.added(Team));
 
-                SlackTeam.on('meta-refreshed', meta => {
+                Team.on('meta-refreshed', meta => {
                     TeamSelectorActions.meta({
-                        id: SlackTeam.slack.team.id,
+                        id: Team.slack.team.id,
                         meta: meta
                     });
                     commonUtil.readJson(TeamsPath)
                         .then(json => {
-                            json[SlackTeam.slack.team.id] = {
+                            json[Team.slack.team.id] = {
                                 meta: meta,
-                                token: SlackTeam.slack.token
+                                token: Team.slack.token
                             };
                             commonUtil.saveJson(TeamsPath, json);
                         })
                         .catch(() => {
                             commonUtil.saveJson(TeamsPath, {
-                                [SlackTeam.slack.team.id]: {
+                                [Team.slack.team.id]: {
                                     meta: meta,
-                                    token: SlackTeam.slack.token
+                                    token: Team.slack.token
                                 }
                             });
                         });
