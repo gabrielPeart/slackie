@@ -15,7 +15,7 @@ default React.createClass({
     },
 
     render() {
-        var user = this.state.users[this.props.messages[0].user];
+        var user = this.state.users[this.props.user];
         return (
             <div key={this.props.key} className="message">
                 <img src={(user && user.profile.image_original) ? user.profile.image_original : ''} className="profile" />

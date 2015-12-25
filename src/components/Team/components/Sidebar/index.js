@@ -1,7 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
 
-import teamsEngineStore from '../../../../stores/teamsEngineStore';
 import SidebarStore from './store';
 import SidebarActions from './actions';
 
@@ -12,7 +11,7 @@ const If = React.createClass({
 });
 
 const SidebarTab = React.createClass({
-	getInitialState() {
+    getInitialState() {
         return {
             activeChannel: SidebarStore.getState().activeChannel
         };
@@ -45,34 +44,15 @@ const SidebarTab = React.createClass({
 
 export
 default React.createClass({
-
-    getInitialState() {
-        return {
-            team: teamsEngineStore.getState().selectedTeam ? teamsEngineStore.getState().teams[teamsEngineStore.getState().selectedTeam].slack : false
-        };
-    },
-    componentWillMount() {
-        teamsEngineStore.listen(this.update);
-    },
-    componentWillUnmount() {
-        teamsEngineStore.unlisten(this.update);
-    },
-    update() {
-        if (this.isMounted()) {
-            this.setState({
-                team: teamsEngineStore.getState().selectedTeam ? teamsEngineStore.getState().teams[teamsEngineStore.getState().selectedTeam].slack : false
-            });
-        }
-    },
-
     getChannels(starred) {
-        if (!this.state.team)
+   if (!this.props.team && !this.props.team.slack)
             return [];
 
+        var team = this.props.team.slack;
         var channels = [];
 
-        if (this.state.team && this.state.team.channels)
-            _.forEach(this.state.team.channels, (channel, idx) => {
+        if (team.channels)
+            _.forEach(team.channels, (channel, idx) => {
                 if (starred) {
                     if (channel.is_member && !channel.is_archived && channel.is_starred) {
                         channels.push(
@@ -90,13 +70,14 @@ default React.createClass({
         return channels;
     },
     getDMS() {
-        if (!this.state.team)
+        if (!this.props.team && !this.props.team.slack)
             return [];
 
+        var team = this.props.team.slack;
         var dms = [];
 
-        if (this.state.team && this.state.team.dms)
-            _.forEach(this.state.team.dms, (dm, idx) => {
+        if (team.dms)
+            _.forEach(team.dms, (dm, idx) => {
                 if (dm.is_open && dm.is_im && !dm.is_starred)
                     dms.push(
                         <SidebarTab key={idx} id={dm.id} name={dm.name} />
@@ -105,13 +86,14 @@ default React.createClass({
         return dms;
     },
     getGroups(starred) {
-        if (!this.state.team)
+        if (!this.props.team && !this.props.team.slack)
             return [];
 
+        var team = this.props.team.slack;
         var groups = [];
 
-        if (this.state.team && this.state.team.groups)
-            _.forEach(this.state.team.groups, (group, idx) => {
+        if (team.groups)
+            _.forEach(team.groups, (group, idx) => {
                 if (starred) {
                     if (group.is_open && group.is_group && !group.is_archived && group.is_starred)
                         groups.push(
@@ -127,7 +109,7 @@ default React.createClass({
         return groups;
     },
     getStarred() {
-        if (!this.state.team)
+        if (!this.props.team)
             return [];
         var starredChannels = this.getChannels(true);
         var starredGroups = this.getGroups(true);
@@ -139,7 +121,6 @@ default React.createClass({
         var Groups = this.getGroups();
         var Channels = this.getChannels();
         var DMs = this.getDMS();
-
 
         return (
             <aside className="sidebar">
