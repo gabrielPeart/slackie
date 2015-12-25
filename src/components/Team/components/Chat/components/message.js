@@ -1,4 +1,6 @@
 import React from 'react';
+import querystring from 'querystring';
+import _ from 'lodash';
 
 import teamsEngineStore from '../../../../../stores/teamsEngineStore';
 
@@ -9,8 +11,11 @@ default React.createClass({
 
 
     render() {
+
+        var text = _.unescape(querystring.unescape(this.props.message.text));
+
         return (
-            <p key={this.props.key} >{this.props.message.text}</p>
+            <p key={this.props.key}>{text}</p>
         );
     }
 });
