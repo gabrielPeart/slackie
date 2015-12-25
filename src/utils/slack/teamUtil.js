@@ -13,30 +13,30 @@ import {
 	EventEmitter
 }
 from 'events';
-
 import commonUtil from '../commonUtil';
 
 
-class Team extends EventEmitter {
+export
+default class extends EventEmitter {
 	constructor(access_token, meta = false) {
 		super();
 		this.token = access_token;
-
 		this.type = 'slack';
-
 		this.fetchingHistory = [];
 		this.messages = {};
-
 		this.meta = meta;
 
-		this.slack = new Slack(access_token, true, false);
+		this.load();
+	}
+
+	load() {
+		this.slack = new Slack(this.token, true, false);
 
 		this.slack.on('open', () => {
 			this.emit('logged-in');
 			this.getTeaminfo();
 			console.log('You are @', this.slack.self.name, 'of', this.slack.team.name);
 		});
-
 
 		this.slack.on('message', message => {
 			this.addMessage(message.channel, {
@@ -51,7 +51,6 @@ class Team extends EventEmitter {
 
 		this.slack.login();
 	}
-
 
 	fetchHistory(channel, latest = 'now', count = 100) {
 		this.fetchingHistory.push(channel)
@@ -91,8 +90,3 @@ class Team extends EventEmitter {
 		});
 	}
 }
-
-
-
-export
-default Team;

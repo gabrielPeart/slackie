@@ -14,20 +14,16 @@ import {
     ipcRenderer
 }
 from 'electron';
-import {
-    app
-}
-from 'remote';
 
-import commonUtil from '../utils/commonUtil';
-import Team from '../utils/slack/teamUtil';
-
-import Header from './Header';
-import TeamSelector from './TeamSelector';
-import TeamSelectorActions from './TeamSelector/actions';
+import TeamsUtil from '../utils/teamUtil';
 
 import updaterActions from '../actions/updateActions';
 import analyticsActions from '../actions/analyticsActions';
+
+import Header from './Header';
+import TeamSelector from './TeamSelector';
+import Modal from './Modal';
+
 
 const Framework = React.createClass({
 
@@ -44,40 +40,7 @@ const Framework = React.createClass({
     },
 
     componentDidMount() {
-        const TeamsPath = path.join(app.getPath('userData'), 'teams.json');
-
-        commonUtil.readJson(TeamsPath)
-            .then(teams => {
-                _.forEach(teams, team => {
-                    let SlackTeam = new Team(team.token, team.meta);
-                    SlackTeam.on('logged-in', () => TeamSelectorActions.added(SlackTeam));
-
-                    SlackTeam.on('meta-refreshed', meta => {
-                        TeamSelectorActions.meta({
-                            id: SlackTeam.slack.team.id,
-                            meta: meta
-                        });
-                        commonUtil.readJson(TeamsPath)
-                            .then((json = {}) => {
-                                json[SlackTeam.slack.team.id] = {
-                                    meta: meta,
-                                    token: SlackTeam.slack.token
-                                };
-                                commonUtil.saveJson(TeamsPath, json);
-                            }).catch(() => {
-                                var json = {};
-                                json[SlackTeam.slack.team.id] = {
-                                    meta: meta,
-                                    token: SlackTeam.slack.token
-                                };
-                                commonUtil.saveJson(TeamsPath, json);
-                            });
-                    });
-                });
-            })
-            .catch(() => {
-                console.info('No teams logged in');
-            });
+       TeamsUtil.reload();
     },
 
     componentWillUnmount() {},
@@ -85,18 +48,7 @@ const Framework = React.createClass({
     update() {
         if (this.isMounted()) {
             this.setState({
-                online: NetworkStore.getState().online
-            });
-
-            _.defer(() => {
-                if (!this.state.updateChecked && this.state.online) {
-                    this.setState({
-                        updateChecked: true
-                    });
-                    analyticsActions.send('dashboard');
-                    updaterActions.check();
-                    NetworkStore.unlisten(this.update);
-                }
+                
             });
         }
     },
@@ -109,6 +61,7 @@ const Framework = React.createClass({
               <div className="main">
               	{React.cloneElement(this.props.children, {query: this.props.query})}
               </div>
+              <Modal/>
             </div>
         );
     }
