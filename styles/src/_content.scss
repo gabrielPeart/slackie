@@ -4,11 +4,64 @@
     height: 100%;
     position: absolute;
     background-color: #ffffff;
-    overflow: scroll;
 }
 
+.page .header {
+    padding-top: 10px;
+    height: 40px;
+}
 
-.page .messsage{
-	color: black;
-    white-space: pre-wrap;
+.page .header h1 {
+    color: black;
+    margin-left: 10px;
+    font-size: 20px;
+    font-weight: 400;
+}
+
+.page .messages {
+    height: calc(100% - 50px - 60px);
+}
+
+.page .messages .message {
+    margin-bottom: 10px;
+}
+
+.page .messages .message .profile {
+    float: left;
+    margin-left: 15px;
+    width: 44px;
+}
+
+.page .messages .message p {
+    color: #202B33;
+    margin-top: 5px;
+}
+
+.page .messages .message .message-text {
+    padding-right: 10px;
+    margin-top: 10px;
+    margin-left: 70px;
+    position: relative;
+}
+
+.page .messages .message h1 {
+    color: #202B33;
+    float: left;
+    font-size: 16px;
+    font-weight: 500;
+    margin-left: 10px;
+}
+
+.page .messages .message .time {
+    font-size: 12px;
+    color: gray;
+    font-weight: 300;
+    margin-left: 10px;
+}
+
+.page .chat-input {
+    position: absolute;
+    bottom: 0;
+    height: 60px;
+    width: 100%;
 }
