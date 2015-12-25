@@ -82,11 +82,11 @@ default React.createClass({
         messageBuild = [];
         MessageQueue.kill();
 
-        _.forEach(this.state.team.messages[this.state.channel], message => MessageQueue.push(message));
+        _.forEach(this.state.team.messages[this.state.channel.id], message => MessageQueue.push(message));
 
         this.state.team.removeAllListeners();
         this.state.team.on('new:message', message => {
-            if (message.channel === this.state.channel && message.team === this.state.team.slack.team.id)
+            if (message.channel === this.state.channel.id && message.team === this.state.team.slack.team.id)
                 MessageQueue.push(message)
         });
     },
@@ -108,11 +108,13 @@ default React.createClass({
             });
         }
     },
+
+
     render() {
         return (
             <div>
-                <Sidebar channel={this.state.channel} team={this.state.team}/>
-                <Chat channel={this.state.channel} team={this.state.team} messages={this.state.messages} />
+                <Sidebar channel={this.state.channel.id} team={this.state.team}/>
+                <Chat channel={this.state.channel} name={ (this.state.channel && this.state.channel.is_channel) ? ('#' + this.state.channel.name) : this.state.channel.name} messages={this.state.messages} />
             </div>
         );
     }

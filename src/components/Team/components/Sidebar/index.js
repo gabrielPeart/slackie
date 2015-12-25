@@ -29,13 +29,13 @@ const SidebarTab = React.createClass({
             });
         }
     },
-    handelSelect(id) {
-        SidebarActions.setActive(id);
+    handelSelect(channel) {
+        SidebarActions.setActive(channel);
     },
     render() {
         return (
-            <li key={this.props.key} className={(this.state.activeChannel === this.props.id) ? 'active': ''} onClick={this.handelSelect.bind(this, this.props.id)} >
-                {this.props.name}
+            <li key={this.props.key} className={(this.state.activeChannel === this.props.id) ? 'active': ''} onClick={this.handelSelect.bind(this, this.props)} >
+                {this.props.is_channel ? ('#' + this.props.name) : this.props.name}
             </li>
         );
     }
@@ -56,13 +56,13 @@ default React.createClass({
                 if (starred) {
                     if (channel.is_member && !channel.is_archived && channel.is_starred) {
                         channels.push(
-                            <SidebarTab key={idx} id={channel.id} name={'#'+channel.name} />
+                            <SidebarTab key={idx} {...channel} />
                         );
                     }
                 } else {
                     if (channel.is_member && !channel.is_archived && !channel.is_starred) {
                         channels.push(
-                            <SidebarTab key={idx} id={channel.id} name={'#'+channel.name} />
+                            <SidebarTab key={idx} {...channel} />
                         );
                     }
                 }
@@ -78,9 +78,9 @@ default React.createClass({
 
         if (team.dms)
             _.forEach(team.dms, (dm, idx) => {
-                if (dm.is_open && dm.is_im && !dm.is_starred)
+                if (dm.is_open && dm.is_im)
                     dms.push(
-                        <SidebarTab key={idx} id={dm.id} name={dm.name} />
+                        <SidebarTab key={idx} {...dm} />
                     );
             });
         return dms;
@@ -97,12 +97,12 @@ default React.createClass({
                 if (starred) {
                     if (group.is_open && group.is_group && !group.is_archived && group.is_starred)
                         groups.push(
-                            <SidebarTab key={idx} id={group.id} name={group.name} />
+                            <SidebarTab key={idx} {...group} />
                         );
                 } else {
                     if (group.is_open && group.is_group && !group.is_archived && !group.is_starred)
                         groups.push(
-                            <SidebarTab key={idx} id={group.id} name={group.name} />
+                            <SidebarTab key={idx} {...group} />
                         );
                 }
             });

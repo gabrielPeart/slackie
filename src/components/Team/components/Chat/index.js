@@ -28,7 +28,7 @@ default React.createClass({
         return (
             <div className="page">
                 <div className="header">
-                    <h1>#general</h1>
+                    <h1>{this.props.name}</h1>
                 </div>
 
                 <div ref="messages" className="messages">
