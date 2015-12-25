@@ -13,10 +13,31 @@ import TeamSelectorActions from '../components/TeamSelector/actions';
 
 const TeamsPath = path.join(app.getPath('userData'), 'teams.json');
 
+const SaveTeam = (id, type, token, meta) => {
+    commonUtil.readJson(TeamsPath)
+        .then(json => {
+            json[id] = {
+                meta: meta,
+                type: type,
+                token: token
+            };
+            commonUtil.saveJson(TeamsPath, json);
+        })
+        .catch(() => {
+            commonUtil.saveJson(TeamsPath, {
+                [id]: {
+                    meta: meta,
+                    type: type,
+                    token: token
+                }
+            });
+        });
+}
 
 
 const parseTeams = teams => {
     _.forEach(teams, team => {
+        console.log(team)
         switch (team.type) {
             case 'slack':
                 let Team = new SlackTeam(team.token, team.meta);
@@ -27,22 +48,7 @@ const parseTeams = teams => {
                         id: Team.slack.team.id,
                         meta: meta
                     });
-                    commonUtil.readJson(TeamsPath)
-                        .then(json => {
-                            json[Team.slack.team.id] = {
-                                meta: meta,
-                                token: Team.slack.token
-                            };
-                            commonUtil.saveJson(TeamsPath, json);
-                        })
-                        .catch(() => {
-                            commonUtil.saveJson(TeamsPath, {
-                                [Team.slack.team.id]: {
-                                    meta: meta,
-                                    token: Team.slack.token
-                                }
-                            });
-                        });
+                    SaveTeam(Team.slack.team.id, 'slack', team.token, meta);
                 });
                 break;
         }

@@ -82,6 +82,9 @@ default React.createClass({
         messageBuild = [];
         MessageQueue.kill();
 
+
+        console.log(this.state.team.slack_history)
+
         _.forEach(this.state.team.messages[this.state.channel.id], message => MessageQueue.push(message));
 
         this.state.team.removeAllListeners();
