@@ -12,12 +12,30 @@ const If = React.createClass({
 });
 
 const SidebarTab = React.createClass({
+	getInitialState() {
+        return {
+            activeChannel: SidebarStore.getState().activeChannel
+        };
+    },
+    componentWillMount() {
+        SidebarStore.listen(this.update);
+    },
+    componentWillUnmount() {
+        SidebarStore.unlisten(this.update);
+    },
+    update() {
+        if (this.isMounted()) {
+            this.setState({
+                activeChannel: SidebarStore.getState().activeChannel
+            });
+        }
+    },
     handelSelect(id) {
         SidebarActions.setActive(id);
     },
     render() {
         return (
-            <li key={this.props.key} onClick={this.handelSelect.bind(this, this.props.id)} >
+            <li key={this.props.key} className={(this.state.activeChannel === this.props.id) ? 'active': ''} onClick={this.handelSelect.bind(this, this.props.id)} >
                 {this.props.name}
             </li>
         );
@@ -30,23 +48,19 @@ default React.createClass({
 
     getInitialState() {
         return {
-            team: teamsEngineStore.getState().selectedTeam ? teamsEngineStore.getState().teams[teamsEngineStore.getState().selectedTeam].slack : false,
-            active: SidebarStore.getState().activeChannel
+            team: teamsEngineStore.getState().selectedTeam ? teamsEngineStore.getState().teams[teamsEngineStore.getState().selectedTeam].slack : false
         };
     },
     componentWillMount() {
         teamsEngineStore.listen(this.update);
-        SidebarStore.listen(this.update);
     },
     componentWillUnmount() {
         teamsEngineStore.unlisten(this.update);
-        SidebarStore.unlisten(this.update);
     },
     update() {
         if (this.isMounted()) {
             this.setState({
-                team: teamsEngineStore.getState().selectedTeam ? teamsEngineStore.getState().teams[teamsEngineStore.getState().selectedTeam].slack : false,
-                active: SidebarStore.getState().activeChannel
+                team: teamsEngineStore.getState().selectedTeam ? teamsEngineStore.getState().teams[teamsEngineStore.getState().selectedTeam].slack : false
             });
         }
     },
