@@ -109,7 +109,7 @@ default React.createClass({
             return [];
 
         var groups = [];
-        
+
         if (this.state.team && this.state.team.groups)
             _.forEach(this.state.team.groups, (group, idx) => {
                 if (starred) {
@@ -164,7 +164,7 @@ default React.createClass({
 
                 <If test={(DMs && DMs.length > 0)}>
                     <div>
-                        <h1>Channels</h1>
+                        <h1>Direct Messages</h1>
                         <ul>
                             {DMs}
                         </ul>
@@ -173,7 +173,7 @@ default React.createClass({
                 
                 <If test={(Groups && Groups.length > 0)}>
                     <div>
-                        <h1>Direct Messages</h1>
+                        <h1>Groups</h1>
                         <ul>
                             {Groups}
                         </ul>
