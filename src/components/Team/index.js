@@ -21,7 +21,7 @@ import SidebarStore from './components/Sidebar/store';
 
 
 const MessageEmitter = new EventEmitter();
-const stateThrottle = _.throttle((throttled, messages) => MessageEmitter.emit('set:messages', messages.concat(throttled)), 500);
+const stateThrottle = _.throttle((throttled, messages) => MessageEmitter.emit('set:messages', messages.concat(throttled)), 200);
 
 var lastUser = false;
 var messageBuild = [];
