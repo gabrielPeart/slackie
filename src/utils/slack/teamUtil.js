@@ -126,7 +126,10 @@ class Team extends EventEmitter {
     addMessage(channel, message) {
         if (!this.messages[channel]) this.messages[channel] = [];
         this.messages[channel].push(message);
-        this.emit('new:message', message);
+        this.emit('new:message', Object.assign({
+            channel: channel,
+            team: this.slack.team.id
+        }, message));
         this.cacheMessages();
     }
 

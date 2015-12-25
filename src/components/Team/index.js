@@ -11,43 +11,31 @@ import {
 }
 from 'events';
 
+import MessageHeader from './components/Chat/components/messageHeader';
 import Message from './components/Chat/components/message';
+
 import Sidebar from './components/Sidebar';
 import Chat from './components/Chat';
 import teamsEngineStore from '../../stores/teamsEngineStore';
 import SidebarStore from './components/Sidebar/store';
 
 
-
-
 const MessageEmitter = new EventEmitter();
+const stateThrottle = _.throttle((throttled, messages) => MessageEmitter.emit('set:messages', messages.concat(throttled)), 500);
+
 var lastUser = false;
 var messageBuild = [];
-var key = 0;
-const MessageQueue = async.queue((task, next) => {
-    let message = task.message;
-    if (message.user !== lastUser && lastUser) {
-        let newMessage = {
-            user: lastUser,
-            messages: messageBuild
-        };
-        let messager = <Message key={key} {...newMessage} />;
 
-        MessageEmitter.emit('new:message', messager)
+const MessageQueue = async.queue((message, next) => {
+    if (message.user !== lastUser) {
+        MessageEmitter.emit('new:message', <MessageHeader time={messageBuild[0] ? messageBuild[0].ts : message.ts} key={uuid()} user={message.user} />);
         messageBuild = [];
     }
-
+    MessageEmitter.emit('new:message', <Message key={uuid()} message={message} />);
     lastUser = message.user;
-    messageBuild.push(message);
-    key++;
-    if (next)
-        process.nextTick(next);
-    else
-        lastUser = false;
+    process.nextTick(next);
 });
 
-
-const stateThrottle = _.throttle((throttled, messages) => MessageEmitter.emit('set:messages', messages.concat(throttled)), 500);
 
 export
 default React.createClass({
@@ -63,41 +51,43 @@ default React.createClass({
         };
     },
 
-    componentDidMount() {
+    componentWillMount() {
+        teamsEngineStore.listen(this.updateTeam);
+        SidebarStore.listen(this.updateChannel);
+
         MessageEmitter.on('new:message', this.addMessage);
-        MessageEmitter.on('set:messages',messages =>{
+        MessageEmitter.on('set:messages', messages => {
             this.setState({
                 messages: messages,
                 throttleMessages: []
             });
         });
     },
-
-    componentWillMount() {
-        teamsEngineStore.listen(this.updateTeam);
-        SidebarStore.listen(this.updateChannel);
-    },
     componentWillUnmount() {
         teamsEngineStore.unlisten(this.updateTeam);
         SidebarStore.unlisten(this.updateChannel);
-        MessageEmitter.removeAllListeners('new:message');
-        MessageEmitter.removeAllListeners('set:messages');
+        MessageEmitter.removeAllListeners();
     },
 
     addMessage(message) {
         this.state.throttleMessages.push(message)
-
-        stateThrottle(this.state.throttleMessages, this.state.messages);  
+        stateThrottle(this.state.throttleMessages, this.state.messages);
     },
 
     getMessages() {
         if (!this.state.team || !this.state.channel)
             return false;
 
-        _.forEach(this.state.team.messages[this.state.channel], (message, idx) => {
-            MessageQueue.push({
-                message: message
-            });
+        lastUser = false;
+        messageBuild = [];
+        MessageQueue.kill();
+
+        _.forEach(this.state.team.messages[this.state.channel], message => MessageQueue.push(message));
+
+        this.state.team.removeAllListeners();
+        this.state.team.on('new:message', message => {
+            if (message.channel === this.state.channel && message.team === this.state.team.slack.team.id)
+                MessageQueue.push(message)
         });
     },
     updateChannel() {
@@ -107,6 +97,8 @@ default React.createClass({
                 messages: []
             });
         }
+
+        console.log(SidebarStore.getState().activeChannel);
         _.defer(this.getMessages);
     },
     updateTeam() {
