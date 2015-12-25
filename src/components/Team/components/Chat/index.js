@@ -18,9 +18,6 @@ default React.createClass({
     scrollBottom() {
         if (!this.refs['messages'])
             return;
-
-        console.log(this.refs['messages'].scrollHeight, this.refs['messages'].scrollTop)
-
         this.refs['messages'].scrollTop = this.refs['messages'].scrollHeight;
 
     },
