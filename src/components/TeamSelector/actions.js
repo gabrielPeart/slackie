@@ -37,14 +37,17 @@ class TeamselectorActions {
                         .then((json = {}) => {
                             json[SlackTeam.slack.team.id] = {
                                 meta: meta,
+                                type: 'slack',
                                 token: SlackTeam.slack.token
                             };
                             commonUtil.saveJson(TeamsPath, json)
                         }).catch(() => {
-                            var json = {};
-                            json[SlackTeam.slack.team.id] = {
-                                meta: meta,
-                                token: SlackTeam.slack.token
+                            var json = {
+                                [SlackTeam.slack.team.id]: {
+                                    meta: meta,
+                                    type: 'slack',
+                                    token: SlackTeam.slack.token
+                                }
                             };
                             commonUtil.saveJson(TeamsPath, json)
                         });
