@@ -52,7 +52,7 @@ default React.createClass({
 
         this.state.team.removeAllListeners(['new:message', 'history:loaded']);
 
-        
+
         this.state.team.on('new:message', this.updateMessages);
         this.state.team.on('history:loaded', this.updateMessages);
 
@@ -62,7 +62,6 @@ default React.createClass({
 
     updateMessages() {
         if (this.isMounted()) {
-
             this.setState({
                 messages: this.state.team.messages[this.state.channel.id]
             });

@@ -1,3 +1,6 @@
+import React from 'react';
+import moment from 'moment';
+import querystring from 'querystring';
 import Promise from 'bluebird';
 import request from 'request';
 import path from 'path';
@@ -6,12 +9,36 @@ import async from 'async';
 import _ from 'lodash';
 import Slack from 'slack-client';
 import util from 'util';
-import NodeWorker from 'workerjs';
 import {
     EventEmitter
 }
 from 'events';
 import commonUtil from '../commonUtil';
+
+
+
+
+const MessageHeader = React.createClass({
+    render() {
+        return (
+            <div className="message">
+                <img src={(this.props.user && this.props.user.profile) ? this.props.user.profile['image_72'] : ''} className="profile" />
+                <h1>{(this.props.user && this.props.user.name) ? this.props.user.name : 'Undefined'}</h1>
+                <span className="time">{moment.unix(this.props.time).calendar()}</span>
+            </div>
+        );
+    }
+});
+
+
+const ChatMessage = React.createClass({
+    render() {
+        var text = _.unescape(querystring.unescape(this.props.message.text));
+        return (
+            <p>{text}</p>
+        );
+    }
+});
 
 
 
@@ -24,27 +51,59 @@ class SlackTeam extends EventEmitter {
         this.messages = {};
         this.meta = meta;
 
+
+        this.setQueues();
         this.load();
-        this.worker = new NodeWorker(path.join(__dirname, 'render.worker.js'), true);
 
-        this.worker.addEventListener('message', data => {
-            data = data.data;
+    }
 
-            switch (data.type) {
-                case 'message':
-                    this.addMessage(data);
-                    break;
-                case 'history':
-                    this.addHistory(data);
-                    break;
-                case 'info':
-                    console.log(data);
-                    break;
+
+
+    setQueues() {
+        var lastUser = false;
+        var messageBuild = [];
+        var Historys = [];
+        var messageHistoryBuild = [];
+
+        this.HistoryMessageQueue = async.queue((message, next) => {
+            if (message.user !== lastUser) {
+                Historys.push(<MessageHeader time={message.ts}  user={this.slack.users[message.user]} />)
+                messageHistoryBuild = [];
             }
+            Historys.push(<ChatMessage message={message} />);
+
+            lastUser = message.user;
+
+            if (this.HistoryMessageQueue.length() === 0) {
+                this.addHistory({
+                    messages: Historys,
+                    channel: message.channel
+                });
+                Historys = [];
+            }
+            process.nextTick(next);
         });
 
-        this.worker.addEventListener('error', console.error);
+
+        this.MessageQueue = async.queue((message, next) => {
+            console.log(message)
+            if (message.user !== lastUser) {
+                this.addMessage({
+                    message: <MessageHeader time={message.ts} user={this.slack.users[message.user]} />,
+                    channel: message.channel
+                });
+                messageBuild = [];
+            }
+            this.addMessage({
+                message: <ChatMessage message={message} />,
+                channel: message.channel
+            })
+            lastUser = message.user;
+            process.nextTick(next);
+        });
     }
+
+
 
     load() {
         this.slack = new Slack(this.token, true, false);
@@ -57,21 +116,7 @@ class SlackTeam extends EventEmitter {
         });
 
         this.slack.on('message', message => {
-            var users = {};
-            _.forEach(this.slack.users, user => {
-                users[user.id] = {
-                    name: user.name,
-                    id: user.id,
-                    profile: user.profile
-                };
-            });
-            this.worker.postMessage({
-                type: 'message',
-                message: message,
-                channel: message.channel,
-                user: message.user,
-                userInfo: users
-            });
+            this.MessageQueue.push(message);
         });
 
         this.slack.on('error', error => this.emit('error', error));
@@ -96,26 +141,15 @@ class SlackTeam extends EventEmitter {
     }
 
     getHistory(channel, history) {
-        if (!this.messages[channel]) this.messages[channel] = [];
-        var users = {};
-        _.forEach(this.slack.users, user => {
-            users[user.id] = {
-                name: user.name,
-                id: user.id,
-                profile: user.profile
-            };
-        });
-
-        this.worker.postMessage({
-            type: 'history',
-            messages: history,
-            channel: channel,
-            users: users
-        });
-
+        _.forEach(history, message => this.HistoryMessageQueue.push(Object.assign(message, {
+            channel: channel
+        })));
     }
 
     addHistory(history) {
+
+        console.log(history)
+
         if (!this.messages[history.channel]) this.messages[history.channel] = [];
         Array.prototype.unshift.apply(this.messages[history.channel], history.messages);
         this.emit('history:loaded');
@@ -124,7 +158,7 @@ class SlackTeam extends EventEmitter {
 
     addMessage(message) {
         if (!this.messages[message.channel]) this.messages[message.channel] = [];
-        this.messages[message.channel].push(_.omit(message, ['channel', 'type']));
+        this.messages[message.channel].push(message.message);
         this.emit('new:message', {
             channel: message.channel,
             team: this.slack.team.id

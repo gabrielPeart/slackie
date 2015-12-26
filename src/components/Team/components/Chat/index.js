@@ -34,7 +34,7 @@ default React.createClass({
                 <div ref="messages" className="messages">
                 {
                     this.props.messages.map((message, idx) => {
-                        return <div key={idx} dangerouslySetInnerHTML={{__html:message.message}} />;
+                        return message;
                     })
                 }
                 </div>
