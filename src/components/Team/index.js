@@ -16,6 +16,7 @@ import Message from './components/Chat/components/message';
 
 import Sidebar from './components/Sidebar';
 import Chat from './components/Chat';
+import ChatStore from './store';
 import teamsEngineStore from '../../stores/teamsEngineStore';
 import SidebarStore from './components/Sidebar/store';
 
@@ -42,9 +43,12 @@ default React.createClass({
 
     getInitialState() {
         var TeamEngine = teamsEngineStore.getState();
+        var ChatStoreState = ChatStore.getState();
+        var SidebarState = SidebarStore.getState();
         return {
             team: TeamEngine.selectedTeam ? TeamEngine.teams[TeamEngine.selectedTeam] : false,
-            channel: SidebarStore.getState().activeChannel ? SidebarStore.getState().activeChannel : false,
+            channel: SidebarState.activeChannel ? SidebarState.activeChannel : false,
+            cachedMessages: (SidebarState.activeChannel && TeamEngine.selectedTeam && ChatStoreState.messageCache[TeamEngine.selectedTeam] && ChatStoreState.messageCache[TeamEngine.selectedTeam][SidebarState.activeChannel.id]) ? ChatStoreState.messageCache[TeamEngine.selectedTeam][SidebarState.activeChannel.id] : false,
             messages: [],
             throttleMessages: [],
             historyLoaded: false
@@ -54,6 +58,7 @@ default React.createClass({
     componentWillMount() {
         teamsEngineStore.listen(this.updateTeam);
         SidebarStore.listen(this.updateChannel);
+        ChatStore.listen(this.updateCache);
 
         MessageEmitter.on('new:message', this.addMessage);
         MessageEmitter.on('set:messages', messages => {
@@ -65,6 +70,7 @@ default React.createClass({
     },
     componentWillUnmount() {
         teamsEngineStore.unlisten(this.updateTeam);
+        ChatStore.unlisten(this.updateCache);
         SidebarStore.unlisten(this.updateChannel);
         MessageEmitter.removeAllListeners();
     },
@@ -81,28 +87,37 @@ default React.createClass({
         lastUser = false;
         messageBuild = [];
         MessageQueue.kill();
-        /*
+  
         console.log(this.state)
 
         _.forEach(this.state.team.messages[this.state.channel.id], message => MessageQueue.push(message));
-*/
 
 
         this.state.team.removeAllListeners();
         this.state.team.on('new:message', message => {
             if (message.channel === this.state.channel.id && message.team === this.state.team.slack.team.id)
-                MessageQueue.push(message)
+                MessageQueue.push(message);
         });
 
         this.state.team.on('new:history', history => {
             if (!history.channel === this.state.channel.id || !history.team === this.state.team.slack.team.id)
                 return;
+
              var TeamEngine = teamsEngineStore.getState();
-            console.log(TeamEngine.teams[TeamEngine.selectedTeam])
+            console.log(TeamEngine.teams[TeamEngine.selectedTeam].messages);
+
+            _.forEach(this.state.team.messages[this.state.channel.id], message => MessageQueue.push(message));
         });
 
         this.state.team.fetchHistory(this.state.channel.id);
 
+    },
+    updateCache(){
+        if (this.isMounted()) {
+            this.setState({
+                cachedMessages: (SidebarStore.getState().activeChannel && TeamEngine.selectedTeam && ChatStoreState.messageCache[TeamEngine.selectedTeam] && ChatStoreState.messageCache[TeamEngine.selectedTeam][SidebarStore.getState().activeChannel.id]) ? ChatStoreState.messageCache[TeamEngine.selectedTeam][SidebarStore.getState().activeChannel.id] : false,
+            });
+        }     
     },
     updateChannel() {
         if (this.isMounted()) {
@@ -120,7 +135,6 @@ default React.createClass({
             });
         }
     },
-
     render() {
         return (
             <div>
