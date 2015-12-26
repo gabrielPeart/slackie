@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
+import moment from 'moment';
 import querystring from 'querystring';
 import async from 'async';
 import {
@@ -88,9 +89,9 @@ const MessageHeader = React.createClass({
     render() {
         return (
             <div className="message">
-                <img src={(this.props.user && this.props.user.profile.image_original) ? this.props.user.profile.image_original : ''} className="profile" />
+                <img src={this.props.user.profile['image_72']} className="profile" />
                 <h1>{(this.props.user && this.props.user.name) ? this.props.user.name : 'Undefined'}</h1>
-                <span className="time">{this.props.time}</span>
+                <span className="time">{moment.unix(this.props.time).fromNow()}</span>
             </div>
         );
     }
@@ -100,7 +101,6 @@ const MessageHeader = React.createClass({
 const ChatMessage = React.createClass({
     render() {
         var text = _.unescape(querystring.unescape(this.props.message.text));
-
         return (
             <p>{text}</p>
         );
