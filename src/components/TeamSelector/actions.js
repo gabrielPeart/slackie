@@ -42,14 +42,13 @@ class TeamselectorActions {
                             };
                             commonUtil.saveJson(TeamsPath, json)
                         }).catch(() => {
-                            var json = {
+                            commonUtil.saveJson(TeamsPath, {
                                 [SlackTeam.slack.team.id]: {
                                     meta: meta,
                                     type: 'slack',
                                     token: SlackTeam.slack.token
                                 }
-                            };
-                            commonUtil.saveJson(TeamsPath, json)
+                            })
                         });
                 });
             })
@@ -57,7 +56,6 @@ class TeamselectorActions {
                 console.error(err)
             });
     }
-
 }
 
 export

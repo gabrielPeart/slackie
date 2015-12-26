@@ -48,7 +48,6 @@ class SlackTeam extends EventEmitter {
 	}
 
 	fetchHistory(channel, latest = false, count = 100) {
-
 		var Channels = Object.assign(this.slack.channels, this.slack.dms, this.slack.groups);
 
 		if (!latest)
@@ -61,13 +60,11 @@ class SlackTeam extends EventEmitter {
 			if (!error && response.statusCode == 200) {
 				let history = body.messages ? body.messages.reverse() : [];
 				if (!this.messages[channel]) this.messages[channel] = [];
-
-				console.log(body)
-
 				_.merge(this.messages[channel], history);
 				this.emit('new:history', {
 					channel: channel,
-					team: this.slack.team.id
+					team: this.slack.team.id,
+					hasMore: (body.has_more && !body.is_limited)
 				})
 			} else {
 				console.error(err || resp.statusCode);
