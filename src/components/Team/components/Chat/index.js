@@ -40,7 +40,7 @@ default React.createClass({
                             <div key={idx}>
                                 {message}
                             </div>
-                            );
+                        );
                     })
                 }
                 </div>

@@ -1,15 +1,5 @@
 import React from 'react';
-import reactUpdate from 'react-addons-update';
 import _ from 'lodash';
-import async from 'async';
-import {
-    v4 as uuid
-}
-from 'uuid';
-import {
-    EventEmitter
-}
-from 'events';
 
 
 import Sidebar from './components/Sidebar';
@@ -41,23 +31,16 @@ default React.createClass({
         SidebarStore.unlisten(this.updateChannel);
     },
 
-    addMessage(message) {
-        this.state.throttleMessages.push(message)
-        stateThrottle(this.state.throttleMessages, this.state.messages);
-    },
-
     getMessages() {
         if (!this.state.team || !this.state.channel)
             return false;
 
         this.state.team.removeAllListeners(['new:message', 'history:loaded']);
 
-
         this.state.team.on('new:message', this.updateMessages);
         this.state.team.on('history:loaded', this.updateMessages);
 
         this.state.team.fetchHistory(this.state.channel.id);
-
     },
 
     updateMessages() {
