@@ -4,6 +4,7 @@ import _ from 'lodash';
 
 import ChatStore from './store';
 import ChatActions from './actions';
+import Input from './components/input';
 
 export
 default React.createClass({
@@ -44,10 +45,7 @@ default React.createClass({
                 }
                 </div>
             
-                <div className="chat-input">
-                    <div className="chat-inner">
-                    </div>
-                </div>
+                <Input />
             </div>
         );
     }

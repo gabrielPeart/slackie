@@ -12,7 +12,6 @@ from 'events';
 
 
 
-
 const MessageHeader = React.createClass({
     render() {
         return (
@@ -52,8 +51,6 @@ class SlackTeam extends EventEmitter {
 
     }
 
-
-
     setQueues() {
         var lastUser = false;
         var messageBuild = [];
@@ -65,7 +62,7 @@ class SlackTeam extends EventEmitter {
                 Historys.push(<MessageHeader time={message.ts} user={this.slack.users[message.user]} />)
                 messageHistoryBuild = [];
             }
-            Historys.push(<ChatMessage message={message} />);
+            Historys.push(<ChatMessage time={message.ts} message={message} />);
             lastUser = message.user;
             if (this.HistoryMessageQueue.length() === 0) {
                 this.addHistory({
@@ -120,7 +117,9 @@ class SlackTeam extends EventEmitter {
 
         if (!latest) latest = (Channels[channel].latest && Channels[channel].latest.ts) ? Channels[channel].latest.ts : false;
 
-        request('https://slack.com/api/channels.history?token=' + this.token + '&inclusive=1&channel=' + channel + '&count=' + count + '&unreads=1' + (latest ? ('&latest=' + latest) : ''), {
+        var type = (channel.charAt(0) === 'C') ? 'channels' : ((channel.charAt(0) === 'G') ? 'groups' : 'im');
+
+        request('https://slack.com/api/' + type + '.history?token=' + this.token + '&inclusive=1&channel=' + channel + '&count=' + count + '&unreads=1' + (latest ? ('&latest=' + latest) : ''), {
             json: true
         }, (error, response, body) => {
             if (!error && response.statusCode == 200) {
