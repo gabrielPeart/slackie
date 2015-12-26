@@ -43,19 +43,26 @@
     cursor: pointer;
 }
 
-.page .messages p {
+.page .messages .msg em{
+    font-style: italic;
+}
+
+.page .messages .msg strong {
+    font-weight: 500;
+}
+
+.page .messages .msg {
     color: #202B33;
     padding: 3px;
     margin: 3px 3px 0px 62px;
     white-space: pre-wrap;
     padding-right: 10px;
-    word-break: break-word;
     border-radius: 3px;
     transition: background 0.125s ease-in-out;
     font-size: 15px;
 }
 
-.page .messages p:hover {
+.page .messages .msg:hover {
     background-color: rgb(240,240,240);
 }
 
