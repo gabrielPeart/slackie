@@ -5,95 +5,145 @@ import fs from 'fs';
 import async from 'async';
 import _ from 'lodash';
 import Slack from 'slack-client';
+import util from 'util';
+import NodeWorker from 'workerjs';
 import {
-	EventEmitter
+    EventEmitter
 }
 from 'events';
 import commonUtil from '../commonUtil';
 
 
+
 class SlackTeam extends EventEmitter {
-	constructor(access_token, meta = false) {
-		super();
-		this.token = access_token;
-		this.type = 'slack';
-		this.fetchingHistory = [];
-		this.messages = {};
-		this.meta = meta;
+    constructor(access_token, meta = false) {
+        super();
+        this.token = access_token;
+        this.type = 'slack';
+        this.fetchingHistory = [];
+        this.messages = {};
+        this.meta = meta;
 
-		this.load();
-	}
+        this.load();
+        this.worker = new NodeWorker(path.join(__dirname, 'render.worker.js'), true);
 
-	load() {
-		this.slack = new Slack(this.token, true, false);
+        this.worker.addEventListener('message', data => {
+            data = data.data;
 
-		this.slack.on('open', () => {
-			this.emit('logged-in');
-			this.getTeaminfo();
-			console.log('You are @', this.slack.self.name, 'of', this.slack.team.name);
-		});
+            switch (data.type) {
+                case 'message':
+                    this.addMessage(data);
+                    break;
+                case 'history':
+                    this.addHistory(data);
+                    break;
+                case 'info':
+                    console.log(data);
+                    break;
+            }
+        });
 
-		this.slack.on('message', message => {
-			this.addMessage(message.channel, {
-				text: message.text,
-				ts: message.ts,
-				user: message.user,
-				type: message.type
-			});
-		});
+        this.worker.addEventListener('error', console.error);
+    }
 
-		this.slack.on('error', error => this.emit('error', error));
+    load() {
+        this.slack = new Slack(this.token, true, false);
 
-		this.slack.login();
-	}
+        this.slack.on('open', () => {
+            this.emit('logged-in');
+            this.getTeaminfo();
+            console.log('You are @', this.slack.self.name, 'of', this.slack.team.name);
+            console.log(this)
+        });
 
-	fetchHistory(channel, latest = false, count = 100) {
-		var Channels = Object.assign(this.slack.channels, this.slack.dms, this.slack.groups);
+        this.slack.on('message', message => {
+            var users = {};
+            _.forEach(this.slack.users, user => {
+                users[user.id] = {
+                    name: user.name,
+                    id: user.id,
+                    profile: user.profile
+                };
+            });
+            this.worker.postMessage({
+                type: 'message',
+                message: message,
+                channel: message.channel,
+                user: message.user,
+                userInfo: users
+            });
+        });
 
-		if (!latest)
-			var latest = (Channels[channel].latest && Channels[channel].latest.ts) ? Channels[channel].latest.ts : false;
+        this.slack.on('error', error => this.emit('error', error));
 
-		this.fetchingHistory.push(channel)
-		request('https://slack.com/api/channels.history?token=' + this.token + '&inclusive=1&channel=' + channel + '&count=' + count + '&unreads=1' + (latest ? ('&latest=' + latest) : ''), {
-			json: true
-		}, (error, response, body) => {
-			if (!error && response.statusCode == 200) {
-				let history = body.messages ? body.messages.reverse() : [];
-				if (!this.messages[channel]) this.messages[channel] = [];
-				_.merge(this.messages[channel], history);
-				this.emit('new:history', {
-					channel: channel,
-					team: this.slack.team.id,
-					hasMore: (body.has_more && !body.is_limited)
-				})
-			} else {
-				console.error(err || resp.statusCode);
-			}
-			_.omit(this.fetchingHistory, channel);
-		});
-	}
+        this.slack.login();
+    }
 
-	addMessage(channel, message) {
-		if (!this.messages[channel]) this.messages[channel] = [];
-		this.messages[channel].push(message);
-		this.emit('new:message', Object.assign({
-			channel: channel,
-			team: this.slack.team.id
-		}, message));
-	}
+    fetchHistory(channel, latest = false, count = 100) {
+        var Channels = Object.assign(this.slack.channels, this.slack.dms, this.slack.groups);
 
-	getTeaminfo() {
-		request('https://slack.com/api/team.info?token=' + this.token, {
-			json: true
-		}, (error, response, body) => {
-			if (!error && response.statusCode == 200) {
-				this.meta = body.team;
-				this.emit('meta-refreshed', body.team);
-			} else {
-				console.error(err || resp.statusCode);
-			}
-		});
-	}
+        if (!latest) latest = (Channels[channel].latest && Channels[channel].latest.ts) ? Channels[channel].latest.ts : false;
+
+        request('https://slack.com/api/channels.history?token=' + this.token + '&inclusive=1&channel=' + channel + '&count=' + count + '&unreads=1' + (latest ? ('&latest=' + latest) : ''), {
+            json: true
+        }, (error, response, body) => {
+            if (!error && response.statusCode == 200) {
+                this.getHistory(channel, body.messages ? body.messages.reverse() : []);
+            } else {
+                console.error(err || resp.statusCode);
+            }
+        });
+    }
+
+    getHistory(channel, history) {
+        if (!this.messages[channel]) this.messages[channel] = [];
+        var users = {};
+        _.forEach(this.slack.users, user => {
+            users[user.id] = {
+                name: user.name,
+                id: user.id,
+                profile: user.profile
+            };
+        });
+
+        this.worker.postMessage({
+            type: 'history',
+            messages: history,
+            channel: channel,
+            users: users
+        });
+
+    }
+
+    addHistory(history) {
+        console.log(history)
+        if (!this.messages[history.channel]) this.messages[history.channel] = [];
+        Array.prototype.unshift.apply(this.messages[history.channel], history.messages);
+        this.emit('history:loaded');
+    }
+
+
+    addMessage(message) {
+        if (!this.messages[message.channel]) this.messages[message.channel] = [];
+        this.messages[message.channel].push(_.omit(message, ['channel', 'type']));
+        this.emit('new:message', {
+            channel: message.channel,
+            team: this.slack.team.id
+        });
+    }
+
+    getTeaminfo() {
+        request('https://slack.com/api/team.info?token=' + this.token, {
+            json: true
+        }, (error, response, body) => {
+            if (!error && response.statusCode == 200) {
+                this.meta = body.team;
+                this.emit('meta-refreshed', body.team);
+            } else {
+                console.error(err || resp.statusCode);
+            }
+        });
+    }
 }
 
 export

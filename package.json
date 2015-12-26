@@ -39,6 +39,7 @@
     "slack-client": "^1.5.1",
     "universal-analytics": "^0.3.10",
     "uuid": "^2.0.1",
+    "workerjs": "^0.1.1",
     "yargs": "^3.31.0"
   },
   "devDependencies": {

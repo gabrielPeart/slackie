@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import _ from 'lodash';
 
 import ChatStore from './store';
@@ -24,7 +25,6 @@ default React.createClass({
 
     render() {
         _.defer(this.scrollBottom);
-
         return (
             <div className="page">
                 <div className="header">
@@ -32,7 +32,11 @@ default React.createClass({
                 </div>
 
                 <div ref="messages" className="messages">
-                    {this.props.messages}
+                {
+                    this.props.messages.map((message, idx) => {
+                        return <div key={idx} dangerouslySetInnerHTML={{__html:message.message}} />;
+                    })
+                }
                 </div>
             
                 <div className="chat-input">
