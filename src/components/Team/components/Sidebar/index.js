@@ -34,7 +34,7 @@ const SidebarTab = React.createClass({
     },
     render() {
         return (
-            <li key={this.props.key} className={(this.state.activeChannel === this.props.id) ? 'active': ''} onClick={this.handelSelect.bind(this, this.props)} >
+            <li key={this.props.key} className={(this.state.activeChannel.id === this.props.id) ? 'active': ''} onClick={this.handelSelect.bind(this, this.props)} >
                 {this.props.is_channel ? ('#' + this.props.name) : this.props.name}
             </li>
         );
@@ -45,7 +45,7 @@ const SidebarTab = React.createClass({
 export
 default React.createClass({
     getChannels(starred) {
-   if (!this.props.team && !this.props.team.slack)
+        if (!this.props.team && !this.props.team.slack)
             return [];
 
         var team = this.props.team.slack;

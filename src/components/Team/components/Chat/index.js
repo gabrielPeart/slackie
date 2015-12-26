@@ -29,6 +29,7 @@ default React.createClass({
             <div className="page">
                 <div className="header">
                     <h1>{this.props.name}</h1>
+                    <span>{this.props.topic ? this.props.topic[0] : ''}</span>
                 </div>
 
                 <div ref="messages" className="messages">
@@ -44,6 +45,8 @@ default React.createClass({
                 </div>
             
                 <div className="chat-input">
+                    <div className="chat-inner">
+                    </div>
                 </div>
             </div>
         );
