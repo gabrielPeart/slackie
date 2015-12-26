@@ -34,7 +34,11 @@ default React.createClass({
                 <div ref="messages" className="messages">
                 {
                     this.props.messages.map((message, idx) => {
-                        return message;
+                        return (
+                            <div key={idx}>
+                                {message}
+                            </div>
+                            );
                     })
                 }
                 </div>

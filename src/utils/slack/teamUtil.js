@@ -1,19 +1,14 @@
 import React from 'react';
 import moment from 'moment';
 import querystring from 'querystring';
-import Promise from 'bluebird';
 import request from 'request';
-import path from 'path';
-import fs from 'fs';
 import async from 'async';
 import _ from 'lodash';
 import Slack from 'slack-client';
-import util from 'util';
 import {
     EventEmitter
 }
 from 'events';
-import commonUtil from '../commonUtil';
 
 
 
@@ -35,7 +30,7 @@ const ChatMessage = React.createClass({
     render() {
         var text = _.unescape(querystring.unescape(this.props.message.text));
         return (
-            <p>{text}</p>
+            <p >{text}</p>
         );
     }
 });
@@ -67,13 +62,11 @@ class SlackTeam extends EventEmitter {
 
         this.HistoryMessageQueue = async.queue((message, next) => {
             if (message.user !== lastUser) {
-                Historys.push(<MessageHeader time={message.ts}  user={this.slack.users[message.user]} />)
+                Historys.push(<MessageHeader time={message.ts} user={this.slack.users[message.user]} />)
                 messageHistoryBuild = [];
             }
             Historys.push(<ChatMessage message={message} />);
-
             lastUser = message.user;
-
             if (this.HistoryMessageQueue.length() === 0) {
                 this.addHistory({
                     messages: Historys,
@@ -86,7 +79,6 @@ class SlackTeam extends EventEmitter {
 
 
         this.MessageQueue = async.queue((message, next) => {
-            console.log(message)
             if (message.user !== lastUser) {
                 this.addMessage({
                     message: <MessageHeader time={message.ts} user={this.slack.users[message.user]} />,
@@ -112,7 +104,6 @@ class SlackTeam extends EventEmitter {
             this.emit('logged-in');
             this.getTeaminfo();
             console.log('You are @', this.slack.self.name, 'of', this.slack.team.name);
-            console.log(this)
         });
 
         this.slack.on('message', message => {
@@ -147,9 +138,6 @@ class SlackTeam extends EventEmitter {
     }
 
     addHistory(history) {
-
-        console.log(history)
-
         if (!this.messages[history.channel]) this.messages[history.channel] = [];
         Array.prototype.unshift.apply(this.messages[history.channel], history.messages);
         this.emit('history:loaded');
