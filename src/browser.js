@@ -1,5 +1,6 @@
 import app from 'app';
 import BrowserWindow from 'browser-window';
+import shell from 'shell';
 import path from 'path';
 import {
     ipcMain
@@ -56,6 +57,7 @@ app.on('ready', () => {
     mainWindow.webContents.on('will-navigate', (event, url) => {
         if (url.indexOf('build/index.html#') < 0) {
             event.preventDefault();
+            shell.openExternal(url);
         }
     });
 
