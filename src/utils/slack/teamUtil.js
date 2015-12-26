@@ -1,6 +1,4 @@
 import React from 'react';
-import moment from 'moment';
-import querystring from 'querystring';
 import request from 'request';
 import async from 'async';
 import _ from 'lodash';
@@ -10,29 +8,8 @@ import {
 }
 from 'events';
 
-
-
-const MessageHeader = React.createClass({
-    render() {
-        return (
-            <div className="message">
-                <img src={(this.props.user && this.props.user.profile) ? this.props.user.profile['image_72'] : ''} className="profile" />
-                <h1>{(this.props.user && this.props.user.name) ? this.props.user.name : 'Undefined'}</h1>
-                <span className="time">{moment.unix(this.props.time).calendar()}</span>
-            </div>
-        );
-    }
-});
-
-
-const ChatMessage = React.createClass({
-    render() {
-        var text = _.unescape(querystring.unescape(this.props.message.text));
-        return (
-            <p >{text}</p>
-        );
-    }
-});
+import MessageHeader from './components/MessageHeader';
+import ChatMessage from './components/message';
 
 
 
@@ -52,42 +29,42 @@ class SlackTeam extends EventEmitter {
     }
 
     setQueues() {
-        var lastUser = false;
+        this.lastUser = false;
         var messageBuild = [];
         var Historys = [];
         var messageHistoryBuild = [];
 
-        this.HistoryMessageQueue = async.queue((message, next) => {
-            if (message.user !== lastUser) {
-                Historys.push(<MessageHeader time={message.ts} user={this.slack.users[message.user]} />)
-                messageHistoryBuild = [];
-            }
-            Historys.push(<ChatMessage time={message.ts} message={message} />);
-            lastUser = message.user;
-            if (this.HistoryMessageQueue.length() === 0) {
-                this.addHistory({
-                    messages: Historys,
-                    channel: message.channel
-                });
-                Historys = [];
-            }
-            process.nextTick(next);
-        });
-
-
+        var builtHistory = 0;
         this.MessageQueue = async.queue((message, next) => {
-            if (message.user !== lastUser) {
+            if (message.history) {
+                builtHistory++
+                if (message.user !== this.lastUser) {
+                    Historys.push(<MessageHeader time={message.ts} user={this.slack.users[message.user]} />)
+                    messageHistoryBuild = [];
+                }
+                Historys.push(<ChatMessage time={message.ts} message={message} />);
+                if (message.length === builtHistory) {
+                    this.addHistory({
+                        messages: Historys,
+                        channel: message.channel
+                    });
+                    Historys = [];
+                    builtHistory = 0;
+                }
+            } else {
+                if (message.user !== this.lastUser) {
+                    this.addMessage({
+                        message: <MessageHeader time={message.ts} user={this.slack.users[message.user]} />,
+                        channel: message.channel
+                    });
+                    messageBuild = [];
+                }
                 this.addMessage({
-                    message: <MessageHeader time={message.ts} user={this.slack.users[message.user]} />,
+                    message: <ChatMessage message={message} />,
                     channel: message.channel
-                });
-                messageBuild = [];
+                })
             }
-            this.addMessage({
-                message: <ChatMessage message={message} />,
-                channel: message.channel
-            })
-            lastUser = message.user;
+            this.lastUser = message.user;
             process.nextTick(next);
         });
     }
@@ -131,8 +108,11 @@ class SlackTeam extends EventEmitter {
     }
 
     getHistory(channel, history) {
-        _.forEach(history, message => this.HistoryMessageQueue.push(Object.assign(message, {
-            channel: channel
+        this.lastUser = false;
+        _.forEach(history, message => this.MessageQueue.push(Object.assign(message, {
+            channel: channel,
+            history: true,
+            length: history.length
         })));
     }
 
