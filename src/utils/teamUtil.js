@@ -2,6 +2,7 @@ import Promise from 'bluebird';
 import _ from 'lodash';
 import fs from 'fs';
 import path from 'path';
+import async from 'async';
 import {
     app
 }
@@ -13,7 +14,11 @@ import TeamSelectorActions from '../components/TeamSelector/actions';
 
 const TeamsPath = path.join(app.getPath('userData'), 'teams.json');
 
-const SaveTeam = (id, type, token, meta) => {
+
+
+const TeamSaveQueue = async.queue((params, next) => {
+    var [id, type, token, meta] = JSON.parse(params);
+
     commonUtil.readJson(TeamsPath)
         .then(json => {
             json[id] = {
@@ -21,7 +26,12 @@ const SaveTeam = (id, type, token, meta) => {
                 type: type,
                 token: token
             };
-            commonUtil.saveJson(TeamsPath, json);
+            commonUtil.saveJson(TeamsPath, json)
+                .then(() => process.nextTick(next))
+                .catch(err => {
+                    console.error(err);
+                    process.nextTick(next);
+                });
         })
         .catch(() => {
             commonUtil.saveJson(TeamsPath, {
@@ -30,9 +40,16 @@ const SaveTeam = (id, type, token, meta) => {
                     type: type,
                     token: token
                 }
-            });
+            })
+                .then(() => process.nextTick(next))
+                .catch(err => {
+                    console.error(err);
+                    process.nextTick(next);
+                });
         });
-}
+
+});
+
 
 
 const parseTeams = teams => {
@@ -47,7 +64,7 @@ const parseTeams = teams => {
                         id: Team.slack.team.id,
                         meta: meta
                     });
-                    SaveTeam(Team.slack.team.id, 'slack', team.token, meta);
+                    TeamSaveQueue.push(JSON.stringify([Team.slack.team.id, 'slack', team.token, meta]));
                 });
                 break;
         }
