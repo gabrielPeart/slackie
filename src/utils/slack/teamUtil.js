@@ -116,7 +116,6 @@ class SlackTeam extends EventEmitter {
     }
 
     addHistory(history) {
-        console.log(history)
         if (!this.messages[history.channel]) this.messages[history.channel] = [];
         Array.prototype.unshift.apply(this.messages[history.channel], history.messages);
         this.emit('history:loaded');
