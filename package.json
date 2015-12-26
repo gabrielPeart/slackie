@@ -38,6 +38,7 @@
     "request-progress": "^0.4.0",
     "slack-api": "^0.1.11",
     "slack-client": "^1.5.1",
+    "slackdown": "^0.1.1",
     "universal-analytics": "^0.3.10",
     "uuid": "^2.0.1",
     "workerjs": "^0.1.1",
