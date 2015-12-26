@@ -30,10 +30,18 @@
     height: 20px;
     line-height: 20px;
     font-weight: 500;
+    transition: all 100ms linear;
+    border-radius: 4px;
+}
+
+.sidebar ul li:hover {
+	color: rgba(1, 115, 199, 0.6);
+    background-color: #D8D8D8;
 }
 
 .sidebar ul li.active {
     color: #0173c7;
+    background-color: #D8D8D8;
 }
 
 .sidebar ul li i {
