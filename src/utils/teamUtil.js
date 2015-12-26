@@ -37,7 +37,6 @@ const SaveTeam = (id, type, token, meta) => {
 
 const parseTeams = teams => {
     _.forEach(teams, team => {
-        console.log(team)
         switch (team.type) {
             case 'slack':
                 let Team = new SlackTeam(team.token, team.meta);

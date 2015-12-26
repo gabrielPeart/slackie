@@ -47,7 +47,7 @@ class SlackTeam extends EventEmitter {
         this.slack.login();
     }
 
-    fetchHistory(channel, latest = 'now', count = 100) {
+    fetchHistory(channel, start = 'now', count = 100) {
         this.fetchingHistory.push(channel)
         request('https://slack.com/api/channels.history?token=' + this.token + '&inclusive=1&channel=' + channel + '&count=' + count + '&unreads=1&latest=' + start, {
             json: true
@@ -55,7 +55,14 @@ class SlackTeam extends EventEmitter {
             if (!error && response.statusCode == 200) {
                 let history = body.messages ? body.messages.reverse() : [];
                 if (!this.messages[channel]) this.messages[channel] = [];
+
+                console.log(body)
+
                 _.merge(this.messages[channel], history);
+                this.emit('new:history', {
+                    channel: channel,
+                    team: this.slack.team.id
+                })
             } else {
                 console.error(err || resp.statusCode);
             }

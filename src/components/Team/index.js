@@ -81,17 +81,28 @@ default React.createClass({
         lastUser = false;
         messageBuild = [];
         MessageQueue.kill();
-
-
-        console.log(this.state.team.slack_history)
+        /*
+        console.log(this.state)
 
         _.forEach(this.state.team.messages[this.state.channel.id], message => MessageQueue.push(message));
+*/
+
 
         this.state.team.removeAllListeners();
         this.state.team.on('new:message', message => {
             if (message.channel === this.state.channel.id && message.team === this.state.team.slack.team.id)
                 MessageQueue.push(message)
         });
+
+        this.state.team.on('new:history', history => {
+            if (!history.channel === this.state.channel.id || !history.team === this.state.team.slack.team.id)
+                return;
+             var TeamEngine = teamsEngineStore.getState();
+            console.log(TeamEngine.teams[TeamEngine.selectedTeam])
+        });
+
+        this.state.team.fetchHistory(this.state.channel.id);
+
     },
     updateChannel() {
         if (this.isMounted()) {
@@ -100,8 +111,6 @@ default React.createClass({
                 messages: []
             });
         }
-
-        console.log(SidebarStore.getState().activeChannel);
         _.defer(this.getMessages);
     },
     updateTeam() {
