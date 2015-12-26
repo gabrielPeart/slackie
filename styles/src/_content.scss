@@ -38,7 +38,7 @@
 .page .messages .message .profile {
     float: left;
     margin-left: 15px;
-    width: 44px;
+    width: 40px;
     border-radius: 4px;
     cursor: pointer;
 }
@@ -46,12 +46,13 @@
 .page .messages p {
     color: #202B33;
     padding: 3px;
-    margin: 3px 3px 0px 66px;
+    margin: 3px 3px 0px 62px;
     white-space: pre-wrap;
     padding-right: 10px;
     word-break: break-word;
     border-radius: 3px;
     transition: background 0.125s ease-in-out;
+    font-size: 15px;
 }
 
 .page .messages p:hover {
@@ -61,7 +62,7 @@
 .page .messages .message h1 {
     color: #202B33;
     float: left;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 500;
     margin-left: 10px;
 }
