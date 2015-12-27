@@ -54,7 +54,7 @@ default React.createClass({
                     }
                 </div>
             
-                <Input />
+                <Input {...this.props} />
             </div>
         );
     }

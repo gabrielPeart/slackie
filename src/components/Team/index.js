@@ -71,7 +71,7 @@ default React.createClass({
         return (
             <div>
                 <Sidebar channel={this.state.channel.id} team={this.state.team}/>
-                <Chat channel={this.state.channel} name={ (this.state.channel && this.state.channel.is_channel) ? ('#' + this.state.channel.name) : this.state.channel.name} topic={this.state.channel.topic ? this.state.channel.topic.value.split('\n') : undefined} messages={this.state.messages} />
+                <Chat team={this.state.team ? this.state.team.slack : false} channel={this.state.channel} name={ (this.state.channel && this.state.channel.is_channel) ? ('#' + this.state.channel.name) : this.state.channel.name} topic={this.state.channel.topic ? this.state.channel.topic.value.split('\n') : undefined} messages={this.state.messages} />
             </div>
         );
     }
