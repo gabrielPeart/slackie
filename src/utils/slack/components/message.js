@@ -7,7 +7,11 @@ import ReactEmoji from 'react-emoji';
 import slackdown from 'slackdown';
 import moment from 'moment';
 
-
+const If = React.createClass({
+    render() {
+        return this.props.test ? this.props.children : false;
+    }
+});
 
 const formatText = text => {
 
@@ -25,7 +29,8 @@ default React.createClass({
     getInitialState() {
         return {
             text: this.props.text,
-            time: this.props.ts
+            time: this.props.ts,
+            edited: false
         };
     },
 
@@ -59,7 +64,8 @@ default React.createClass({
     handelEdit(edit) {
         this.setState({
             text: edit.text,
-            time: edit.ts
+            time: edit.ts,
+            edited: true
         });
         _.defer(this.handelListenEvents);
     },
@@ -77,14 +83,15 @@ default React.createClass({
 
         return (
             <div className="msg">
-        		<div className="time">{moment.unix(this.state.time).format('h:mm')}</div>
-        		<div>
-        		    {
-                    	text.map((el, idx) => {
-                    	    return <span key={idx} dangerouslySetInnerHTML={{__html: (React.isValidElement(el) ? ReactDOMServer.renderToString(el) : el)}} />;
-                    	})
-                	}
-        		</div>
+        		<div className="time">{moment.unix(this.state.time).format('h:mm')}</div> 
+        		{
+                   	text.map((el, idx) => {
+                   	    return <span key={idx} dangerouslySetInnerHTML={{__html: (React.isValidElement(el) ? ReactDOMServer.renderToString(el) : el)}} />;
+                   	})
+                }
+                <If test={this.state.edited}>
+                	<div className="edited">(edited)</div>
+                </If>
         	</div>
         );
     }

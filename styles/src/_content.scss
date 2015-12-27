@@ -67,6 +67,16 @@
     color: gray;
     opacity: 0;
 }
+
+.page .messages .msg .edited {
+    float: right;
+    font-size: 12px;
+    position: relative;
+    top: 2px;
+    font-weight: 400;
+    color: gray;
+}
+
 .page .messages .msg .emoji{
     top: 4px;
     position: relative;

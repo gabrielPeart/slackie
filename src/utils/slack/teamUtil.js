@@ -75,7 +75,7 @@ class SlackTeam extends EventEmitter {
 		switch(message.subtype) {
 		    case 'message_changed':
 		    	var eventName = message.channel + ':' + message.previous_message.user + ':' + message.previous_message.ts + ':' + message.previous_message.text;
-		        this.emit(eventName, message)
+		        this.emit(eventName, message);
 		        break;
 		}
 
