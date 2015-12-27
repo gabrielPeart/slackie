@@ -35,8 +35,8 @@ default React.createClass({
         if (!this.state.team || !this.state.channel)
             return false;
 
-        this.state.team.removeAllListeners(['new:message', 'history:loaded']);
-
+        this.state.team.removeAllListeners('new:message');
+        this.state.team.removeAllListeners('history:loaded');
         this.state.team.on('new:message', this.updateMessages);
         this.state.team.on('history:loaded', this.updateMessages);
 
