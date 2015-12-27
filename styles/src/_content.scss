@@ -35,7 +35,8 @@
 
 .page .messages .message {
     position: relative;
-    margin-top: 20px
+    margin-top: 20px;
+    animation: fadein 200ms;
 }
 
 .page .messages .message .profile {
@@ -83,6 +84,7 @@
 }
 
 .page .messages .msg {
+	animation: fadein 500ms;
     color: #202B33;
     padding: 3px;
     word-break: break-word;
@@ -93,6 +95,12 @@
     transition: all 125ms ease-in-out;
     font-size: 15px;
 }
+
+@-webkit-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
 
 .page .messages .msg:hover {
     background-color: rgb(240,240,240);
@@ -139,3 +147,4 @@
     padding: 1px 10px;
     box-sizing: border-box;
 }
+
