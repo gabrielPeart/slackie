@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import querystring from 'querystring';
 import _ from 'lodash';
-import emojione from 'emojione';
 import ReactEmoji from 'react-emoji';
 import slackdown from 'slackdown';
 import moment from 'moment';
