@@ -1,18 +1,24 @@
 import React from 'react';
 import querystring from 'querystring';
 import _ from 'lodash';
+import emojione from 'emojione';
 import slackdown from 'slackdown';
-slackdown.parse('The quick brown fox jumps over the lazy dog')
 
 
+emojione.imageType = 'svg';
+emojione.imagePathSVG = '../images/emojione/svg/';
 
 
 export
 default React.createClass({
     render() {
-        var text = _.unescape(querystring.unescape(this.props.message.text));
+        var text = slackdown.parse(_.unescape(querystring.unescape(this.props.message.text)));
+
+			text = emojione.shortnameToImage(text);
+
+
         return (
-            <div className="msg" dangerouslySetInnerHTML={{__html: slackdown.parse(text)}} />
+            <div className="msg" dangerouslySetInnerHTML={{__html: text}} />
         );
     }
 });
