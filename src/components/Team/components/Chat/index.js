@@ -20,14 +20,14 @@ default React.createClass({
         window.removeEventListener('resize', this.scrollBottom);
     },
 
-    componentDidUpdate: function() {
+    componentDidUpdate() {
         if (this.shouldScrollBottom) {
             var node = this.refs['messages'];
             node.scrollTop = node.scrollHeight
         }
     },
 
-    componentWillUpdate: function() {
+    componentWillUpdate() {
         if (!this.refs['messages'])
             return;
         var node = this.refs['messages'];
@@ -43,7 +43,15 @@ default React.createClass({
                 </div>
 
                 <div ref="messages" className="messages">
-                    {this.props.messages}
+                    {
+                        this.props.messages.map((el, idx) => {
+                            return(
+                                <span key={idx}>
+                                    {el}
+                                </span>
+                            );
+                        })
+                    }
                 </div>
             
                 <Input />
