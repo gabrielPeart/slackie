@@ -26,7 +26,6 @@ class SlackTeam extends EventEmitter {
 
         this.setQueues();
         this.load();
-
     }
 
     setQueues() {
@@ -37,8 +36,6 @@ class SlackTeam extends EventEmitter {
 
         var builtHistory = 0;
 
-
-
         this.MessageQueue = async.queue((message, next) => {
             if (message.history) {
                 builtHistory++
@@ -46,7 +43,7 @@ class SlackTeam extends EventEmitter {
                     Historys.push(<MessageHeader time={message.ts} user={this.slack.users[message.user]} />)
                     messageHistoryBuild = [];
                 }
-                Historys.push(<ChatMessage {...message} />);
+                Historys.push(<ChatMessage Emmiter={this} {...message} />);
                 if (message.length === builtHistory) {
                     this.addHistory({
                         messages: Historys,
@@ -58,13 +55,13 @@ class SlackTeam extends EventEmitter {
             } else {
                 if (message.user !== this.LastMessage.user) {
                     this.addMessage({
-                        message: <MessageHeader  time={message.ts} user={this.slack.users[message.user]} />,
+                        message: <MessageHeader time={message.ts} user={this.slack.users[message.user]} />,
                         channel: message.channel
                     });
                     messageBuild = [];
                 }
                 this.addMessage({
-                    message: <ChatMessage {...message} />,
+                    message: <ChatMessage Emmiter={this} {...message} />,
                     channel: message.channel
                 })
             }
@@ -73,6 +70,16 @@ class SlackTeam extends EventEmitter {
         });
     }
 
+    handelSubtypes(message){
+
+		switch(message.subtype) {
+		    case 'message_changed':
+		    	var eventName = message.channel + ':' + message.previous_message.user + ':' + message.previous_message.ts + ':' + message.previous_message.text;
+		        this.emit(eventName, message)
+		        break;
+		}
+
+    }
 
 
     load() {
@@ -85,6 +92,10 @@ class SlackTeam extends EventEmitter {
         });
 
         this.slack.on('message', message => {
+        	if(message.subtype)
+        		return this.handelSubtypes(message);
+        	if(message.hidden)
+        		return console.info(message);
             this.MessageQueue.push(message);
         });
 

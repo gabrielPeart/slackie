@@ -21,8 +21,52 @@ const formatText = text => {
 export
 default React.createClass({
     mixins: [ReactEmoji],
+
+    getInitialState() {
+        return {
+            text: this.props.text,
+            time: this.props.ts
+        };
+    },
+
+    componentDidMount() {
+        this.handelListenEvents();
+    },
+
+    componentWillUnmount() {
+        this.handelUnlistenEvents();
+    },
+
+    handelUnlistenEvents() {
+        this.props.Emmiter.removeAllListeners(this.props.channel + ':' + this.props.user + ':' + this.state.time + ':' + this.state.text);
+    },
+
+    handelListenEvents() {
+        this.props.Emmiter.on(this.props.channel + ':' + this.props.user + ':' + this.state.time + ':' + this.state.text, this.handelMessageEvents);
+    },
+
+    handelMessageEvents(event) {
+        this.handelUnlistenEvents();
+        switch (event.subtype) {
+            case 'message_changed':
+                this.handelEdit(event.message);
+                break;
+            default:
+                this.handelListenEvents();
+        }
+    },
+
+    handelEdit(edit) {
+        this.setState({
+            text: edit.text,
+            time: edit.ts
+        });
+        _.defer(this.handelListenEvents);
+    },
+
+
     render() {
-        var text = this.emojify(formatText(this.props.text), {
+        var text = this.emojify(formatText(this.state.text), {
             emojiType: 'twemoji',
             ext: 'svg',
             attributes: {
@@ -31,10 +75,9 @@ default React.createClass({
         });
         text = text ? text : [];
 
-
         return (
             <div className="msg">
-        		<div className="time">{moment.unix(this.props.ts).format('h:mm')}</div>
+        		<div className="time">{moment.unix(this.state.time).format('h:mm')}</div>
         		<div>
         		    {
                     	text.map((el, idx) => {
