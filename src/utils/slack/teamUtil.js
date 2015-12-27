@@ -33,17 +33,13 @@ class SlackTeam extends EventEmitter {
         var messageBuild = [];
         var Historys = [];
         var messageHistoryBuild = [];
-        this.LastMessage = false;
+        this.LastMessage = {};
 
         var builtHistory = 0;
 
 
 
         this.MessageQueue = async.queue((message, next) => {
-        	
-        	if(!this.LastMessage)
-        		this.LastMessage = message;
-
             if (message.history) {
                 builtHistory++
                 if (message.user !== this.LastMessage.user) {
@@ -60,7 +56,7 @@ class SlackTeam extends EventEmitter {
                     builtHistory = 0;
                 }
             } else {
-                if (message.user !== this.lastUser.user) {
+                if (message.user !== this.LastMessage.user) {
                     this.addMessage({
                         message: <MessageHeader  time={message.ts} user={this.slack.users[message.user]} />,
                         channel: message.channel
@@ -98,7 +94,7 @@ class SlackTeam extends EventEmitter {
     }
 
     fetchHistory(channel, latest, count = 100) {
-    	this.LastMessage = false;
+    	this.LastMessage = {};
 
     	if(_.includes(this.gotHistory, channel) && !latest){
     		this.emit('history:loaded');
