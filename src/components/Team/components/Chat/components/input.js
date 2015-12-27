@@ -9,6 +9,9 @@ default React.createClass({
         if (this.refs['chat-input'].value.length === 0)
             return;
 
+        if (this.refs['chat-input'].value.startsWith('```'))
+            return;
+
         let channel = this.props.team.getChannelGroupOrDMByID(this.props.channel.id);
         channel.send(this.refs['chat-input'].value);
 
@@ -19,7 +22,7 @@ default React.createClass({
         	user: this.props.team.self.id,
         	channel: this.props.channel.id,
         	ts: new Date().getTime() / 1000
-        })
+        });
 
         this.refs['chat-input'].value = '';
     },
@@ -28,7 +31,7 @@ default React.createClass({
             <div className="chat-input">
                 <div className="chat-inner">
                 	<form onSubmit={this.handelSend}>
-                		<input ref="chat-input"/>
+                		<textarea wrap='soft' ref="chat-input"/>
                 	 </form>
                 </div>
             </div>
