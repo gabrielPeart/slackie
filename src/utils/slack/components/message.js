@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOMServer from 'react-dom/server';
 import querystring from 'querystring';
 import _ from 'lodash';
 import emojione from 'emojione';
@@ -21,12 +22,14 @@ export
 default React.createClass({
     mixins: [ReactEmoji],
     render() {
-    	var text = this.emojify(formatText(this.props.text), {
-    		emojiType: 'twemoji',
-    		ext: 'svg',
-    		attributes: {className: 'emoji'}
-    	});
-    	text = text? text: [];
+        var text = this.emojify(formatText(this.props.text), {
+            emojiType: 'twemoji',
+            ext: 'svg',
+            attributes: {
+                className: 'emoji'
+            }
+        });
+        text = text ? text : [];
 
 
         return (
@@ -35,7 +38,7 @@ default React.createClass({
         		<div>
         		    {
                     	text.map((el, idx) => {
-                    	    return React.isValidElement(el) ? el : <span dangerouslySetInnerHTML={{__html: el}} />;
+                    	    return <span key={idx} dangerouslySetInnerHTML={{__html: (React.isValidElement(el) ? ReactDOMServer.renderToString(el) : el)}} />;
                     	})
                 	}
         		</div>
