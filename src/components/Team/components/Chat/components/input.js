@@ -1,4 +1,5 @@
 import React from 'react';
+import Textarea from 'react-textarea-autosize';
 import _ from 'lodash';
 
 export
@@ -15,13 +16,13 @@ default React.createClass({
         let channel = this.props.team.getChannelGroupOrDMByID(this.props.channel.id);
         channel.send(this.refs['chat-input'].value);
 
-    
+
         this.props.team.emit('message', {
-        	text: this.refs['chat-input'].value,
-        	type: 'message',
-        	user: this.props.team.self.id,
-        	channel: this.props.channel.id,
-        	ts: new Date().getTime() / 1000
+            text: this.refs['chat-input'].value,
+            type: 'message',
+            user: this.props.team.self.id,
+            channel: this.props.channel.id,
+            ts: new Date().getTime() / 1000
         });
 
         this.refs['chat-input'].value = '';
@@ -31,7 +32,7 @@ default React.createClass({
             <div className="chat-input">
                 <div className="chat-inner">
                 	<form onSubmit={this.handelSend}>
-                		<textarea wrap='soft' ref="chat-input"/>
+                		<Textarea className="textarea-input" ref="chat-input"></Textarea>
                 	 </form>
                 </div>
             </div>

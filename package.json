@@ -36,6 +36,7 @@
     "react-emoji": "^0.4.1",
     "react-mousetrap": "0.0.6",
     "react-router": "^1.0.2",
+    "react-textarea-autosize": "^3.2.0",
     "request-progress": "^0.4.0",
     "slack-api": "^0.1.11",
     "slack-client": "^1.5.1",
