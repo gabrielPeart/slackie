@@ -9,16 +9,23 @@ emojione.imageType = 'svg';
 emojione.imagePathSVG = '../images/emojione/svg/';
 
 
+
+const formatText = text => {
+	
+    text = slackdown.parse(_.unescape(querystring.unescape(text)));
+
+    text = emojione.shortnameToImage(text);
+
+    return text;
+}
+
+
+
 export
 default React.createClass({
     render() {
-        var text = slackdown.parse(_.unescape(querystring.unescape(this.props.message.text)));
-
-			text = emojione.shortnameToImage(text);
-
-
         return (
-            <div className="msg" dangerouslySetInnerHTML={{__html: text}} />
+        	<div className="msg" dangerouslySetInnerHTML={{__html: formatText(this.props.message.text)}} />
         );
     }
 });
