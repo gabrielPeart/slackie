@@ -103,6 +103,7 @@
 }
 
 
+
 .page .messages .msg:hover {
     background-color: rgb(240,240,240);
 }
@@ -157,3 +158,9 @@
     resize: none;
 }
 
+
+
+.page .chat-input .chat-inner .textarea-input{
+    position: absolute;
+    bottom: 10px;
+}
