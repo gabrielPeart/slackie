@@ -9,6 +9,7 @@ default React.createClass({
 		return (
 			<div className="chat-input">
                 <div className="chat-inner">
+                	<input></input>
                 </div>
             </div>
 		);
