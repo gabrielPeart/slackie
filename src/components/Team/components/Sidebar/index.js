@@ -30,7 +30,8 @@ const SidebarTab = React.createClass({
         }
     },
     handelSelect(channel) {
-        SidebarActions.setActive(channel);
+        if(this.state.activeChannel.id !== channel.id)
+            SidebarActions.setActive(channel);
     },
     render() {
         return (
