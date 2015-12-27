@@ -11,21 +11,30 @@ default React.createClass({
 
     componentDidMount() {
         window.addEventListener('resize', this.scrollBottom);
+
+        var node = this.refs['messages'];
+        node.scrollTop = node.scrollHeight;
     },
 
     componentWillUnmount() {
         window.removeEventListener('resize', this.scrollBottom);
     },
 
-    scrollBottom() {
+    componentDidUpdate: function() {
+        if (this.shouldScrollBottom) {
+            var node = this.refs['messages'];
+            node.scrollTop = node.scrollHeight
+        }
+    },
+
+    componentWillUpdate: function() {
         if (!this.refs['messages'])
             return;
-        this.refs['messages'].scrollTop = this.refs['messages'].scrollHeight;
-
+        var node = this.refs['messages'];
+        this.shouldScrollBottom = node.scrollTop + node.offsetHeight === node.scrollHeight;
     },
 
     render() {
-        _.defer(this.scrollBottom);
         return (
             <div className="page">
                 <div className="header">
