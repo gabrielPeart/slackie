@@ -41,9 +41,11 @@
 .page .messages .message .profile {
     float: left;
     margin-left: 15px;
+    position: relative;
     width: 40px;
     border-radius: 4px;
     cursor: pointer;
+    z-index: 2;
 }
 
 .page .messages .msg em{
@@ -52,6 +54,18 @@
 
 .page .messages .msg strong {
     font-weight: 500;
+}
+.page .messages .msg .time {
+    color: black;
+    float: left;
+    margin-left: -42px;
+    font-size: 12px;
+    font-weight: 600px;
+    position: relative;
+    top: 2px;
+    font-weight: 400;
+    color: gray;
+    opacity: 0;
 }
 
 .page .messages .msg {
@@ -62,12 +76,16 @@
     white-space: pre-wrap;
     padding-right: 10px;
     border-radius: 3px;
-    transition: background 0.125s ease-in-out;
+    transition: all 125ms ease-in-out;
     font-size: 15px;
 }
 
 .page .messages .msg:hover {
     background-color: rgb(240,240,240);
+}
+
+.page .messages .msg:hover .time{
+    opacity: 1;
 }
 
 .page .messages .message h1 {
