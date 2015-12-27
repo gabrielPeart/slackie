@@ -40,7 +40,7 @@ default React.createClass({
         this.state.team.on('new:message', this.updateMessages);
         this.state.team.on('history:loaded', this.updateMessages);
 
-        this.state.team.fetchHistory(this.state.channel.id);
+        _.defer(() => this.state.team.fetchHistory(this.state.channel.id));
     },
 
     updateMessages() {
