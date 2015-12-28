@@ -13,11 +13,9 @@ default React.createClass({
     },
 
     handelSend(e) {
-        if (this.refs['chat-input'].value.length === 0)
+        if (this.refs['chat-input'].value.replace(/(\r\n|\n|\r)/gm, '').length === 0) {
             return;
-
-        if (this.refs['chat-input'].value.startsWith('```'))
-            return;
+        }
 
         let channel = this.props.team.getChannelGroupOrDMByID(this.props.channel.id);
         channel.send(this.refs['chat-input'].value);
@@ -34,7 +32,7 @@ default React.createClass({
         this.refs['chat-input'].value = '';
     },
     handelKeyDown(event) {
-        if (event.keyCode == 13) {
+        if (event.keyCode == 13 && !event.shiftKey) {
             event.preventDefault();
             return this.handelSend();
         }
@@ -43,7 +41,7 @@ default React.createClass({
         return (
             <div className="chat-input">
                 <div className="chat-inner">
-                	<Textarea onKeyDown={this.handelKeyDown} className="textarea-input" ref="chat-input"/>
+                	<Textarea onKeyUp={this.handelKeyDown} className="textarea-input" ref="chat-input"/>
                 </div>
             </div>
         );
