@@ -74,7 +74,7 @@
     opacity: 0;
 }
 
-.page .messages .msg .inline-image{
+.page .messages .msg .inline-image img{
     max-width: 70vw;
     max-height: 30vh;
     display: block;
@@ -84,7 +84,7 @@
     border: 1px solid rgba(128, 128, 128, 0.38);
 }
 
-.page .messages .msg .inline-image.false{
+.page .messages .msg .inline-image.false img{
     height: 0px;
     border: 0px solid rgba(128, 128, 128, 0.38);
 }

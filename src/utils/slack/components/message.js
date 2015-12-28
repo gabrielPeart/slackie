@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
+import ImageLoader from 'react-imageloader';
 import querystring from 'querystring';
 import _ from 'lodash';
 import ReactEmoji from 'react-emoji';
@@ -82,6 +83,10 @@ default React.createClass({
         });
     },
 
+    handelMessageLoaded(inline) {
+        this.props.Emmiter.emit('message:loaded', inline, this.state.time);
+    },
+
     getInline() {
         switch (this.state.subtype) {
             case 'file_share':
@@ -89,7 +94,10 @@ default React.createClass({
                     return (
                         <span>
                 			<i onClick={this.handelInLineToggle} className={"toggle-inline " + (this.state.attachmentExpanded ? 'ion-arrow-down-b' : 'ion-arrow-right-b')} />
-                			<img className={"inline-image " + this.state.attachmentExpanded} alt={this.state.file.title} src={this.state.file.url} />
+                			<ImageLoader
+                				onLoad={this.handelMessageLoaded.bind(this,true)}
+                				className={"inline-image " + this.state.attachmentExpanded}
+                			 	src={this.state.file.url} />
                 		</span>
                     );
                 break;
@@ -98,9 +106,13 @@ default React.createClass({
                     return (
                         <span>
                 			<i onClick={this.handelInLineToggle} className={"toggle-inline " + (this.state.attachmentExpanded ? 'ion-arrow-down-b' : 'ion-arrow-right-b')} />
-                			<img className={"inline-image " + this.state.attachmentExpanded} alt={this.state.attachments[0].image_url} src={this.state.attachments[0].image_url} />
+                            <ImageLoader
+                                onLoad={this.handelMessageLoaded.bind(this,true)}
+                                className={"inline-image " + this.state.attachmentExpanded}
+                                src={this.state.attachments[0].image_url} />
                 		</span>
                     );
+                this.handelMessageLoaded(false);
                 return null;
         }
     },
