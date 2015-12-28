@@ -5,8 +5,6 @@ import _ from 'lodash';
 export
 default React.createClass({
     handelSend(e) {
-        e.preventDefault();
-
         if (this.refs['chat-input'].value.length === 0)
             return;
 
@@ -27,13 +25,17 @@ default React.createClass({
 
         this.refs['chat-input'].value = '';
     },
+    handelKeyDown(event) {
+    	if(event.keyCode == 13){
+    		event.preventDefault();
+    		return this.handelSend();
+    	}
+    },
     render() {
         return (
             <div className="chat-input">
                 <div className="chat-inner">
-                	<form onSubmit={this.handelSend}>
-                		<Textarea className="textarea-input" ref="chat-input"></Textarea>
-                	 </form>
+                	<Textarea onKeyDown={this.handelKeyDown} className="textarea-input" ref="chat-input"/>
                 </div>
             </div>
         );
