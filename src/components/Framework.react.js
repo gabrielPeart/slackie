@@ -22,7 +22,6 @@ import analyticsActions from '../actions/analyticsActions';
 
 import Header from './Header';
 import TeamSelector from './TeamSelector';
-import Modal from './Modal';
 
 
 const Framework = React.createClass({
@@ -61,7 +60,6 @@ const Framework = React.createClass({
               <div className="main">
               	{React.cloneElement(this.props.children, {query: this.props.query})}
               </div>
-              <Modal/>
             </div>
         );
     }
