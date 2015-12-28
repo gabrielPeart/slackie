@@ -40,8 +40,13 @@ default React.createClass({
             return;
 
         this.props.emitter.removeAllListeners('message:loaded');
-        var lastTime = 0;
-        var throttle = _.throttle((inline, time) => _.defer(this.checkAndSroll), 300);
+        this.props.emitter.removeAllListeners('inline:toggle');
+
+        var throttle = _.throttle(() => _.defer(this.checkAndSroll), 300);
+        this.props.emitter.on('inline:toggle', ()=>{
+            this.shouldScrollBottom = this.refs['messages'].scrollTop + this.refs['messages'].offsetHeight === this.refs['messages'].scrollHeight;
+            this.checkAndSroll();
+        });
         this.props.emitter.on('message:loaded', throttle);
     },
 
