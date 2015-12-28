@@ -84,7 +84,10 @@ default React.createClass({
     },
 
     handelMessageLoaded(inline) {
-        this.props.Emmiter.emit('message:loaded', inline, this.state.time);
+        if (inline)
+            _.delay(() => this.props.Emmiter.emit('message:loaded', inline, this.state.time), 300);
+        else
+            this.props.Emmiter.emit('message:loaded', inline, this.state.time);
     },
 
     getInline() {

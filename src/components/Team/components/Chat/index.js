@@ -19,14 +19,13 @@ default React.createClass({
     },
 
     componentDidUpdate() {
-        this.refreshListeners();
         this.checkAndSroll();
+        this.refreshListeners();
     },
 
     componentWillUpdate() {
         if (!this.refs['messages'])
             return;
-
         this.shouldScrollBottom = this.refs['messages'].scrollTop + this.refs['messages'].offsetHeight === this.refs['messages'].scrollHeight;
     },
 
@@ -40,13 +39,9 @@ default React.createClass({
         if (!this.props.emitter)
             return;
 
-        this.props.emitter.removeAllListeners('inline:loaded');
+        this.props.emitter.removeAllListeners('message:loaded');
         var lastTime = 0;
-        var throttle = _.throttle((inline, time) => {
-            if (time > lastTime)
-                this.checkAndSroll();
-            lastTime = time;
-        }, 300);
+        var throttle = _.throttle((inline, time) => _.defer(this.checkAndSroll), 300);
         this.props.emitter.on('message:loaded', throttle);
     },
 
