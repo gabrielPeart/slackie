@@ -13,6 +13,7 @@ import ChatMessage from './components/message';
 
 
 
+
 class SlackTeam extends EventEmitter {
     constructor(access_token, meta = false) {
         super();
@@ -71,10 +72,9 @@ class SlackTeam extends EventEmitter {
     }
 
     handelSubtypes(message){
-
 		switch(message.subtype) {
 		    case 'message_changed':
-		    	var eventName = message.channel + ':' + message.previous_message.user + ':' + message.previous_message.ts + ':' + message.previous_message.text;
+		    	var eventName = message.channel + ':' + message.previous_message.user + ':' + message.previous_message.ts;
 		        this.emit(eventName, message);
 		        break;
 		    case 'file_share':
@@ -84,7 +84,6 @@ class SlackTeam extends EventEmitter {
 		    default:
 		        console.log(message)
 		}
-
     }
 
 

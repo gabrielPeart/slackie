@@ -27,22 +27,18 @@ default React.createClass({
 
     getInitialState() {
         return {
+            subtype: this.props.subtype,
+            attachments: this.props.attachments,
+            file: this.props.file,
             text: this.props.text,
             time: this.props.ts,
             edited: false,
-            visible: false,
             attachmentExpanded: true
         };
     },
 
-    componentDidMount() {
+    componentWillMount() {
         this.handelListenEvents();
-        _.defer(() => {
-            this.setState({
-                visible: true
-            });
-        })
-
     },
 
     componentWillUnmount() {
@@ -50,58 +46,67 @@ default React.createClass({
     },
 
     handelUnlistenEvents() {
-        this.props.Emmiter.removeAllListeners(this.props.channel + ':' + this.props.user + ':' + this.state.time + ':' + this.state.text);
+        this.props.Emmiter.removeAllListeners(this.props.channel + ':' + this.props.user + ':' + this.state.time);
     },
 
     handelListenEvents() {
-        this.props.Emmiter.on(this.props.channel + ':' + this.props.user + ':' + this.state.time + ':' + this.state.text, this.handelMessageEvents);
+        this.props.Emmiter.on(this.props.channel + ':' + this.props.user + ':' + this.state.time, this.handelMessageEvents);
     },
 
     handelMessageEvents(event) {
         this.handelUnlistenEvents();
         switch (event.subtype) {
             case 'message_changed':
-                this.handelEdit(event.message);
+                this.handelEdit(event.message, event.subtype);
                 break;
             default:
                 this.handelListenEvents();
         }
     },
 
-    handelEdit(edit) {
+    handelEdit(edit, subtype) {
         this.setState({
+            subtype: subtype,
+            attachments: edit.attachments ? edit.attachments : false,
+            file: edit.file ? edit.file : false,
             text: edit.text,
             time: edit.ts,
-            edited: true
+            edited: edit.edited ? true : false
         });
         _.defer(this.handelListenEvents);
     },
 
-    handelInLineToggle(){
-		this.setState({
+    handelInLineToggle() {
+        this.setState({
             attachmentExpanded: !this.state.attachmentExpanded
         });
     },
 
     getInline() {
-        switch (this.props.subtype) {
+        switch (this.state.subtype) {
             case 'file_share':
-                console.log(this.props);
-                if(this.props.file && this.props.file.mimetype && this.props.file.mimetype.includes('image'))
-                	return (
-                		<span>
+                if (this.state.file && this.state.file.mimetype && this.state.file.mimetype.includes('image'))
+                    return (
+                        <span>
                 			<i onClick={this.handelInLineToggle} className={"toggle-inline " + (this.state.attachmentExpanded ? 'ion-arrow-down-b' : 'ion-arrow-right-b')} />
-                			<img className={"inline-image " + this.state.attachmentExpanded} alt={this.props.file.title} src={this.props.file.url} />
+                			<img className={"inline-image " + this.state.attachmentExpanded} alt={this.state.file.title} src={this.state.file.url} />
                 		</span>
-                	);
+                    );
                 break;
             default:
+                if (this.state.attachments && this.state.attachments[0] && this.state.attachments[0].image_url)
+                    return (
+                        <span>
+                			<i onClick={this.handelInLineToggle} className={"toggle-inline " + (this.state.attachmentExpanded ? 'ion-arrow-down-b' : 'ion-arrow-right-b')} />
+                			<img className={"inline-image " + this.state.attachmentExpanded} alt={this.state.attachments[0].image_url} src={this.state.attachments[0].image_url} />
+                		</span>
+                    );
                 return null;
         }
     },
 
     getClassName() {
-        switch (this.props.subtype) {
+        switch (this.state.subtype) {
             case 'me_message':
                 return 'me_message';
                 break;
