@@ -123,7 +123,7 @@ module.exports = {
             console.info('Checking for updates for client v.' + version);
 
         analyticsActions.event(['update', 'check', version]);
-        getJson('https://api.github.com/repos/luigiplr/slakie/releases/latest' + (annon ? '' : '?client_id=XXXXXXXXXXXXXXX&client_secret=XXXXXXXXXXXXXXX'))
+        getJson('https://api.github.com/repos/luigiplr/slackie/releases/latest' + (annon ? '' : '?client_id=XXXXXXXXXXXXXXX&client_secret=XXXXXXXXXXXXXXX'))
             .then(json => {
 
                 if (version === json.tag_name || json.prerelease)

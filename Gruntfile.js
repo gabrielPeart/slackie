@@ -29,7 +29,7 @@ module.exports = function(grunt) {
                     version: packagejson['electron-version'],
                     platform: 'win32',
                     arch: arch,
-                    asar: true
+                    asar: false
                 }
             }
         },
