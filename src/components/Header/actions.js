@@ -22,7 +22,7 @@ class HeaderActions {
     toggleMinimize() {
         this.dispatch();
         ipcRenderer.send('app:minimize');
-        this.actions.minimize();
+        this.actions.minimized();
     }
 
     close() {
