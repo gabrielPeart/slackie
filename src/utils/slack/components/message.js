@@ -81,7 +81,7 @@ default React.createClass({
         this.setState({
             attachmentExpanded: !this.state.attachmentExpanded
         });
-        _.defer(() => this.props.Emmiter.emit('inline:toggle'));
+        this.props.Emmiter.emit('inline:toggle');
     },
 
     handelMessageLoaded(inline) {

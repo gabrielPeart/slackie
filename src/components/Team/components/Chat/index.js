@@ -45,7 +45,7 @@ default React.createClass({
         var throttle = _.throttle(() => _.defer(this.checkAndSroll), 300);
         this.props.emitter.on('inline:toggle', ()=>{
             this.shouldScrollBottom = this.refs['messages'].scrollTop + this.refs['messages'].offsetHeight === this.refs['messages'].scrollHeight;
-            this.checkAndSroll();
+            _.defer(this.checkAndSroll);
         });
         this.props.emitter.on('message:loaded', throttle);
     },
