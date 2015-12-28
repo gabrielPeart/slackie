@@ -53,6 +53,11 @@
     font-style: italic;
 }
 
+.page .messages .msg .me_message{
+    font-style: italic !important;
+    color: gray !important;
+}
+
 .page .messages .msg strong {
     font-weight: 500;
 }

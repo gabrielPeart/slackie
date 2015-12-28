@@ -63,7 +63,7 @@ class SlackTeam extends EventEmitter {
                 this.addMessage({
                     message: <ChatMessage Emmiter={this} {...message} />,
                     channel: message.channel
-                })
+                });
             }
             this.LastMessage = message;
             process.nextTick(next);
@@ -77,6 +77,11 @@ class SlackTeam extends EventEmitter {
 		    	var eventName = message.channel + ':' + message.previous_message.user + ':' + message.previous_message.ts + ':' + message.previous_message.text;
 		        this.emit(eventName, message);
 		        break;
+		    case 'me_message':
+		    	this.MessageQueue.push(message);
+		    	break;
+		    default:
+		        console.log(message)
 		}
 
     }

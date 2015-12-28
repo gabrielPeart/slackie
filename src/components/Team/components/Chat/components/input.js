@@ -6,20 +6,13 @@ import _ from 'lodash';
 export
 default React.createClass({
 
-    componentDidMount() {},
-
-    componentWillUnmount() {
-
-    },
-
-    handelSend(e) {
+    handelSend() {
         if (this.refs['chat-input'].value.replace(/(\r\n|\n|\r)/gm, '').length === 0) {
             return;
         }
 
         let channel = this.props.team.getChannelGroupOrDMByID(this.props.channel.id);
         channel.send(this.refs['chat-input'].value);
-
 
         this.props.team.emit('message', {
             text: this.refs['chat-input'].value,
