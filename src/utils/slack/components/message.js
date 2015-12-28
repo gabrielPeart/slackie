@@ -76,6 +76,27 @@ default React.createClass({
         _.defer(this.handelListenEvents);
     },
 
+    getInline() {
+        switch (this.props.subtype) {
+            case 'file_share':
+                console.log(this.props);
+                if(this.props.file && this.props.file.mimetype && this.props.file.mimetype.includes('image'))
+                	return <img className="inline-image" alt={this.props.file.title} src={this.props.file.url} />;
+                break;
+            default:
+                return null;
+        }
+    },
+
+    getClassName() {
+        switch (this.props.subtype) {
+            case 'me_message':
+                return 'me_message';
+                break;
+            default:
+                return '';
+        }
+    },
 
     render() {
         var text = this.emojify(formatText(this.state.text), {
@@ -87,20 +108,15 @@ default React.createClass({
         });
         text = text ? text : [];
 
-        var className = (this.props.subtype && this.props.subtype === 'me_message') ? 'me_message' : '';
-
         return (
             <div className="msg">
         		<div className="time">{moment.unix(this.state.time).format('h:mm')}</div> 
         		{
                    	text.map((el, idx) => {
-                   	    return (
-                   	    	<span key={idx}>
-                   	    		<span className={className} dangerouslySetInnerHTML={{__html: (React.isValidElement(el) ? ReactDOMServer.renderToString(el) : el)}} />
-                   	    	</span>
-                   	    );
+                   	    return <span key={idx} className={this.getClassName()} dangerouslySetInnerHTML={{__html: (React.isValidElement(el) ? ReactDOMServer.renderToString(el) : el)}} />;
                    	})
                 }
+                {this.getInline()}
                 <If test={this.state.edited}>
                 	<div className="edited">(edited)</div>
                 </If>

@@ -74,6 +74,17 @@
     opacity: 0;
 }
 
+.page .messages .msg .inline-image{
+    max-width: 70vw;
+    max-height: 30vh;
+    display: block;
+    margin-top: 5px;
+    position: relative;
+    border-radius: 3px;
+    border: 1px solid rgba(128, 128, 128, 0.38);
+
+}
+
 .page .messages .msg .edited {
     float: right;
     font-size: 12px;
