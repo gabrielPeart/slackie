@@ -30,7 +30,8 @@ default React.createClass({
             text: this.props.text,
             time: this.props.ts,
             edited: false,
-            visible: false
+            visible: false,
+            attachmentExpanded: true
         };
     },
 
@@ -76,12 +77,23 @@ default React.createClass({
         _.defer(this.handelListenEvents);
     },
 
+    handelInLineToggle(){
+		this.setState({
+            attachmentExpanded: !this.state.attachmentExpanded
+        });
+    },
+
     getInline() {
         switch (this.props.subtype) {
             case 'file_share':
                 console.log(this.props);
                 if(this.props.file && this.props.file.mimetype && this.props.file.mimetype.includes('image'))
-                	return <img className="inline-image" alt={this.props.file.title} src={this.props.file.url} />;
+                	return (
+                		<span>
+                			<i onClick={this.handelInLineToggle} className={"toggle-inline " + (this.state.attachmentExpanded ? 'ion-arrow-down-b' : 'ion-arrow-right-b')} />
+                			<img className={"inline-image " + this.state.attachmentExpanded} alt={this.props.file.title} src={this.props.file.url} />
+                		</span>
+                	);
                 break;
             default:
                 return null;

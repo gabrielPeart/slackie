@@ -82,7 +82,19 @@
     position: relative;
     border-radius: 3px;
     border: 1px solid rgba(128, 128, 128, 0.38);
+}
 
+.page .messages .msg .inline-image.false{
+    height: 0px;
+    border: 0px solid rgba(128, 128, 128, 0.38);
+}
+
+.page .messages .msg .toggle-inline {
+    margin-left: 5px;
+    color: rgba(128, 128, 128, 0.98);
+    top: 2px;
+    position: relative;
+    cursor: pointer;
 }
 
 .page .messages .msg .edited {
