@@ -41,7 +41,7 @@ default React.createClass({
         return (
             <div className="chat-input">
                 <div className="chat-inner">
-                	<Textarea onKeyUp={this.handelKeyDown} className="textarea-input" ref="chat-input"/>
+                	<Textarea onKeyDown={this.handelKeyDown} className="textarea-input" ref="chat-input"/>
                 </div>
             </div>
         );
