@@ -1,9 +1,14 @@
 .sidebar {
-    height: 100%;
+    height: calc(100vh - 30px);
     position: fixed;
     width: 190px;
     padding-right: 20px;
     background-color: #f1f1f1;
+    overflow-y: scroll;
+}
+
+.sidebar::-webkit-scrollbar{
+    width:6px;
 }
 
 .sidebar h1 {
