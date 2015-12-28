@@ -36,6 +36,7 @@ const SidebarTab = React.createClass({
     render() {
         return (
             <li key={this.props.key} className={(this.state.activeChannel.id === this.props.id) ? 'active': ''} onClick={this.handelSelect.bind(this, this.props)} >
+                <i className={'user-status ' + (this.props.is_im ? this.props.users[this.props.user].presence : 'hidden')} />
                 {this.props.is_channel ? ('#' + this.props.name) : this.props.name}
             </li>
         );
@@ -46,9 +47,6 @@ const SidebarTab = React.createClass({
 export
 default React.createClass({
     getChannels(starred) {
-        if (!this.props.team && !this.props.team.slack)
-            return [];
-
         var team = this.props.team.slack;
         var channels = [];
 
@@ -71,9 +69,6 @@ default React.createClass({
         return channels;
     },
     getDMS() {
-        if (!this.props.team && !this.props.team.slack)
-            return [];
-
         var team = this.props.team.slack;
         var dms = [];
 
@@ -81,15 +76,12 @@ default React.createClass({
             _.forEach(team.dms, (dm, idx) => {
                 if (dm.is_open && dm.is_im)
                     dms.push(
-                        <SidebarTab key={idx} {...dm} />
+                        <SidebarTab key={idx} users={this.props.team.slack.users} {...dm} />
                     );
             });
         return dms;
     },
     getGroups(starred) {
-        if (!this.props.team && !this.props.team.slack)
-            return [];
-
         var team = this.props.team.slack;
         var groups = [];
 
@@ -110,8 +102,6 @@ default React.createClass({
         return groups;
     },
     getStarred() {
-        if (!this.props.team)
-            return [];
         var starredChannels = this.getChannels(true);
         var starredGroups = this.getGroups(true);
 

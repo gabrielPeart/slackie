@@ -7,7 +7,11 @@ import Chat from './components/Chat';
 import teamsEngineStore from '../../stores/teamsEngineStore';
 import SidebarStore from './components/Sidebar/store';
 
-
+const If = React.createClass({
+    render() {
+        return this.props.test ? this.props.children : false;
+    }
+});
 
 export
 default React.createClass({
@@ -70,8 +74,12 @@ default React.createClass({
     render() {
         return (
             <div>
-                <Sidebar channel={this.state.channel.id} team={this.state.team}/>
-                <Chat emitter={this.state.team} team={this.state.team ? this.state.team.slack : false} channel={this.state.channel} name={ (this.state.channel && this.state.channel.is_channel) ? ('#' + this.state.channel.name) : this.state.channel.name} topic={this.state.channel.topic ? this.state.channel.topic.value.split('\n') : undefined} messages={this.state.messages} />
+                <If test={this.state.team}>
+                    <Sidebar channel={this.state.channel.id} team={this.state.team}/>
+                </If>
+                <If test={(this.state.team && this.state.team.slack)}>
+                    <Chat emitter={this.state.team} team={this.state.team.slack} channel={this.state.channel} name={ (this.state.channel && this.state.channel.is_channel) ? ('#' + this.state.channel.name) : this.state.channel.name} topic={this.state.channel.topic ? this.state.channel.topic.value.split('\n') : undefined} messages={this.state.messages} />
+                </If>
             </div>
         );
     }
