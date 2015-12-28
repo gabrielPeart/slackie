@@ -1,9 +1,14 @@
 import React from 'react';
 import Textarea from 'react-textarea-autosize';
+import {
+    mouseTrap
+}
+from 'react-mousetrap';
 import _ from 'lodash';
 
+
 export
-default React.createClass({
+default mouseTrap(React.createClass({
     handelSend(e) {
         if (this.refs['chat-input'].value.length === 0)
             return;
@@ -26,10 +31,10 @@ default React.createClass({
         this.refs['chat-input'].value = '';
     },
     handelKeyDown(event) {
-    	if(event.keyCode == 13){
-    		event.preventDefault();
-    		return this.handelSend();
-    	}
+        if (event.keyCode == 13) {
+            event.preventDefault();
+            return this.handelSend();
+        }
     },
     render() {
         return (
@@ -40,4 +45,4 @@ default React.createClass({
             </div>
         );
     }
-});
+}));
