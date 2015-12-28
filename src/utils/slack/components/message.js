@@ -81,6 +81,7 @@ default React.createClass({
         this.setState({
             attachmentExpanded: !this.state.attachmentExpanded
         });
+        _.defer(() => this.props.Emmiter.emit('message:loaded', true));
     },
 
     handelMessageLoaded(inline) {
