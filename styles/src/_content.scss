@@ -135,14 +135,10 @@
 }
 
 .page .chat-input .chat-inner {
+    position: relative;
     width: calc(100% - 50px);
     height: calc(100% - 20px);
     margin: 10px 20px;
-}
-
-.page .chat-input .chat-inner form {
-    position: relative;
-    height: 100%;
 }
 
 .page .chat-input .chat-inner .textarea-input {
