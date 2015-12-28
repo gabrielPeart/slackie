@@ -142,6 +142,7 @@
 }
 
 .page .chat-input .chat-inner .textarea-input {
+    z-index: 3;
     position: absolute;
     bottom: 0px;
     outline: none;
