@@ -153,10 +153,11 @@
     height: 100%;
     border: 1px solid #adadad;
     border-radius: 8px;
-    padding: 9px 10px;
-    font-size: inherit;
+    padding: 10px;
+    font-size: 15px;
     font-family: inherit;
     box-sizing: border-box;
     -webkit-appearance: none;
     resize: none;
+    min-height: 40px;
 }
