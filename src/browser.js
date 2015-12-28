@@ -50,9 +50,7 @@ app.on('ready', () => {
     mainWindow.loadURL(path.normalize('file://' + path.join(__dirname, '../index.html')));
 
 
-    mainWindow.webContents.on('new-window', event => {
-        event.preventDefault();
-    });
+    mainWindow.webContents.on('new-window', event => event.preventDefault());
 
     mainWindow.webContents.on('will-navigate', (event, url) => {
         if (url.indexOf('build/index.html#') < 0) {
