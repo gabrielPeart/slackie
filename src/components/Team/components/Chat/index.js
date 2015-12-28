@@ -19,6 +19,7 @@ default React.createClass({
     },
 
     componentDidUpdate() {
+        this.refreshListeners();
         this.checkAndSroll();
     },
 
@@ -26,13 +27,12 @@ default React.createClass({
         if (!this.refs['messages'])
             return;
 
-        this.refreshListeners();
         this.shouldScrollBottom = this.refs['messages'].scrollTop + this.refs['messages'].offsetHeight === this.refs['messages'].scrollHeight;
     },
 
     checkAndSroll() {
         if (this.shouldScrollBottom) {
-            this.refs['messages'].scrollTop = this.refs['messages'].scrollHeight
+            this.refs['messages'].scrollTop = this.refs['messages'].scrollHeight;
         }
     },
 
@@ -42,21 +42,13 @@ default React.createClass({
 
         this.props.emitter.removeAllListeners('inline:loaded');
         var lastTime = 0;
-        var throttle = _.throttle(this.checkAndSroll, 1000);
-        this.props.emitter.on('message:loaded', (inline, time) => {
-            if (inline) {
-                if (time > lastTime) {
-                    _.defer(this.checkAndSroll)
-                    throttle()
-                    console.log(this.refs['messages'].scrollTop, this.refs['messages'].scrollHeight)
-                    console.log('new inline loaded')
-                }
-            } else
+        var throttle = _.throttle((inline, time) => {
+            if (time > lastTime)
                 this.checkAndSroll();
-            lastTime = time
-        });
+            lastTime = time;
+        }, 300);
+        this.props.emitter.on('message:loaded', throttle);
     },
-
 
     render() {
         return (
@@ -65,7 +57,6 @@ default React.createClass({
                     <h1>{this.props.name}</h1>
                     <span>{this.props.topic ? this.props.topic[0] : ''}</span>
                 </div>
-
                 <div ref="messages" className="messages">
                     {
                         this.props.messages.map((el, idx) => {
@@ -77,7 +68,6 @@ default React.createClass({
                         })
                     }
                 </div>
-            
                 <Input {...this.props} />
             </div>
         );
