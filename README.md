@@ -7,7 +7,7 @@
 ### Screenshots
 
 <img src="preview/UI_preview_0.0.1.png" alt="Dashboard 0.0.1" width="34%"/>
-<img src="preview/add_team_OAuth.png" alt="Add Team" width="34%"/>
+<img src="preview/add_team_OAuth.png" alt="Add Team" width="41%"/>
 
 
 ## Contributing
