@@ -16,7 +16,8 @@ const Team = React.createClass({
         var icon = this.props.meta ? 'url("' + this.props.meta.icon.image_original + '")' : false;
 
         return (
-            <div onClick={this.handelSelect} className="team" style={{backgroundImage: icon}}>
+            <div onClick={this.handelSelect} className={'team ' + ((this.props.active && this.props.active === this.props.team.id)? 'active' : '')} style={{backgroundImage: icon}}>
+                <i/>
                 <p>{this.props.team.name}</p>
             </div>
         );
@@ -52,7 +53,7 @@ default React.createClass({
             <aside className="teams">
                 {
                     Object.keys(this.state.teams).map((team, idx) => {
-                        return <Team key={idx} team={this.state.teams[team].slack.team} meta={this.state.teams[team].meta ? this.state.teams[team].meta : false} />;
+                        return <Team key={idx} active={this.state.active} team={this.state.teams[team].slack.team} meta={this.state.teams[team].meta ? this.state.teams[team].meta : false} />;
                     }, this)
                 }
                 <div onClick={TeamSelectorActions.add} className="add">
