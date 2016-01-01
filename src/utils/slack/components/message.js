@@ -3,8 +3,7 @@ import ReactDOMServer from 'react-dom/server';
 import ImageLoader from 'react-imageloader';
 import querystring from 'querystring';
 import _ from 'lodash';
-import ReactEmoji from 'react-emoji';
-import slackdown from 'slackdown';
+import messageFormatUtil from '../parseFormattingUtil';
 import moment from 'moment';
 
 const If = React.createClass({
@@ -13,18 +12,8 @@ const If = React.createClass({
     }
 });
 
-const formatText = text => {
-
-    text = slackdown.parse(_.unescape(querystring.unescape(text)));
-
-    return text;
-}
-
-
-
 export
 default React.createClass({
-    mixins: [ReactEmoji],
 
     getInitialState() {
         return {
@@ -132,13 +121,9 @@ default React.createClass({
     },
 
     render() {
-        var text = this.emojify(formatText(this.state.text), {
-            emojiType: 'twemoji',
-            ext: 'svg',
-            attributes: {
-                className: 'emoji'
-            }
-        });
+        var text = [messageFormatUtil(_.unescape(this.state.text))];
+
+        console.log(text)
         text = text ? text : [];
 
         return (
