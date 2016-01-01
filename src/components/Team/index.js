@@ -46,7 +46,6 @@ default React.createClass({
         this.state.team.removeAllListeners('history:loaded');
         this.state.team.on('new:message', this.updateMessages);
         this.state.team.on('history:loaded', this.updateMessages);
-        console.log('trying to get history for,', this.state.channel)
         _.defer(() => this.state.team.fetchHistory(this.state.channel.id));
     },
 
@@ -72,8 +71,9 @@ default React.createClass({
     updateTeam() {
         if (this.isMounted()) {
             this.setState({
-                team: teamsEngineStore.getState().selectedTeam ? teamsEngineStore.getState().teams[teamsEngineStore.getState().selectedTeam] : false
+                team: teamsEngineStore.getState().selectedTeam ? teamsEngineStore.getState().teams[teamsEngineStore.getState().selectedTeam] : false,
             });
+            this.updateChannel();
             _.defer(this.handelTeamUpdate);           
         }
     },
@@ -83,7 +83,6 @@ default React.createClass({
             return;
 
         if(!this.state.channel){
-            console.log(this.state.team.slack)
             var general = _(this.state.team.slack.channels)
                 .filter(channel => { return channel.is_general; })
                 .value()[0];
