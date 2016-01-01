@@ -35,12 +35,12 @@ const TeamSaveQueue = async.queue((params, next) => {
         })
         .catch(() => {
             commonUtil.saveJson(TeamsPath, {
-                [id]: {
-                    meta: meta,
-                    type: type,
-                    token: token
-                }
-            })
+                    [id]: {
+                        meta: meta,
+                        type: type,
+                        token: token
+                    }
+                })
                 .then(() => process.nextTick(next))
                 .catch(err => {
                     console.error(err);
@@ -51,32 +51,30 @@ const TeamSaveQueue = async.queue((params, next) => {
 });
 
 
+const LoadTeams = async.queue((team, next) => {
+    switch (team.type) {
+        case 'slack':
+            let Team = new SlackTeam(team.token, team.meta);
+            Team.once('logged-in', () => {
+                TeamSelectorActions.loaded(Team)
+                process.nextTick(next);
+            });
 
-const parseTeams = teams => {
-    _.forEach(teams, team => {
-        switch (team.type) {
-            case 'slack':
-                let Team = new SlackTeam(team.token, team.meta);
-                Team.once('logged-in', () => TeamSelectorActions.loaded(Team));
-
-                Team.on('meta-refreshed', meta => {
-                    TeamSelectorActions.meta({
-                        id: Team.slack.team.id,
-                        meta: meta
-                    });
-                    TeamSaveQueue.push(JSON.stringify([Team.slack.team.id, 'slack', team.token, meta]));
+            Team.on('meta-refreshed', meta => {
+                TeamSelectorActions.meta({
+                    id: Team.slack.team.id,
+                    meta: meta
                 });
-                break;
-        }
-    });
-}
-
-
+                TeamSaveQueue.push(JSON.stringify([Team.slack.team.id, 'slack', team.token, meta]));
+            });
+            break;
+    }
+}, 2);
 
 module.exports = {
     reload() {
         commonUtil.readJson(TeamsPath)
-            .then(parseTeams)
+            .then(teams => _.forEach(teams, team => LoadTeams.push(team)))
             .catch(() => {
                 console.info('No teams logged in');
             });
