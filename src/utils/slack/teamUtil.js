@@ -71,7 +71,7 @@ class SlackTeam extends EventEmitter {
         });
     }
 
-    handelSubtypes(message){
+    handelSubtypes(message, history){
 		switch(message.subtype) {
 		    case 'message_changed':
 		    	var eventName = message.channel + ':' + message.previous_message.user + ':' + message.previous_message.ts;
@@ -81,6 +81,11 @@ class SlackTeam extends EventEmitter {
 		    case 'me_message':
 		    	this.MessageQueue.push(message);
 		    	break;
+            case 'bot_message':
+                message.user = message.bot_id;
+                message.text = (message.attachments && message.attachments[0]) ? message.attachments[0].fallback : '';
+                this.MessageQueue.push(message);
+                break;
 		    default:
 		        console.log(message)
 		}
@@ -137,11 +142,19 @@ class SlackTeam extends EventEmitter {
     getHistory(channel, history) {
     	this.gotHistory.push(channel);
 
-        _.forEach(history, message => this.MessageQueue.push(Object.assign(message, {
-            channel: channel,
-            history: true,
-            length: history.length
-        })));
+        _.forEach(history, message => {
+
+            message = Object.assign(message, {
+                channel: channel,
+                history: true,
+                length: history.length
+            });
+
+            if(message.subtype)
+                return this.handelSubtypes(message, true);
+
+            this.MessageQueue.push(message);
+        });
     }
 
     addHistory(history) {
