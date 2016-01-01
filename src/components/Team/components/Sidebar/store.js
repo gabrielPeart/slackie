@@ -3,18 +3,19 @@ import SidebarActions from './actions';
 
 
 class SidebarStore {
-    constructor() {
-        this.bindActions(SidebarActions);
+	constructor() {
+		this.bindActions(SidebarActions);
 
 
-        this.activeChannel = false;
-    }
+		this.activeChannel = {};
+	}
 
-    onSetActive(channel) {
-        this.setState({
-            activeChannel: channel
-        });
-    }
+	onSetActive(channel) {
+		this.activeChannel[channel.team] = channel.channel;
+		this.setState({
+			activeChannel: this.activeChannel
+		});
+	}
 
 }
 

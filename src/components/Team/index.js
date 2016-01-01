@@ -6,6 +6,8 @@ import Sidebar from './components/Sidebar';
 import Chat from './components/Chat';
 import teamsEngineStore from '../../stores/teamsEngineStore';
 import SidebarStore from './components/Sidebar/store';
+import SidebarActions from './components/Sidebar/actions';
+
 
 const If = React.createClass({
     render() {
@@ -21,8 +23,9 @@ default React.createClass({
         var SidebarState = SidebarStore.getState();
         return {
             team: TeamEngine.selectedTeam ? TeamEngine.teams[TeamEngine.selectedTeam] : false,
-            channel: SidebarState.activeChannel ? SidebarState.activeChannel : false,
-            messages: (TeamEngine.selectedTeam && SidebarState.activeChannel) ? TeamEngine.teams[TeamEngine.selectedTeam].messages[SidebarState.activeChannel] : []
+            channel: (SidebarState.activeChannel && SidebarState.activeChannel[TeamEngine.selectedTeam]) ? SidebarState.activeChannel[TeamEngine.selectedTeam] : false,
+            messages: (TeamEngine.selectedTeam && SidebarState.activeChannel) ? TeamEngine.teams[TeamEngine.selectedTeam].messages[SidebarState.activeChannel] : [],
+            loadedFirst: false
         };
     },
 
@@ -38,12 +41,12 @@ default React.createClass({
     getMessages() {
         if (!this.state.team || !this.state.channel)
             return false;
-
+        
         this.state.team.removeAllListeners('new:message');
         this.state.team.removeAllListeners('history:loaded');
         this.state.team.on('new:message', this.updateMessages);
         this.state.team.on('history:loaded', this.updateMessages);
-
+        console.log('trying to get history for,', this.state.channel)
         _.defer(() => this.state.team.fetchHistory(this.state.channel.id));
     },
 
@@ -54,31 +57,52 @@ default React.createClass({
             });
         }
     },
-
     updateChannel() {
         if (this.isMounted()) {
+            var TeamEngine = teamsEngineStore.getState();
+            var SidebarState = SidebarStore.getState();
+
             this.setState({
-                channel: SidebarStore.getState().activeChannel ? SidebarStore.getState().activeChannel : false,
+                channel: (SidebarState.activeChannel && SidebarState.activeChannel[TeamEngine.selectedTeam]) ? SidebarState.activeChannel[TeamEngine.selectedTeam] : false,
                 messages: []
             });
+            _.defer(this.getMessages);
         }
-        _.defer(this.getMessages);
     },
     updateTeam() {
         if (this.isMounted()) {
             this.setState({
                 team: teamsEngineStore.getState().selectedTeam ? teamsEngineStore.getState().teams[teamsEngineStore.getState().selectedTeam] : false
             });
+            _.defer(this.handelTeamUpdate);           
         }
     },
+
+    handelTeamUpdate(){
+        if(!this.state.team)
+            return;
+
+        if(!this.state.channel){
+            console.log(this.state.team.slack)
+            var general = _(this.state.team.slack.channels)
+                .filter(channel => { return channel.is_general; })
+                .value()[0];
+
+            _.defer(()=> SidebarActions.setActive({
+                team: this.state.team.slack.team.id, 
+                channel: general
+            }));            
+        }
+    },
+
     render() {
         return (
             <div>
                 <If test={this.state.team}>
                     <Sidebar channel={this.state.channel.id} team={this.state.team}/>
                 </If>
-                <If test={(this.state.team && this.state.team.slack)}>
-                    <Chat emitter={this.state.team} team={this.state.team.slack} channel={this.state.channel} name={ (this.state.channel && this.state.channel.is_channel) ? ('#' + this.state.channel.name) : this.state.channel.name} topic={this.state.channel.topic ? this.state.channel.topic.value.split('\n') : undefined} messages={this.state.messages} />
+                <If test={this.state.team}>
+                    <Chat emitter={this.state.team} team={this.state.team.slack} channel={this.state.channel} name={ (this.state.channel && this.state.channel.is_channel) ? ('#' + this.state.channel.name) : this.state.channel.name} topic={this.state.channel.topic ? this.state.channel.topic.value.split('\n') : undefined} messages={this.state.messages ? this.state.messages : []} />
                 </If>
             </div>
         );

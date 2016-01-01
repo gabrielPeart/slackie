@@ -4,6 +4,7 @@ import _ from 'lodash';
 import SidebarStore from './store';
 import SidebarActions from './actions';
 
+
 const If = React.createClass({
     render() {
         return this.props.test ? this.props.children : false;
@@ -13,7 +14,7 @@ const If = React.createClass({
 const SidebarTab = React.createClass({
     getInitialState() {
         return {
-            activeChannel: SidebarStore.getState().activeChannel
+            activeChannel: SidebarStore.getState().activeChannel[this.props.slack]
         };
     },
     componentWillMount() {
@@ -25,17 +26,20 @@ const SidebarTab = React.createClass({
     update() {
         if (this.isMounted()) {
             this.setState({
-                activeChannel: SidebarStore.getState().activeChannel
+                activeChannel: SidebarStore.getState().activeChannel[this.props.slack]
             });
         }
     },
     handelSelect(channel) {
-        if(this.state.activeChannel.id !== channel.id)
-            SidebarActions.setActive(channel);
+        if(!this.state.activeChannel || this.state.activeChannel.id !== channel.id)
+            SidebarActions.setActive({
+                team: this.props.slack, 
+                channel: channel
+            });
     },
     render() {
         return (
-            <li key={this.props.key} className={(this.state.activeChannel.id === this.props.id) ? 'active': ''} onClick={this.handelSelect.bind(this, this.props)} >
+            <li key={this.props.key} className={((this.state.activeChannel && this.state.activeChannel.id) === this.props.id) ? 'active': ''} onClick={this.handelSelect.bind(this, _.omit(this.props, 'slack'))} >
                 <i className={'user-status ' + (this.props.is_im ? this.props.users[this.props.user].presence : 'hidden')} />
                 {this.props.is_channel ? ('#' + this.props.name) : this.props.name}
             </li>
@@ -55,13 +59,13 @@ default React.createClass({
                 if (starred) {
                     if (channel.is_member && !channel.is_archived && channel.is_starred) {
                         channels.push(
-                            <SidebarTab key={idx} {...channel} />
+                            <SidebarTab key={idx} slack={this.props.team.slack.team.id} {...channel} />
                         );
                     }
                 } else {
                     if (channel.is_member && !channel.is_archived && !channel.is_starred) {
                         channels.push(
-                            <SidebarTab key={idx} {...channel} />
+                            <SidebarTab key={idx} slack={this.props.team.slack.team.id} {...channel} />
                         );
                     }
                 }
@@ -76,7 +80,7 @@ default React.createClass({
             _.forEach(team.dms, (dm, idx) => {
                 if (dm.is_open && dm.is_im)
                     dms.push(
-                        <SidebarTab key={idx} users={this.props.team.slack.users} {...dm} />
+                        <SidebarTab key={idx} slack={this.props.team.slack.team.id} users={this.props.team.slack.users} {...dm} />
                     );
             });
         return dms;
@@ -90,12 +94,12 @@ default React.createClass({
                 if (starred) {
                     if (group.is_open && group.is_group && !group.is_archived && group.is_starred)
                         groups.push(
-                            <SidebarTab key={idx} {...group} />
+                            <SidebarTab slack={this.props.team.slack.team.id} key={idx} {...group} />
                         );
                 } else {
                     if (group.is_open && group.is_group && !group.is_archived && !group.is_starred)
                         groups.push(
-                            <SidebarTab key={idx} {...group} />
+                            <SidebarTab slack={this.props.team.slack.team.id} key={idx} {...group} />
                         );
                 }
             });

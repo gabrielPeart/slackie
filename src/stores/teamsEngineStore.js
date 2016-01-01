@@ -20,6 +20,20 @@ class TeamsEngineStore {
         });
     }
 
+    onLoaded(slack) {
+        this.teams[slack.slack.team.id] = slack;
+        if(!this.selectedTeam)
+            this.setState({
+                teams: this.teams,
+                selectedTeam: slack.slack.team.id
+            });
+        else
+            this.setState({
+                teams: this.teams
+            });  
+    }
+
+
     onAdded(slack) {
         this.teams[slack.slack.team.id] = slack;
         this.setState({

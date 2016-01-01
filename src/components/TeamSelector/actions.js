@@ -18,6 +18,7 @@ class TeamselectorActions {
         this.generateActions(
             'select',
             'added',
+            'loaded',
             'meta'
         );
     }

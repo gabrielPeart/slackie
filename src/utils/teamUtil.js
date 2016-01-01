@@ -57,7 +57,7 @@ const parseTeams = teams => {
         switch (team.type) {
             case 'slack':
                 let Team = new SlackTeam(team.token, team.meta);
-                Team.once('logged-in', () => TeamSelectorActions.added(Team));
+                Team.once('logged-in', () => TeamSelectorActions.loaded(Team));
 
                 Team.on('meta-refreshed', meta => {
                     TeamSelectorActions.meta({

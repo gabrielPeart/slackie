@@ -119,7 +119,7 @@ class SlackTeam extends EventEmitter {
 
         var Channels = Object.assign(this.slack.channels, this.slack.dms, this.slack.groups);
 
-        if (!latest) latest = (Channels[channel].latest && Channels[channel].latest.ts) ? Channels[channel].latest.ts : false;
+        if (!latest) latest = (Channels[channel] && Channels[channel].latest && Channels[channel].latest.ts) ? Channels[channel].latest.ts : false;
 
         var type = (channel.charAt(0) === 'C') ? 'channels' : ((channel.charAt(0) === 'G') ? 'groups' : 'im');
 
