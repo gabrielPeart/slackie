@@ -85,17 +85,14 @@ emoji.init().update();
         return safeMatch(match, tag("code", payloads(match[1])));
     };
 
+    var matchCodeBlock = match => {
+        return safeMatch(match, tag("codeBlock", payloads(match[1])));
+    };
+
     var isWhiteSpace = input => {
         return /^\s?$/.test(input);
     };
 
-    var matchEmoji = input => {
-        console.log(input)
-        var emojiParsed = emoji.parse(input);
-        console.log(emojiParsed)
-
-
-    };
 
     var safeMatch = (match, tag) => {
         var prefix_ok = match.index == 0;
@@ -132,6 +129,9 @@ emoji.init().update();
             }, {
                 p: /`([^`]*?)`/g,
                 cb: matchFixed
+            }, {
+                p: /```([^```]*?)```/g,
+                cb: matchCodeBlock
             }, {
                 p: /~([^\~]*?)~/g,
                 cb: matchStrike

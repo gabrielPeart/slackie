@@ -54,6 +54,24 @@
     font-style: italic;
 }
 
+.page .messages .msg code{
+    white-space: normal;
+    color: red;
+    font-size: 12px;
+    background-color: #f7f7f9;
+    border: 1px solid #e1e1e8;
+    padding: 0px 4px;
+}
+
+.page .messages .msg codeBlock{
+    line-height: 18px;
+    font-size: 12px;
+    background-color: #f7f7f9;
+    padding: 0px 4px;
+    border: 1px solid #e1e1e8;
+    display: block;
+}
+
 .page .messages .msg .me_message {
     font-style: italic !important;
     color: gray !important;
