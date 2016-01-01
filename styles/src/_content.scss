@@ -54,6 +54,13 @@
     font-style: italic;
 }
 
+.page .messages .msg .slack-user{
+    font-weight: 600;
+}
+.page .messages .msg .slack-user:before {
+    content:'@';
+}
+
 .page .messages .msg code{
     white-space: normal;
     color: red;
@@ -78,7 +85,7 @@
 }
 
 .page .messages .msg strong {
-    font-weight: 500;
+    font-weight: 600;
 }
 .page .messages .msg .time {
     color: black;

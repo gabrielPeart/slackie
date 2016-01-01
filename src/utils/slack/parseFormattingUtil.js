@@ -58,9 +58,10 @@ emoji.init().update();
                 }, (p.length == 1 ? p[0] : p[1]));
             case "@":
                 p = payloads(match[1], 2);
+                var name = p.length > 1 ? p[1] : ((users['U' + p[0]] && users['U' + p[0]].name) ? users['U' + p[0]].name : p[0]);
                 return tag("span", {
                     class: "slack-user"
-                }, (p.length == 1 ? p[0] : p[1]));
+                }, name);
             default:
                 p = payloads(match[1]);
                 return tag("a", {
@@ -155,8 +156,9 @@ emoji.init().update();
 
         return text;
     };
-
-    return text => {
+    var users = [];
+    return (text, Msgusers) => {
+        users = Msgusers;
         text = publicParse(text);
         return emoji.parse(text, 'http://www.emoji-cheat-sheet.com/graphics/emojis');
     }

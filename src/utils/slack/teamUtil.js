@@ -44,7 +44,7 @@ class SlackTeam extends EventEmitter {
                     Historys.push(<MessageHeader time={message.ts} user={this.slack.users[message.user]} />)
                     messageHistoryBuild = [];
                 }
-                Historys.push(<ChatMessage Emmiter={this} {...message} />);
+                Historys.push(<ChatMessage Emmiter={this} users={this.slack.users} {...message} />);
                 if (message.length === builtHistory) {
                     this.addHistory({
                         messages: Historys,
@@ -56,13 +56,13 @@ class SlackTeam extends EventEmitter {
             } else {
                 if (message.user !== this.LastMessage.user) {
                     this.addMessage({
-                        message: <MessageHeader time={message.ts} user={this.slack.users[message.user]} />,
+                        message: <MessageHeader time={message.ts} users={this.slack.users} user={this.slack.users[message.user]} />,
                         channel: message.channel
                     });
                     messageBuild = [];
                 }
                 this.addMessage({
-                    message: <ChatMessage Emmiter={this} {...message} />,
+                    message: <ChatMessage Emmiter={this} users={this.slack.users} {...message} />,
                     channel: message.channel
                 });
             }
