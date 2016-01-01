@@ -121,19 +121,11 @@ default React.createClass({
     },
 
     render() {
-        var text = [messageFormatUtil(_.unescape(this.state.text))];
-
-        console.log(text)
-        text = text ? text : [];
-
+        var text = messageFormatUtil(_.unescape(this.state.text));
         return (
             <div className="msg">
         		<div className="time">{moment.unix(this.state.time).format('h:mm')}</div> 
-        		{
-                   	text.map((el, idx) => {
-                   	    return <span key={idx} className={this.getClassName()} dangerouslySetInnerHTML={{__html: (React.isValidElement(el) ? ReactDOMServer.renderToString(el) : el)}} />;
-                   	})
-                }
+                <span className={this.getClassName()} dangerouslySetInnerHTML={{__html: text}} />
                 {this.getInline()}
                 <If test={this.state.edited}>
                 	<div className="edited">(edited)</div>

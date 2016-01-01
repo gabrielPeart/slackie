@@ -1,4 +1,10 @@
-/*! https://github.com/blockmar/slackdown by @blockmar | MIT license */ ;
+import emoji from 'emoji-parser';
+
+emoji.init().update();
+
+
+/*! https://github.com/blockmar/slackdown by @blockmar | MIT license */
+;
 (function(root, factory) {
     if (typeof define === 'function' && define.amd) {
         define([], factory);
@@ -84,8 +90,9 @@
     };
 
     var matchEmoji = input => {
-
-
+        console.log(input)
+        var emojiParsed = emoji.parse(input);
+        console.log(emojiParsed)
 
 
     };
@@ -128,9 +135,6 @@
             }, {
                 p: /~([^\~]*?)~/g,
                 cb: matchStrike
-            }, {
-                p: /:([^\:]*?):/g,
-                cb: matchEmoji
             }];
 
             for (var p = 0; p < patterns.length; p++) {
@@ -152,6 +156,9 @@
         return text;
     };
 
-    return publicParse
+    return text => {
+        text = publicParse(text);
+        return emoji.parse(text, 'http://www.emoji-cheat-sheet.com/graphics/emojis');
+    }
 
 }));
