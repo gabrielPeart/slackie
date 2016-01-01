@@ -25,7 +25,7 @@ default React.createClass({
             team: TeamEngine.selectedTeam ? TeamEngine.teams[TeamEngine.selectedTeam] : false,
             channel: (SidebarState.activeChannel && SidebarState.activeChannel[TeamEngine.selectedTeam]) ? SidebarState.activeChannel[TeamEngine.selectedTeam] : false,
             messages: (TeamEngine.selectedTeam && SidebarState.activeChannel) ? TeamEngine.teams[TeamEngine.selectedTeam].messages[SidebarState.activeChannel] : [],
-            loadedFirst: false
+            selectedTeam: 'unLoaded'
         };
     },
 
@@ -70,8 +70,14 @@ default React.createClass({
     },
     updateTeam() {
         if (this.isMounted()) {
+            var TeamEngine = teamsEngineStore.getState();
+
+            if(this.state.selectedTeam === TeamEngine.selectedTeam)
+                return;
+
             this.setState({
-                team: teamsEngineStore.getState().selectedTeam ? teamsEngineStore.getState().teams[teamsEngineStore.getState().selectedTeam] : false,
+                team: TeamEngine.selectedTeam ? TeamEngine.teams[TeamEngine.selectedTeam] : false,
+                selectedTeam: TeamEngine.selectedTeam
             });
             this.updateChannel();
             _.defer(this.handelTeamUpdate);           
