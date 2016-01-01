@@ -146,7 +146,7 @@ module.exports = function(grunt) {
             },
             livereload: {
                 options: {
-                    livereload: true
+                    livereload: 27871
                 },
                 files: ['build/**/*']
             },
