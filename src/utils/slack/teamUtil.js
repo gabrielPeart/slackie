@@ -20,8 +20,12 @@ import ChatMessage from './components/message';
 const notifyMessage = (msg, team) => {
     if (ipcRenderer.sendSync('app:get:focused') || msg.user === team.self.id)
         return;
-
+    
     const channel = Object.assign(team.channels, team.dms, team.groups)[msg.channel];
+    
+    if (!msg.includes(team.self.id) && !channel.is_im)
+        return;
+
     const users = Object.assign(team.users, team.bots);
 
     const title = !channel.is_im ? ('in ' + (channel.is_channel ? '#' : '') + channel.name) : 'from ' + users[msg.user].name;
