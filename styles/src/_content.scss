@@ -27,11 +27,15 @@
 }
 
 .page .messages {
-    height: calc(100% - 44px - 66px - 10px);
+    height: calc(100% - 44px - 56px - 5px);
     width: auto;
-    margin: 5px 5px 5px 0;
+    margin: 5px 5px 0 0;
     overflow-y: scroll;
     overflow-x: hidden;
+}
+
+.page .messages span:last-of-type .msg {
+    margin-bottom: 14px;
 }
 
 .page .messages .message {
@@ -42,7 +46,7 @@
 
 .page .messages .message .profile {
     float: left;
-    margin-left: 15px;
+    margin-left: 17px;
     position: relative;
     width: 40px;
     border-radius: 4px;
@@ -92,12 +96,12 @@
     float: left;
     margin-left: -42px;
     font-size: 12px;
-    font-weight: 600px;
     position: relative;
     top: 2px;
     font-weight: 400;
     color: gray;
     opacity: 0;
+    -webkit-transition: opacity 0.125s linear;
 }
 
 .page .messages .msg .inline-image img {
@@ -146,7 +150,7 @@
     padding: 4px;
     font-weight: 400;
     word-break: break-word;
-    margin: 3px 4px 0px 63px;
+    margin: 3px 4px 0px 65px;
     white-space: pre-wrap;
     padding-right: 10px;
     border-radius: 3px;
@@ -187,7 +191,7 @@
 .page .chat-input {
     position: absolute;
     bottom: 0;
-    height: 66px;
+    height: 56px;
     width: 100%;
 }
 
@@ -195,7 +199,7 @@
     position: relative;
     width: calc(100% - 40px);
     height: calc(100% - 16px);
-    margin: 8px 18px;
+    margin: 0 18px 4px 14px;
     height: 40px;
 }
 

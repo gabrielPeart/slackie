@@ -53,6 +53,8 @@ default React.createClass({
                 <div className="chat-inner">
                 	<Textarea onKeyDown={this.handelKeyDown} className="textarea-input" ref="chat-input"/>
                 </div>
+                <div className="chat-status-thingy-bar-or-something-i-dunno">
+                </div>
             </div>
         );
     }
