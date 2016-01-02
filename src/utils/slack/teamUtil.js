@@ -18,7 +18,7 @@ import MessageHeader from './components/MessageHeader';
 import ChatMessage from './components/message';
 
 const notifyMessage = (msg, team) => {
-    if (ipcRenderer.sendSync('app:get:focused'))
+    if (ipcRenderer.sendSync('app:get:focused') || msg.user === team.self.id)
         return;
 
     const channel = Object.assign(team.channels, team.dms, team.groups)[msg.channel];
