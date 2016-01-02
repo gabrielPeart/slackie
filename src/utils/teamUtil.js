@@ -1,82 +1,50 @@
 import Promise from 'bluebird';
 import _ from 'lodash';
-import fs from 'fs';
-import path from 'path';
+import ls from 'local-storage';
 import async from 'async';
-import {
-    app
-}
-from 'remote';
 
-import commonUtil from './commonUtil';
 import SlackTeam from './slack/teamUtil';
 import TeamSelectorActions from '../components/TeamSelector/actions';
 
-const TeamsPath = path.join(app.getPath('userData'), 'teams.json');
-
-
 
 const TeamSaveQueue = async.queue((params, next) => {
-    var [id, type, token, meta] = JSON.parse(params);
+	const [id, type, token, meta] = JSON.parse(params);
 
-    commonUtil.readJson(TeamsPath)
-        .then(json => {
-            json[id] = {
-                meta: meta,
-                type: type,
-                token: token
-            };
-            commonUtil.saveJson(TeamsPath, json)
-                .then(() => process.nextTick(next))
-                .catch(err => {
-                    console.error(err);
-                    process.nextTick(next);
-                });
-        })
-        .catch(() => {
-            commonUtil.saveJson(TeamsPath, {
-                    [id]: {
-                        meta: meta,
-                        type: type,
-                        token: token
-                    }
-                })
-                .then(() => process.nextTick(next))
-                .catch(err => {
-                    console.error(err);
-                    process.nextTick(next);
-                });
-        });
+	var teams = ls.get('teams') || {};
 
+	teams[id] = {
+		meta,
+		type,
+		token
+	};
+
+	ls.set('teams', teams);
+	next();
 });
 
 
 const LoadTeams = async.queue((team, next) => {
-    switch (team.type) {
-        case 'slack':
-            let Team = new SlackTeam(team.token, team.meta);
-            Team.once('logged-in', () => {
-                TeamSelectorActions.loaded(Team)
-                process.nextTick(next);
-            });
+	switch (team.type) {
+		case 'slack':
+			const Team = new SlackTeam(team.token, team.meta);
+			Team.once('logged-in', () => {
+				TeamSelectorActions.loaded(Team);
+				next();
+			});
 
-            Team.on('meta-refreshed', meta => {
-                TeamSelectorActions.meta({
-                    id: Team.slack.team.id,
-                    meta: meta
-                });
-                TeamSaveQueue.push(JSON.stringify([Team.slack.team.id, 'slack', team.token, meta]));
-            });
-            break;
-    }
+			Team.on('meta-refreshed', meta => {
+				TeamSelectorActions.meta({
+					id: Team.slack.team.id,
+					meta: meta
+				});
+				TeamSaveQueue.push(JSON.stringify([Team.slack.team.id, 'slack', team.token, meta]));
+			});
+			break;
+	}
 }, 2);
 
 module.exports = {
-    reload() {
-        commonUtil.readJson(TeamsPath)
-            .then(teams => _.forEach(teams, team => LoadTeams.push(team)))
-            .catch(() => {
-                console.info('No teams logged in');
-            });
-    }
+	reload() {
+		_.forEach((ls.get('teams') || {}), team => LoadTeams.push(team));
+	}
 }

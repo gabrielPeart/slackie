@@ -1,16 +1,8 @@
 import Slack from 'slack-client';
-import path from 'path';
 import alt from '../../alt';
 import OAuthUtil from '../../utils/OAuthUtil';
 import Team from '../../utils/slack/teamUtil';
-import commonUtil from '../../utils/commonUtil';
-import {
-    app
-}
-from 'remote';
-
-
-const TeamsPath = path.join(app.getPath('userData'), 'teams.json');
+import ls from 'local-storage';
 
 
 class TeamselectorActions {
@@ -32,30 +24,21 @@ class TeamselectorActions {
                 SlackTeam.on('meta-refreshed', meta => {
                     this.actions.meta({
                         id: SlackTeam.slack.team.id,
-                        meta: meta
+                        meta
                     });
-                    commonUtil.readJson(TeamsPath)
-                        .then((json = {}) => {
-                            json[SlackTeam.slack.team.id] = {
-                                meta: meta,
-                                type: 'slack',
-                                token: SlackTeam.slack.token
-                            };
-                            commonUtil.saveJson(TeamsPath, json)
-                        }).catch(() => {
-                            commonUtil.saveJson(TeamsPath, {
-                                [SlackTeam.slack.team.id]: {
-                                    meta: meta,
-                                    type: 'slack',
-                                    token: SlackTeam.slack.token
-                                }
-                            })
-                        });
+
+                    var teams = ls.get('teams') || {};
+
+                    teams[SlackTeam.slack.team.id] = {
+                        type: 'slack',
+                        token: SlackTeam.slack.token,
+                        meta
+                    };
+
+                    ls.set('teams', teams);
                 });
             })
-            .catch(err => {
-                console.error(err)
-            });
+            .catch(err => console.error(err));
     }
 }
 

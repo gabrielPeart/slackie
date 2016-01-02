@@ -24,6 +24,7 @@
     "emoji-parser": "^0.1.1",
     "history": "^1.13.1",
     "is-online": "^5.0.1",
+    "local-storage": "^1.4.2",
     "lodash": "^3.10.1",
     "moment": "^2.10.6",
     "node-notifier": "^4.4.0",
