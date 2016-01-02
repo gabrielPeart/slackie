@@ -2,7 +2,12 @@ import React from 'react';
 import request from 'request';
 import async from 'async';
 import _ from 'lodash';
+import notifier from 'node-notifier';
 import Slack from 'slack-client';
+import {
+    ipcRenderer
+}
+from 'electron';
 import {
     EventEmitter
 }
@@ -11,8 +16,21 @@ from 'events';
 import MessageHeader from './components/MessageHeader';
 import ChatMessage from './components/message';
 
+const notifyMessage = (msg, team) => {
+    if (ipcRenderer.sendSync('app:get:focused'))
+        return;
 
+    const channel = Object.assign(team.channels, team.dms, team.groups)[msg.channel];
+    const users = Object.assign(team.users, team.bots);
 
+    const title = !channel.is_im ? ('in ' + (channel.is_channel ? '#' : '') + channel.name) : 'from ' + users[msg.user].name;
+    const text = channel.is_im ? msg.text : '@' + users[msg.user].name + ': ' + msg.text;
+    notifier.notify({
+        'title': 'New message ' + title,
+        'message': text
+    });
+
+}
 
 class SlackTeam extends EventEmitter {
     constructor(access_token, meta = false) {
@@ -65,30 +83,31 @@ class SlackTeam extends EventEmitter {
                     message: <ChatMessage Emmiter={this} users={Object.assign(this.slack.users, this.slack.bots)} {...message} />,
                     channel: message.channel
                 });
+                notifyMessage(message, this.slack);
             }
             this.LastMessage = message;
             process.nextTick(next);
         });
     }
 
-    handelSubtypes(message, history){
-		switch(message.subtype) {
-		    case 'message_changed':
-		    	var eventName = message.channel + ':' + message.previous_message.user + ':' + message.previous_message.ts;
-		        this.emit(eventName, message);
-		        break;
-		    case 'file_share':
-		    case 'me_message':
-		    	this.MessageQueue.push(message);
-		    	break;
+    handelSubtypes(message, history) {
+        switch (message.subtype) {
+            case 'message_changed':
+                var eventName = message.channel + ':' + message.previous_message.user + ':' + message.previous_message.ts;
+                this.emit(eventName, message);
+                break;
+            case 'file_share':
+            case 'me_message':
+                this.MessageQueue.push(message);
+                break;
             case 'bot_message':
                 message.user = message.bot_id;
                 message.text = (message.attachments && message.attachments[0]) ? message.attachments[0].fallback : '';
                 this.MessageQueue.push(message);
                 break;
-		    default:
-		        console.log(message)
-		}
+            default:
+                console.log(message)
+        }
     }
 
 
@@ -102,10 +121,10 @@ class SlackTeam extends EventEmitter {
         });
 
         this.slack.on('message', message => {
-        	if(message.subtype)
-        		return this.handelSubtypes(message);
-        	if(message.hidden)
-        		return console.info(message);
+            if (message.subtype)
+                return this.handelSubtypes(message);
+            if (message.hidden)
+                return console.info(message);
             this.MessageQueue.push(message);
         });
 
@@ -115,12 +134,12 @@ class SlackTeam extends EventEmitter {
     }
 
     fetchHistory(channel, latest, count = 100) {
-    	this.LastMessage = {};
+        this.LastMessage = {};
 
-    	if(_.includes(this.gotHistory, channel) && !latest){
-    		this.emit('history:loaded');
-    		return console.log('History already fetched for', channel);
-    	}
+        if (_.includes(this.gotHistory, channel) && !latest) {
+            this.emit('history:loaded');
+            return console.log('History already fetched for', channel);
+        }
 
         var Channels = Object.assign(this.slack.channels, this.slack.dms, this.slack.groups);
 
@@ -140,7 +159,7 @@ class SlackTeam extends EventEmitter {
     }
 
     getHistory(channel, history) {
-    	this.gotHistory.push(channel);
+        this.gotHistory.push(channel);
 
         _.forEach(history, message => {
 
@@ -150,7 +169,7 @@ class SlackTeam extends EventEmitter {
                 length: history.length
             });
 
-            if(message.subtype)
+            if (message.subtype)
                 return this.handelSubtypes(message, true);
 
             this.MessageQueue.push(message);

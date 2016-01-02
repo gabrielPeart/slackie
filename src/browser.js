@@ -49,7 +49,6 @@ app.on('ready', () => {
 
     mainWindow.loadURL(path.normalize('file://' + path.join(__dirname, '../index.html')));
 
-
     mainWindow.webContents.on('new-window', event => event.preventDefault());
 
     mainWindow.webContents.on('will-navigate', (event, url) => {
@@ -66,7 +65,12 @@ app.on('ready', () => {
 
     mainWindow.on('close', app.quit);
 
-    ipcMain.on('app:get:maximized', (event) => {
+
+    ipcMain.on('app:get:focused', event => {
+        event.returnValue = mainWindow.isFocused();
+    });
+
+    ipcMain.on('app:get:maximized', event => {
         event.returnValue = mainWindow.isMaximized();
     });
 
