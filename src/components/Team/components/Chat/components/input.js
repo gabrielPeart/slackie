@@ -10,7 +10,6 @@ default React.createClass({
         if (!this.message.ts)
             return;
 
-        console.log(this.message)
         this.props.team.emit('message', Object.assign(this.message, {
             type: 'message',
             user: this.props.team.self.id
@@ -21,12 +20,21 @@ default React.createClass({
         this.message = {};
     },
 
+    formatMessage(text){
+
+        _.forEach(this.props.team.users, user => {
+            text = text.replace('@' + user.name, '<@'+ user.id +'>');
+        });
+
+        return text;
+    },
+
     handelSend() {
         if (this.refs['chat-input'].value.replace(/(\r\n|\n|\r)/gm, '').length === 0) {
             return;
         }
 
-        this.message = this.props.team.getChannelGroupOrDMByID(this.props.channel.id).send(this.refs['chat-input'].value)
+        this.message = this.props.team.getChannelGroupOrDMByID(this.props.channel.id).send(this.formatMessage(this.refs['chat-input'].value))
 
         Object.observe(this.message, this.waitForSent);
 
