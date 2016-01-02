@@ -8,7 +8,7 @@ import TeamSelectorActions from '../components/TeamSelector/actions';
 
 
 const TeamSaveQueue = async.queue((params, next) => {
-	const [id, type, token, meta] = JSON.parse(params);
+	const [id, type, token, meta] = params;
 
 	var teams = ls.get('teams') || {};
 
