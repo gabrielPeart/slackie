@@ -121,7 +121,7 @@ default React.createClass({
     },
 
     render() {
-        var text = messageFormatUtil(_.unescape(this.state.text), this.props.users);
+        var text = new messageFormatUtil(_.unescape(this.state.text), this.props.users, false).parsed;
         return (
             <div className="msg">
         		<div className="time">{moment.unix(this.state.time).format('h:mm')}</div> 
