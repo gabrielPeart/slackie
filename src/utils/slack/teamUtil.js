@@ -54,11 +54,11 @@ class SlackTeam extends EventEmitter {
 
         this.gotHistory = [];
 
-        this.setQueues();
-        this.load();
+        this._setQueues();
+        this._load();
     }
 
-    setQueues() {
+    _setQueues() {
         var messageBuild = [];
         var Historys = [];
         var messageHistoryBuild = [];
@@ -75,7 +75,7 @@ class SlackTeam extends EventEmitter {
                 }
                 Historys.push(<ChatMessage Emmiter={this} users={Object.assign(this.slack.users, this.slack.bots)} {...message} />);
                 if (message.length === builtHistory) {
-                    this.addHistory({
+                    this._addHistory({
                         messages: Historys,
                         channel: message.channel
                     });
@@ -84,24 +84,24 @@ class SlackTeam extends EventEmitter {
                 }
             } else {
                 if (message.user !== this.LastMessage.user) {
-                    this.addMessage({
+                    this._addMessage({
                         message: <MessageHeader time={message.ts} users={Object.assign(this.slack.users, this.slack.bots)} user={Object.assign(this.slack.users, this.slack.bots)[message.user]} />,
                         channel: message.channel
                     });
                     messageBuild = [];
                 }
-                this.addMessage({
+                this._addMessage({
                     message: <ChatMessage Emmiter={this} users={Object.assign(this.slack.users, this.slack.bots)} {...message} />,
                     channel: message.channel
                 });
                 notifyMessage(message, this.slack);
             }
             this.LastMessage = message;
-            process.nextTick(next);
+            next();
         });
     }
 
-    handelSubtypes(message, history) {
+    _handelSubtypes(message, history) {
         switch (message.subtype) {
             case 'message_changed':
                 var eventName = message.channel + ':' + message.previous_message.user + ':' + message.previous_message.ts;
@@ -122,18 +122,18 @@ class SlackTeam extends EventEmitter {
     }
 
 
-    load() {
+    _load() {
         this.slack = new Slack(this.token, true, false);
 
         this.slack.on('open', () => {
             this.emit('logged-in');
-            this.getTeaminfo();
+            this._getTeaminfo();
             console.log('You are @', this.slack.self.name, 'of', this.slack.team.name);
         });
 
         this.slack.on('message', message => {
             if (message.subtype)
-                return this.handelSubtypes(message);
+                return this._handelSubtypes(message);
             if (message.hidden)
                 return console.info(message);
             this.MessageQueue.push(message);
@@ -162,14 +162,14 @@ class SlackTeam extends EventEmitter {
             json: true
         }, (error, response, body) => {
             if (!error && response.statusCode == 200) {
-                this.getHistory(channel, body.messages ? body.messages.reverse() : []);
+                this._getHistory(channel, body.messages ? body.messages.reverse() : []);
             } else {
                 console.error(err || resp.statusCode);
             }
         });
     }
 
-    getHistory(channel, history) {
+    _getHistory(channel, history) {
         this.gotHistory.push(channel);
 
         _.forEach(history, message => {
@@ -181,20 +181,20 @@ class SlackTeam extends EventEmitter {
             });
 
             if (message.subtype)
-                return this.handelSubtypes(message, true);
+                return this._handelSubtypes(message, true);
 
             this.MessageQueue.push(message);
         });
     }
 
-    addHistory(history) {
+    _addHistory(history) {
         if (!this.messages[history.channel]) this.messages[history.channel] = [];
         Array.prototype.unshift.apply(this.messages[history.channel], history.messages);
         this.emit('history:loaded');
     }
 
 
-    addMessage(message) {
+    _addMessage(message) {
         if (!this.messages[message.channel]) this.messages[message.channel] = [];
         this.messages[message.channel].push(message.message);
         this.emit('new:message', {
@@ -203,7 +203,7 @@ class SlackTeam extends EventEmitter {
         });
     }
 
-    getTeaminfo() {
+    _getTeaminfo() {
         request('https://slack.com/api/team.info?token=' + this.token, {
             json: true
         }, (error, response, body) => {
