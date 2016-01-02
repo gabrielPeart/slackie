@@ -22,7 +22,7 @@ const notifyMessage = (msg, team) => {
         return;
 
     const channel = Object.assign(team.channels, team.dms, team.groups)[msg.channel];
-    
+
     if (!msg.text.includes(team.self.id) && !channel.is_im)
         return;
 
@@ -32,7 +32,7 @@ const notifyMessage = (msg, team) => {
     const text = channel.is_im ? msg.text : '@' + users[msg.user].name + ': ' + msg.text;
 
     notifier.notify({
-        title: 'New message ' + title,
+        title: '[' + team.team.name + '] New message ' + title,
         message: text,
         wait: false,
         icon: path.join(__dirname, '../../../', 'images/slack-notify.png')
