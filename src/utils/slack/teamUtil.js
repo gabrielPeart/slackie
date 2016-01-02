@@ -4,6 +4,7 @@ import async from 'async';
 import path from 'path';
 import _ from 'lodash';
 import notifier from 'node-notifier';
+import messageFormatUtil from './parseFormattingUtil';
 import Slack from 'slack-client';
 import {
     ipcRenderer
@@ -29,7 +30,10 @@ const notifyMessage = (msg, team) => {
     const users = Object.assign(team.users, team.bots);
 
     const title = !channel.is_im ? ('in ' + (channel.is_channel ? '#' : '') + channel.name) : 'from ' + users[msg.user].name;
-    const text = channel.is_im ? msg.text : '@' + users[msg.user].name + ': ' + msg.text;
+
+    var ParsedText = new messageFormatUtil(_.unescape(msg.text), users, true).parsed;
+
+    const text = channel.is_im ? ParsedText : '@' + users[msg.user].name + ': ' + ParsedText;
 
     notifier.notify({
         title: '[' + team.team.name + '] New message ' + title,
