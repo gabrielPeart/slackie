@@ -1,6 +1,7 @@
 import React from 'react';
 import request from 'request';
 import async from 'async';
+import path from 'path';
 import _ from 'lodash';
 import notifier from 'node-notifier';
 import Slack from 'slack-client';
@@ -25,11 +26,13 @@ const notifyMessage = (msg, team) => {
 
     const title = !channel.is_im ? ('in ' + (channel.is_channel ? '#' : '') + channel.name) : 'from ' + users[msg.user].name;
     const text = channel.is_im ? msg.text : '@' + users[msg.user].name + ': ' + msg.text;
-    notifier.notify({
-        'title': 'New message ' + title,
-        'message': text
-    });
 
+    notifier.notify({
+        title: 'New message ' + title,
+        message: text,
+        wait: false,
+        icon: path.join(__dirname, '../../../', 'images/slack-notify.png')
+    });
 }
 
 class SlackTeam extends EventEmitter {
