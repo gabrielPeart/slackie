@@ -129,7 +129,7 @@ default React.createClass({
     render() {
         const text = new messageFormatUtil(_.unescape(this.state.text), this.props.users, false).parsed;
         return (
-            <div key={this.props.key} className="message">
+            <div className="message">
         		<div className="time">{moment.unix(this.state.time).format('h:mm')}</div> 
                 <span className={this.getClassName()} dangerouslySetInnerHTML={{__html: text}} />
                 {this.getInline()}

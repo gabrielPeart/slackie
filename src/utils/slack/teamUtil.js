@@ -82,6 +82,8 @@ class SlackTeam extends EventEmitter {
             if(!this.LastMessage[message.channel])
                this.LastMessage[message.channel] = {};
 
+            let header = null;
+
             if (message.history) {
             	if(!builtHistory[message.channel])
             		builtHistory[message.channel] = 0
@@ -89,8 +91,19 @@ class SlackTeam extends EventEmitter {
                 	Historys[message.channel] = {}
 
                 if (message.user !== this.LastMessage[message.channel].user) 
-                	Historys[message.channel][message.user + ':' + (message.ts - 0.00001)] = <MessageHeader time={message.ts} key={message.user + ':' + (message.ts - 0.00001)}  user={Object.assign(this.slack.users, this.slack.bots)[message.user]} />;
-                Historys[message.channel][message.user + ':' + message.ts] = <ChatMessage key={message.user + ':' + message.ts} Emmiter={this} users={Object.assign(this.slack.users, this.slack.bots)} {...message} />;
+                	header = <MessageHeader 
+                        time={message.ts} 
+                        user={Object.assign(this.slack.users, this.slack.bots)[message.user]} />;
+
+                Historys[message.channel][message.user + ':' + message.ts] = (
+                    <div key={message.user + ':' + message.ts}> 
+                        {header}
+                        <ChatMessage 
+                            Emmiter={this} 
+                            users={Object.assign(this.slack.users, this.slack.bots)} 
+                            {...message} />
+                    </div>
+                    );
 
                 builtHistory[message.channel]++;
                 if (message.HistoryLength === builtHistory[message.channel]) {
@@ -102,18 +115,20 @@ class SlackTeam extends EventEmitter {
                     delete builtHistory[message.channel];
                 }
             } else {
-                if (message.user !== this.LastMessage[message.channel].user) {
-                	this._addMessage({
-                		message: {
-                			[message.user + ':' + (message.ts - 0.00001)]: <MessageHeader key={message.user + ':' + (message.ts - 0.00001)} time={message.ts} users={Object.assign(this.slack.users, this.slack.bots)} user={Object.assign(this.slack.users, this.slack.bots)[message.user]} />
-                		},
-                		channel: message.channel
-                	});
-                }
-                let id = message.user + ':' + message.ts;
+                if (message.user !== this.LastMessage[message.channel].user) 
+                    header = <MessageHeader 
+                        time={message.ts} 
+                        users={Object.assign(this.slack.users, this.slack.bots)} 
+                        user={Object.assign(this.slack.users, this.slack.bots)[message.user]} />
+
                 this._addMessage({
                 	message: {
-                		[id]: <ChatMessage key={id} Emmiter={this} users={Object.assign(this.slack.users, this.slack.bots)} {...message} />
+                		[message.user + ':' + message.ts]: (
+                            <div key={message.user + ':' + message.ts}> 
+                                {header}
+                                <ChatMessage Emmiter={this} users={Object.assign(this.slack.users, this.slack.bots)} {...message} />
+                            </div>
+                        )
                 	},
                 	channel: message.channel
                 });
