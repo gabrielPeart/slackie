@@ -51,6 +51,12 @@ default React.createClass({
     },
 
     render() {
+
+        let messages = []
+
+        _.forEach(this.props.messages, (msg, idx) => messages.push(<span key={idx}>{msg}</span>));
+            
+               
         return (
             <div className="page">
                 <div className="header">
@@ -58,15 +64,7 @@ default React.createClass({
                     <span>{this.props.topic ? this.props.topic[0] : ''}</span>
                 </div>
                 <div ref="messages" className="messages">
-                    {
-                        this.props.messages.map((el, idx) => {
-                            return(
-                                <span key={idx}>
-                                    {el}
-                                </span>
-                            );
-                        })
-                    }
+                    {messages}
                 </div>
                 <Input {...this.props} />
             </div>
