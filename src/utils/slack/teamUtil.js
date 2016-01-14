@@ -101,7 +101,7 @@ class SlackTeam extends EventEmitter {
                         {header}
                         <ChatMessage 
                             Emmiter={this}
-                            removed={this.removed[message.channel] && this.removed[message.channel][message.user + ':' + message.ts]}
+                            removed={this.removed}
                             users={Object.assign(this.slack.users, this.slack.bots)} 
                             {...message} />
                     </div>
@@ -130,7 +130,7 @@ class SlackTeam extends EventEmitter {
                                 {header}
                                 <ChatMessage 
                                     Emmiter={this} 
-                                    removed={this.removed[message.channel] && this.removed[message.channel][message.user + ':' + message.ts]}
+                                    removed={this.removed}
                                     users={Object.assign(this.slack.users, this.slack.bots)} 
                                     {...message} />
                             </div>
@@ -148,11 +148,9 @@ class SlackTeam extends EventEmitter {
     _handelSubtypes(message, history) {
         switch (message.subtype) {
             case 'message_deleted':
-                console.log(message)
                 if(!this.removed[message.channel])
                     this.removed[message.channel] = [];
                 this.removed[message.channel].push(message.previous_message.user+':'+message.previous_message.ts)
-
             case 'message_changed':
                 this.emit(message.channel + ':' + message.previous_message.user + ':' + message.previous_message.ts, message);
                 break;

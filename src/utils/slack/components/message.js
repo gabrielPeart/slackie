@@ -14,7 +14,6 @@ const If = React.createClass({
 
 export
 default React.createClass({
-
     getInitialState() {
         return {
             subtype: this.props.subtype,
@@ -24,7 +23,7 @@ default React.createClass({
             time: this.props.ts,
             edited: false,
             attachmentExpanded: true,
-            removed: this.props.removed
+            removed: false
         };
     },
 
@@ -50,7 +49,7 @@ default React.createClass({
             case 'message_deleted':
                 this.setState({
                     subtype: 'removed',
-                    removed: event.deleted_ts
+                    removed: true
                 });
                 break;
             case 'message_changed':
@@ -135,12 +134,14 @@ default React.createClass({
 
     render() {
         const text = new messageFormatUtil(_.unescape(this.state.text), this.props.users, false).parsed;
+        const removedProps = this.props.removed || {}
+        const removed = this.state.removed || (removedProps[this.props.channel] && removedProps[this.props.channel].includes(this.props.user + ':' + this.props.ts))
         return (
             <div className={'message ' + (this.state.removed ? 'removed' : null)}>
         		<div className="time">{moment.unix(this.state.time).format('h:mm')}</div> 
-                <span className={this.getClassName()} dangerouslySetInnerHTML={{__html: !this.state.removed ? text : 'Message removed.'}} />
+                <span className={this.getClassName()} dangerouslySetInnerHTML={{__html: removed ? 'Message removed.' : text }} />
                 {this.getInline()}
-                <If test={this.state.edited && !this.state.removed}>
+                <If test={this.state.edited && !removed}>
                 	<div className="edited">(edited)</div>
                 </If>
         	</div>
