@@ -112,12 +112,11 @@ default React.createClass({
 
     getClassName() {
         switch (this.state.subtype) {
+            case 'channel_join':
+            case 'channel_leave':
             case 'channel_purpose':
             case 'channel_topic':
                 return 'channel_event';
-            break;
-            case 'channel_leave':
-                return 'channel_leave';
             break;
             case 'me_message':
                 return 'me_message';

@@ -132,6 +132,7 @@ class SlackTeam extends EventEmitter {
             case 'channel_purpose':
             case 'channel_topic':
             case 'channel_leave':
+            case 'channel_join':
             case 'file_share':
             case 'me_message':
                 this.MessageQueue.push(message);
