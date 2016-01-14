@@ -1,5 +1,24 @@
+/**
+ * Messages area is 100% - 70px - 210px ~ team select + channel select
+ * Header is 44px high. 20px high with 24px padding (top&bottom)
+ * Messages container is 100% - 44px - 56px - 5px ~ header height + chat input height + 5px margin at top
+ *  - The messages container starts 5px from the top of the header and ends directly on the chat-input
+ *  - this is so messages scroll behind the input, messages container has no paddings, the last message
+ *  - ends directly on the input and has 16px margin of seperation
+ * Chat area is 56px high, the actual chat input is 40px with the rest being space below for notifcation area
+ **/
+
+$TeamSelect-width: 70px;
+$ChannelSelect-width: 210px;
+$Page-width: $TeamSelect-width + $ChannelSelect-width; // - 100%
+
+$Header-height: 44px;
+$ChatInput-height: 56px;
+$MessagesContainer-height: $Header-height + $ChatInput-height + 5; // - 100%
+
 .page {
-    width: calc(100vw - 280px);
+    /* 100% - 70 - 210 (team select, channel select) */
+    width: calc(100vw - $Page-width);
     right: 0;
     height: 100%;
     position: absolute;
@@ -9,7 +28,8 @@
 .page .header {
     background-color: rgb(247, 247, 247);
     padding: 12px 0;
-    height: 20px;
+    height: $Header-height;
+    box-sizing: border-box;
 }
 
 .page .header h1 {
@@ -27,7 +47,7 @@
 }
 
 .page .messages {
-    height: calc(100% - 44px - 56px - 5px);
+    height: calc(100% - #{$MessagesContainer-height});
     width: auto;
     margin: 5px 5px 0 0;
     overflow-y: scroll;
@@ -201,7 +221,7 @@
 .page .chat-input {
     position: absolute;
     bottom: 0;
-    height: 56px;
+    height: $ChatInput-height;
     width: 100%;
 }
 
