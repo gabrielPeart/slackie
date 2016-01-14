@@ -9,6 +9,12 @@
 <img src="preview/UI_preview_0.0.1.png" alt="Dashboard 0.0.1" width="34%"/>
 <img src="preview/add_team_OAuth.png" alt="Add Team" width="41%"/>
 
+### Todo
+* [x] Get Slack Teams loading w/ OAuth
+* [x] Emoji Support
+* [ ] Slack formatting parser (60% done)
+* [ ] Display all inline message formats (40% done)
+* [ ] Add IRC channel support
 
 ## Contributing
 
