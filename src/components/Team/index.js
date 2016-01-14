@@ -4,6 +4,7 @@ import _ from 'lodash';
 
 import Sidebar from './components/Sidebar';
 import Chat from './components/Chat';
+import Loading from './components/Loading';
 import teamsEngineStore from '../../stores/teamsEngineStore';
 import SidebarStore from './components/Sidebar/store';
 import SidebarActions from './components/Sidebar/actions';
@@ -22,6 +23,7 @@ default React.createClass({
         var TeamEngine = teamsEngineStore.getState();
         var SidebarState = SidebarStore.getState();
         return {
+            loading: (TeamEngine.selectedTeam && SidebarState.activeChannel) ? false : true,
             team: TeamEngine.selectedTeam ? TeamEngine.teams[TeamEngine.selectedTeam] : false,
             channel: (SidebarState.activeChannel && SidebarState.activeChannel[TeamEngine.selectedTeam]) ? SidebarState.activeChannel[TeamEngine.selectedTeam] : false,
             messages: (TeamEngine.selectedTeam && SidebarState.activeChannel) ? TeamEngine.teams[TeamEngine.selectedTeam].messages[SidebarState.activeChannel] : [],
@@ -41,7 +43,11 @@ default React.createClass({
     getMessages() {
         if (!this.state.team || !this.state.channel)
             return false;
-        
+
+        this.setState({
+            loading: true,
+            messages: []
+        });
         this.state.team.removeAllListeners('new:message');
         this.state.team.removeAllListeners('history:loaded');
         this.state.team.on('new:message', this.updateMessages);
@@ -51,7 +57,8 @@ default React.createClass({
 
     updateMessages() {
         if (this.isMounted()) {
-            this.setState({
+            this.setState({       
+                loading: false,         
                 messages: this.state.team.messages[this.state.channel.id]
             });
         }
@@ -101,14 +108,23 @@ default React.createClass({
     },
 
     render() {
+
+        console.log(this.state.loading)
+
+        const Contents = this.state.loading ? <Loading /> : <Chat 
+            emitter={this.state.team} 
+            team={this.state.team.slack} 
+            channel={this.state.channel} 
+            name={ (this.state.channel && this.state.channel.is_channel) ? ('#' + this.state.channel.name) : this.state.channel.name} 
+            topic={this.state.channel.topic ? this.state.channel.topic.value.split('\n') : undefined} 
+            messages={this.state.messages ? this.state.messages : []} />
+
         return (
             <div>
                 <If test={this.state.team}>
                     <Sidebar channel={this.state.channel.id} team={this.state.team}/>
                 </If>
-                <If test={this.state.team}>
-                    <Chat emitter={this.state.team} team={this.state.team.slack} channel={this.state.channel} name={ (this.state.channel && this.state.channel.is_channel) ? ('#' + this.state.channel.name) : this.state.channel.name} topic={this.state.channel.topic ? this.state.channel.topic.value.split('\n') : undefined} messages={this.state.messages ? this.state.messages : []} />
-                </If>
+                {Contents}
             </div>
         );
     }

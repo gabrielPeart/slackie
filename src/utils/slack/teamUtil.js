@@ -62,7 +62,6 @@ class SlackTeam extends EventEmitter {
         this.type = 'slack';
 
         this.LastMessage = {};
-        this.fetchingHistory = [];
 
         this.removed = {};
         this.messages = {};
@@ -197,7 +196,6 @@ class SlackTeam extends EventEmitter {
 
     fetchHistory(channel, latest, count = 100) {
         this.LastMessage = {};
-        this.fetchingHistory.push(channel)
         if (_.includes(this.gotHistory, channel) && !latest) {
             this.emit('history:loaded');
             return console.log('History already fetched for', channel);
@@ -217,9 +215,6 @@ class SlackTeam extends EventEmitter {
             } else {
                 console.error(err || resp.statusCode);
             }
-            this.fetchingHistory = _.remove(this.fetchingHistory, n => {
-              return n === channel;
-            });
         });
     }
 
