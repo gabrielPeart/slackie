@@ -89,8 +89,8 @@ class SlackTeam extends EventEmitter {
                 	Historys[message.channel] = {}
 
                 if (message.user !== this.LastMessage[message.channel].user) 
-                	Historys[message.channel][message.user + ':' + (message.ts - 0.00001)] = <MessageHeader time={message.ts} user={Object.assign(this.slack.users, this.slack.bots)[message.user]} />;
-                Historys[message.channel][message.user + ':' + message.ts] = <ChatMessage Emmiter={this} users={Object.assign(this.slack.users, this.slack.bots)} {...message} />;
+                	Historys[message.channel][message.user + ':' + (message.ts - 0.00001)] = <MessageHeader time={message.ts} key={message.user + ':' + (message.ts - 0.00001)}  user={Object.assign(this.slack.users, this.slack.bots)[message.user]} />;
+                Historys[message.channel][message.user + ':' + message.ts] = <ChatMessage key={message.user + ':' + message.ts} Emmiter={this} users={Object.assign(this.slack.users, this.slack.bots)} {...message} />;
 
                 builtHistory[message.channel]++;
                 if (message.HistoryLength === builtHistory[message.channel]) {
@@ -105,14 +105,15 @@ class SlackTeam extends EventEmitter {
                 if (message.user !== this.LastMessage[message.channel].user) {
                 	this._addMessage({
                 		message: {
-                			[message.user + ':' + (message.ts - 0.00001)]: <MessageHeader time={message.ts} users={Object.assign(this.slack.users, this.slack.bots)} user={Object.assign(this.slack.users, this.slack.bots)[message.user]} />
+                			[message.user + ':' + (message.ts - 0.00001)]: <MessageHeader key={message.user + ':' + (message.ts - 0.00001)} time={message.ts} users={Object.assign(this.slack.users, this.slack.bots)} user={Object.assign(this.slack.users, this.slack.bots)[message.user]} />
                 		},
                 		channel: message.channel
                 	});
                 }
+                let id = message.user + ':' + message.ts;
                 this._addMessage({
                 	message: {
-                		[message.user + ':' + message.ts]: <ChatMessage Emmiter={this} users={Object.assign(this.slack.users, this.slack.bots)} {...message} />
+                		[id]: <ChatMessage key={id} Emmiter={this} users={Object.assign(this.slack.users, this.slack.bots)} {...message} />
                 	},
                 	channel: message.channel
                 });

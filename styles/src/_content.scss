@@ -34,17 +34,17 @@
     overflow-x: hidden;
 }
 
-.page .messages span:last-of-type .msg {
+.page .messages div:last-of-type.message {
     margin-bottom: 14px;
 }
 
-.page .messages .message {
+.page .messages .message-header {
     position: relative;
     margin-top: 20px;
     animation: fadein 500ms;
 }
 
-.page .messages .message .profile{
+.page .messages .message-header .profile{
     width: 40px;
     height: 40px;
     margin-left: 17px;
@@ -54,25 +54,25 @@
     float: left;
 }
 
-.page .messages .message .profile img {
+.page .messages .message-header .profile img {
     width: 40px;
     height: 40px;
     border-radius: 4px;
     cursor: pointer;
 }
 
-.page .messages .msg em {
+.page .messages .message em {
     font-style: italic;
 }
 
-.page .messages .msg .slack-user{
+.page .messages .message .slack-user{
     font-weight: 600;
 }
-.page .messages .msg .slack-user:before {
+.page .messages .message .slack-user:before {
     content:'@';
 }
 
-.page .messages .msg code{
+.page .messages .message code{
     white-space: normal;
     color: red;
     font-size: 12px;
@@ -81,7 +81,7 @@
     padding: 0px 4px;
 }
 
-.page .messages .msg codeBlock{
+.page .messages .message codeBlock{
     line-height: 18px;
     font-size: 12px;
     background-color: #f7f7f9;
@@ -90,20 +90,20 @@
     display: block;
 }
 
-.page .messages .msg .channel_event .slack-user{
+.page .messages .message .channel_event .slack-user{
     display: none;
 }
 
-.page .messages .msg .channel_event,
-.page .messages .msg .me_message {
+.page .messages .message .channel_event,
+.page .messages .message .me_message {
     font-style: italic !important;
     color: gray !important;
 }
 
-.page .messages .msg strong {
+.page .messages .message strong {
     font-weight: 600;
 }
-.page .messages .msg .time {
+.page .messages .message .time {
     color: black;
     float: left;
     margin-left: -42px;
@@ -116,7 +116,7 @@
     -webkit-transition: opacity 0.125s linear;
 }
 
-.page .messages .msg .inline-image img {
+.page .messages .message .inline-image img {
     max-width: 70vw;
     max-height: 30vh;
     display: block;
@@ -126,12 +126,12 @@
     border: 1px solid rgba(128, 128, 128, 0.38);
 }
 
-.page .messages .msg .inline-image.false img {
+.page .messages .message .inline-image.false img {
     height: 0px;
     border: 0px solid rgba(128, 128, 128, 0.38);
 }
 
-.page .messages .msg .toggle-inline {
+.page .messages .message .toggle-inline {
     margin-left: 5px;
     color: rgba(128, 128, 128, 0.98);
     top: 2px;
@@ -139,7 +139,7 @@
     cursor: pointer;
 }
 
-.page .messages .msg .edited {
+.page .messages .message .edited {
     float: right;
     font-size: 12px;
     position: relative;
@@ -148,14 +148,14 @@
     color: gray;
 }
 
-.page .messages .msg .emoji {
+.page .messages .message .emoji {
     top: 4px;
     margin-top: -14px;
     height: 20px;
     position: relative;
 }
 
-.page .messages .msg {
+.page .messages .message {
 	animation: fadein 400ms;
 	font-family: 'Open Sans', sans-serif;
     color: #202B33;
@@ -175,15 +175,15 @@
     to   { opacity: 1; }
 }
 
-.page .messages .msg:hover {
+.page .messages .message:hover {
     background-color: rgb(240,240,240);
 }
 
-.page .messages .msg:hover .time{
+.page .messages .message:hover .time{
     opacity: 1;
 }
 
-.page .messages .message h1 {
+.page .messages .message-header h1 {
     color: #202B33;
     float: left;
     font-size: 15px;
@@ -191,7 +191,7 @@
     margin-left: 10px;
 }
 
-.page .messages .message .time {
+.page .messages .message-header .time {
     font-size: 12px;
     color: gray;
     font-weight: 300;

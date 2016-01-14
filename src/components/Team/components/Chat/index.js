@@ -58,7 +58,7 @@ default React.createClass({
 
     render() {
         let messages = []
-        _.forEach(this.props.messages, (msg, idx) => messages.push(<span key={idx}>{msg}</span>));
+        _.forEach(this.props.messages, msg => messages.push(msg));
         return (
             <div className="page">
                 <div className="header">

@@ -7,7 +7,7 @@ default React.createClass({
     render() {
     	var profileImage = (this.props.user && this.props.user.profile) ? this.props.user.profile['image_72'] : ((this.props.user && this.props.user.icons) ? this.props.user.icons[Object.keys(this.props.user.icons)[Object.keys(this.props.user.icons).length - 1]] : '');
         return (
-            <div className="message">
+            <div key={this.props.key} className="message-header">
             	<ImageLoader
                 	className="profile"
                 	src={profileImage} />
