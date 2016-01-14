@@ -197,17 +197,17 @@ class SlackTeam extends EventEmitter {
 
     fetchHistory(channel, latest, count = 100) {
         this.LastMessage = {};
-
+        this.fetchingHistory.push(channel)
         if (_.includes(this.gotHistory, channel) && !latest) {
             this.emit('history:loaded');
             return console.log('History already fetched for', channel);
         }
 
-        var Channels = Object.assign(this.slack.channels, this.slack.dms, this.slack.groups);
+        const Channels = Object.assign(this.slack.channels, this.slack.dms, this.slack.groups);
 
         if (!latest) latest = (Channels[channel] && Channels[channel].latest && Channels[channel].latest.ts) ? Channels[channel].latest.ts : false;
 
-        var type = (channel.charAt(0) === 'C') ? 'channels' : ((channel.charAt(0) === 'G') ? 'groups' : 'im');
+        const type = (channel.charAt(0) === 'C') ? 'channels' : ((channel.charAt(0) === 'G') ? 'groups' : 'im');
 
         request('https://slack.com/api/' + type + '.history?token=' + this.token + '&inclusive=1&channel=' + channel + '&count=' + count + '&unreads=1' + (latest ? ('&latest=' + latest) : ''), {
             json: true
@@ -217,6 +217,9 @@ class SlackTeam extends EventEmitter {
             } else {
                 console.error(err || resp.statusCode);
             }
+            this.fetchingHistory = _.remove(this.fetchingHistory, n => {
+              return n === channel;
+            });
         });
     }
 
