@@ -130,7 +130,7 @@ class SlackTeam extends EventEmitter {
                                 {header}
                                 <ChatMessage 
                                     Emmiter={this} 
-                                    removed={this.removed}
+                                    removed={this.removed[message.channel] && this.removed[message.channel][message.user + ':' + message.ts]}
                                     users={Object.assign(this.slack.users, this.slack.bots)} 
                                     {...message} />
                             </div>
