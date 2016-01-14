@@ -18,7 +18,7 @@ $MessagesContainer-height: $Header-height + $ChatInput-height + 5; // - 100%
 
 .page {
     /* 100% - 70 - 210 (team select, channel select) */
-    width: calc(100vw - $Page-width);
+    width: calc(100vw - #{$Page-width});
     right: 0;
     height: 100%;
     position: absolute;
