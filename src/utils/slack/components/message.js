@@ -23,7 +23,8 @@ default React.createClass({
             text: this.props.text,
             time: this.props.ts,
             edited: false,
-            attachmentExpanded: true
+            attachmentExpanded: true,
+            removed: this.props.removed
         };
     },
 
@@ -46,6 +47,12 @@ default React.createClass({
     handelMessageEvents(event) {
         this.handelUnlistenEvents();
         switch (event.subtype) {
+            case 'message_deleted':
+                this.setState({
+                    subtype: 'removed',
+                    removed: event.deleted_ts
+                });
+                break;
             case 'message_changed':
                 this.handelEdit(event.message, event.subtype);
                 break;
@@ -61,7 +68,7 @@ default React.createClass({
             file: edit.file ? edit.file : false,
             text: edit.text,
             time: edit.ts,
-            edited: edit.edited ? true : false
+            edited: edit.edited ? true : false,
         });
         _.defer(this.handelListenEvents);
     },
@@ -117,23 +124,23 @@ default React.createClass({
             case 'channel_purpose':
             case 'channel_topic':
                 return 'channel_event';
-            break;
+                break;
             case 'me_message':
                 return 'me_message';
                 break;
             default:
-                return '';
+                return this.state.subtype;
         }
     },
 
     render() {
         const text = new messageFormatUtil(_.unescape(this.state.text), this.props.users, false).parsed;
         return (
-            <div className="message">
+            <div className={'message ' + (this.state.removed ? 'removed' : null)}>
         		<div className="time">{moment.unix(this.state.time).format('h:mm')}</div> 
-                <span className={this.getClassName()} dangerouslySetInnerHTML={{__html: text}} />
+                <span className={this.getClassName()} dangerouslySetInnerHTML={{__html: !this.state.removed ? text : 'Message removed.'}} />
                 {this.getInline()}
-                <If test={this.state.edited}>
+                <If test={this.state.edited && !this.state.removed}>
                 	<div className="edited">(edited)</div>
                 </If>
         	</div>

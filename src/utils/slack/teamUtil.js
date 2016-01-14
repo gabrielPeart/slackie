@@ -64,6 +64,7 @@ class SlackTeam extends EventEmitter {
         this.LastMessage = {};
         this.fetchingHistory = [];
 
+        this.removed = {};
         this.messages = {};
         this.meta = meta;
 
@@ -99,7 +100,8 @@ class SlackTeam extends EventEmitter {
                     <div key={message.user + ':' + message.ts}> 
                         {header}
                         <ChatMessage 
-                            Emmiter={this} 
+                            Emmiter={this}
+                            removed={this.removed[message.channel] && this.removed[message.channel][message.user + ':' + message.ts]}
                             users={Object.assign(this.slack.users, this.slack.bots)} 
                             {...message} />
                     </div>
@@ -126,7 +128,11 @@ class SlackTeam extends EventEmitter {
                 		[message.user + ':' + message.ts]: (
                             <div key={message.user + ':' + message.ts}> 
                                 {header}
-                                <ChatMessage Emmiter={this} users={Object.assign(this.slack.users, this.slack.bots)} {...message} />
+                                <ChatMessage 
+                                    Emmiter={this} 
+                                    removed={this.removed}
+                                    users={Object.assign(this.slack.users, this.slack.bots)} 
+                                    {...message} />
                             </div>
                         )
                 	},
@@ -141,9 +147,14 @@ class SlackTeam extends EventEmitter {
 
     _handelSubtypes(message, history) {
         switch (message.subtype) {
+            case 'message_deleted':
+                console.log(message)
+                if(!this.removed[message.channel])
+                    this.removed[message.channel] = [];
+                this.removed[message.channel].push(message.previous_message.user+':'+message.previous_message.ts)
+
             case 'message_changed':
-                var eventName = message.channel + ':' + message.previous_message.user + ':' + message.previous_message.ts;
-                this.emit(eventName, message);
+                this.emit(message.channel + ':' + message.previous_message.user + ':' + message.previous_message.ts, message);
                 break;
             case 'channel_purpose':
             case 'channel_topic':
