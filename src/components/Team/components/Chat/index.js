@@ -20,12 +20,13 @@ default React.createClass({
 
     componentDidUpdate() {
         this.checkAndSroll();
-        this.refreshListeners();
     },
 
     componentWillUpdate() {
         if (!this.refs['messages'])
             return;
+
+        this.refreshListeners();
         this.checkShouldScrollBottom();
     },
 
