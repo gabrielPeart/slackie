@@ -167,7 +167,6 @@
     white-space: pre-wrap;
     padding-right: 10px;
     border-radius: 3px;
-    transition: all 125ms ease-in-out;
     font-size: 14px;
 }
 
@@ -175,8 +174,6 @@
     from { opacity: 0; }
     to   { opacity: 1; }
 }
-
-
 
 .page .messages .msg:hover {
     background-color: rgb(240,240,240);
