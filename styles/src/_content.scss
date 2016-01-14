@@ -90,6 +90,13 @@
     display: block;
 }
 
+.page .messages .msg .channel_event .slack-user,
+.page .messages .msg .channel_leave .slack-user{
+    display: none;
+}
+
+.page .messages .msg .channel_event,
+.page .messages .msg .channel_leave,
 .page .messages .msg .me_message {
     font-style: italic !important;
     color: gray !important;

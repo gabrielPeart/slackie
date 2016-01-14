@@ -112,6 +112,13 @@ default React.createClass({
 
     getClassName() {
         switch (this.state.subtype) {
+            case 'channel_purpose':
+            case 'channel_topic':
+                return 'channel_event';
+            break;
+            case 'channel_leave':
+                return 'channel_leave';
+            break;
             case 'me_message':
                 return 'me_message';
                 break;
@@ -121,7 +128,7 @@ default React.createClass({
     },
 
     render() {
-        var text = new messageFormatUtil(_.unescape(this.state.text), this.props.users, false).parsed;
+        const text = new messageFormatUtil(_.unescape(this.state.text), this.props.users, false).parsed;
         return (
             <div className="msg">
         		<div className="time">{moment.unix(this.state.time).format('h:mm')}</div> 

@@ -26,13 +26,16 @@ default React.createClass({
     componentWillUpdate() {
         if (!this.refs['messages'])
             return;
-        this.shouldScrollBottom = this.refs['messages'].scrollTop + this.refs['messages'].offsetHeight === this.refs['messages'].scrollHeight;
+        this.checkShouldScrollBottom();
+    },
+
+    checkShouldScrollBottom() {
+        this.shouldScrollBottom = this.refs['messages'].scrollTop + this.refs['messages'].offsetHeight >= this.refs['messages'].scrollHeight - 10;
     },
 
     checkAndSroll() {
-        if (this.shouldScrollBottom) {
+        if (this.shouldScrollBottom)
             this.refs['messages'].scrollTop = this.refs['messages'].scrollHeight;
-        }
     },
 
     refreshListeners() {
@@ -42,21 +45,19 @@ default React.createClass({
         this.props.emitter.removeAllListeners('message:loaded');
         this.props.emitter.removeAllListeners('inline:toggle');
 
-        var throttle = _.throttle(() => _.defer(this.checkAndSroll), 300);
-        this.props.emitter.on('inline:toggle', ()=>{
-            this.shouldScrollBottom = this.refs['messages'].scrollTop + this.refs['messages'].offsetHeight === this.refs['messages'].scrollHeight;
+        const throttle = _.throttle(should => _.defer(this.checkAndSroll), 300);
+
+        this.props.emitter.on('inline:toggle', () => {
+            this.checkShouldScrollBottom();
             _.defer(this.checkAndSroll);
         });
         this.props.emitter.on('message:loaded', throttle);
     },
 
+
     render() {
-
         let messages = []
-
         _.forEach(this.props.messages, (msg, idx) => messages.push(<span key={idx}>{msg}</span>));
-            
-               
         return (
             <div className="page">
                 <div className="header">

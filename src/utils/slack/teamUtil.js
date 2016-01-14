@@ -129,6 +129,9 @@ class SlackTeam extends EventEmitter {
                 var eventName = message.channel + ':' + message.previous_message.user + ':' + message.previous_message.ts;
                 this.emit(eventName, message);
                 break;
+            case 'channel_purpose':
+            case 'channel_topic':
+            case 'channel_leave':
             case 'file_share':
             case 'me_message':
                 this.MessageQueue.push(message);
