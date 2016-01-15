@@ -12,6 +12,8 @@
 ### Todo
 * [x] Get Slack Teams loading w/ OAuth
 * [x] Emoji Support
+* [x] Notification Support
+* [x] Sending and retrieving of Channel/Group & DM History
 * [ ] Slack formatting parser (60% done)
 * [ ] Display all inline message formats (40% done)
 * [ ] Add IRC channel support
