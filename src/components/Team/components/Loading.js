@@ -12,7 +12,10 @@ default React.createClass({
     render() {
         return (
             <div className="slack-loading">
-
+                <p className="loading-text">Loading...</p>
+                <div className="loader-container">
+                    <div className="loader"></div>
+                </div>
         	</div>
         );
     }

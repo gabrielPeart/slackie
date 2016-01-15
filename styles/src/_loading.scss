@@ -1,0 +1,87 @@
+$Loading-color: rgb(80, 80, 80);
+
+.slack-loading {
+  width: calc(100vw - 70px);
+  height: calc(100vh - 30px);
+  position: relative;
+  background-color: rgb(235, 235, 235);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.loading-text {
+  color: $Loading-color;
+  font-weight: 400;
+  margin-top: -51px;
+  margin-bottom: 35px;
+  font-size: 36px;
+}
+
+.loader-container {
+  height: 0;
+}
+
+/**
+ * CSS Loader
+ * http://projects.lukehaas.me/css-loaders/
+ **/
+.loader,
+.loader:before,
+.loader:after {
+  background: $Loading-color;
+  -webkit-animation: load1 1s infinite ease-in-out;
+  animation: load1 1s infinite ease-in-out;
+  width: 1em;
+  height: 4em;
+}
+.loader:before,
+.loader:after {
+  position: absolute;
+  top: 0;
+  content: '';
+}
+.loader:before {
+  left: -1.5em;
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+.loader {
+  text-indent: -9999em;
+  margin: 0 auto;
+  position: relative;
+  font-size: 11px;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+.loader:after {
+  left: 1.5em;
+}
+@-webkit-keyframes load1 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 0 $Loading-color;
+    height: 4em;
+  }
+  40% {
+    box-shadow: 0 -2em $Loading-color;
+    height: 5em;
+  }
+}
+@keyframes load1 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 0 $Loading-color;
+    height: 4em;
+  }
+  40% {
+    box-shadow: 0 -2em $Loading-color;
+    height: 5em;
+  }
+}
