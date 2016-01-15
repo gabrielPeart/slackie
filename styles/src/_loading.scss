@@ -10,6 +10,10 @@ $Loading-color: rgb(80, 80, 80);
   justify-content: center;
   flex-direction: column;
 }
+.slack-loading.chat{
+  left: 207px;
+  width: calc(100vw - 270px);
+}
 
 .loading-text {
   color: $Loading-color;

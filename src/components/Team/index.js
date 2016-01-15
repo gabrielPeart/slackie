@@ -108,10 +108,7 @@ default React.createClass({
     },
 
     render() {
-
-        console.log(this.state.loading)
-
-        const Contents = this.state.loading ? <Loading /> : <Chat 
+        const Contents = this.state.loading ? <Loading team={this.state.team} channel={this.state.channel} /> : <Chat 
             emitter={this.state.team} 
             team={this.state.team.slack} 
             channel={this.state.channel} 
