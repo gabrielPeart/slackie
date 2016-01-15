@@ -10,8 +10,11 @@
 <img src="preview/add_team_OAuth.png" alt="Add Team" width="41%"/>
 
 ### Todo
+* [ ] Add native window controls for OSX Linux & Windows (1/3 completed)
 * [x] Get Slack Teams loading w/ OAuth
 * [x] Emoji Support
+* [x] Notification Support
+* [x] Sending and retrieving of Channel/Group & DM History
 * [ ] Slack formatting parser (60% done)
 * [ ] Display all inline message formats (40% done)
 * [ ] Add IRC channel support
@@ -20,17 +23,20 @@
 
 ### Getting Started
 
+- `npm install grunt-cli -g`
 - `npm install`
 
 To run the app in development:
 
-- `npm start`
+- `grunt`
 
-Running `npm start` will download and install [Electron](http://electron.atom.io/).
+Or:
+
+- `grunt --dev (optional -- starts dev console on app start)`
 
 ### Building & Release
 
-- `npm run release`
+- `grunt release --arch=ia32 (optional)`
 
 ### Find a bug/issue or simply want to request a new feature?
 

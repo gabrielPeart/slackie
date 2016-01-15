@@ -5,6 +5,7 @@ import _ from 'lodash';
 import Sidebar from './components/Sidebar';
 import Chat from './components/Chat';
 import Loading from './components/Loading';
+import NoTeams from './components/NoTeams';
 import teamsEngineStore from '../../stores/teamsEngineStore';
 import SidebarStore from './components/Sidebar/store';
 import SidebarActions from './components/Sidebar/actions';
@@ -23,6 +24,7 @@ default React.createClass({
         var TeamEngine = teamsEngineStore.getState();
         var SidebarState = SidebarStore.getState();
         return {
+            noTeams: TeamEngine.noTeams,
             loading: (TeamEngine.selectedTeam && SidebarState.activeChannel) ? false : true,
             team: TeamEngine.selectedTeam ? TeamEngine.teams[TeamEngine.selectedTeam] : false,
             channel: (SidebarState.activeChannel && SidebarState.activeChannel[TeamEngine.selectedTeam]) ? SidebarState.activeChannel[TeamEngine.selectedTeam] : false,
@@ -83,6 +85,7 @@ default React.createClass({
                 return;
 
             this.setState({
+                noTeams: TeamEngine.noTeams,
                 team: TeamEngine.selectedTeam ? TeamEngine.teams[TeamEngine.selectedTeam] : false,
                 selectedTeam: TeamEngine.selectedTeam
             });
@@ -108,10 +111,10 @@ default React.createClass({
     },
 
     render() {
+        if(this.state.noTeams)
+            return <NoTeams />;
 
-        console.log(this.state.loading)
-
-        const Contents = this.state.loading ? <Loading /> : <Chat 
+        const Contents = this.state.loading ? <Loading team={this.state.team} channel={this.state.channel} /> : <Chat 
             emitter={this.state.team} 
             team={this.state.team.slack} 
             channel={this.state.channel} 

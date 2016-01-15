@@ -8,6 +8,7 @@ import ls from 'local-storage';
 class TeamselectorActions {
     constructor() {
         this.generateActions(
+            'noTeams',
             'select',
             'added',
             'loaded',

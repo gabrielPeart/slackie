@@ -11,8 +11,11 @@ default React.createClass({
 
     render() {
         return (
-            <div className="slack-loading">
-
+            <div className={'slack-loading' + (this.props.team && this.props.channel ? ' chat' : '' )}>
+                <p className="loading-text">Loading...</p>
+                <div className="loader-container">
+                    <div className="loader"></div>
+                </div>
         	</div>
         );
     }

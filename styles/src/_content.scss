@@ -189,6 +189,7 @@ $MessagesContainer-height: $Header-height + $ChatInput-height + 5; // - 100%
     padding-right: 10px;
     border-radius: 3px;
     font-size: 14px;
+    transition: background-color 0.125s ease-in-out;
 }
 
 @-webkit-keyframes fadein {
