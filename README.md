@@ -10,6 +10,7 @@
 <img src="preview/add_team_OAuth.png" alt="Add Team" width="41%"/>
 
 ### Todo
+* [ ] Add native window controls for OSX Linux & Windows (1/3 completed)
 * [x] Get Slack Teams loading w/ OAuth
 * [x] Emoji Support
 * [x] Notification Support
