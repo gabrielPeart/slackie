@@ -27,17 +27,15 @@
 
 To run the app in development:
 
-- `npm start`
+- `grunt`
 
 Or:
 
 - `grunt --dev (optional -- starts dev console on app start)`
 
-Running `npm start` will download and install [Electron](http://electron.atom.io/).
-
 ### Building & Release
 
-- `npm run release`
+- `grunt release --arch=ia32 (optional)`
 
 ### Find a bug/issue or simply want to request a new feature?
 
