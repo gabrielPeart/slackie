@@ -9,6 +9,7 @@ class TeamsEngineStore {
         this.bindActions(teamsEngineActions);
         this.bindActions(TeamSelectorActions);
 
+        this.noTeams = false;
         this.teams = {};
         this.selectedTeam = false;
 
@@ -20,15 +21,23 @@ class TeamsEngineStore {
         });
     }
 
+    onNoTeams(){
+        this.setState({
+            noTeams: true
+        });
+    }
+
     onLoaded(slack) {
         this.teams[slack.slack.team.id] = slack;
         if(!this.selectedTeam)
             this.setState({
+                noTeams: false,
                 teams: this.teams,
                 selectedTeam: slack.slack.team.id
             });
         else
             this.setState({
+                noTeams: false,
                 teams: this.teams
             });  
     }
@@ -37,6 +46,7 @@ class TeamsEngineStore {
     onAdded(slack) {
         this.teams[slack.slack.team.id] = slack;
         this.setState({
+            noTeams: false,
             teams: this.teams,
             selectedTeam: slack.slack.team.id
         });

@@ -45,6 +45,11 @@ const LoadTeams = async.queue((team, next) => {
 
 module.exports = {
 	reload() {
-		_.forEach((ls.get('teams') || {}), team => LoadTeams.push(team));
+		const teams = ls.get('teams');
+
+		if(!teams || teams.length === 0)
+			return TeamSelectorActions.noTeams();
+
+		_.forEach(teams, team => LoadTeams.push(team));
 	}
 }
