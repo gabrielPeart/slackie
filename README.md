@@ -22,11 +22,16 @@
 
 ### Getting Started
 
+- `npm install grunt-cli -g`
 - `npm install`
 
 To run the app in development:
 
 - `npm start`
+
+Or:
+
+- `grunt --dev (optional -- starts dev console on app start)`
 
 Running `npm start` will download and install [Electron](http://electron.atom.io/).
 
