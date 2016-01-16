@@ -29,7 +29,7 @@ default React.createClass({
             <div className="inline-description">
                 <div className="color-bar" style={{backgroundColor: (this.props.color ? ('#' + this.props.color) : void 0)}}></div>
                 {thumb}
-                <div className={this.props.thumb_url ? 'inline-description-inner thumb thumb' : 'inline-description-inner thumb'}>
+                <div className={this.props.thumb_url ? 'inline-description-inner thumb' : 'inline-description-inner'}>
                     <h2>{this.props.service_name}</h2>
                     <a className="description-title" href={this.props.title_link}>{this.props.title}</a>
                     <p dangerouslySetInnerHTML={{__html: new messageFormatUtil(_.unescape(this.props.text), this.props.users, false).parsed }}/>
