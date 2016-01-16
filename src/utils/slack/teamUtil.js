@@ -155,6 +155,7 @@ class SlackTeam extends EventEmitter {
                 break;
             case 'channel_purpose':
             case 'channel_topic':
+            case 'bot_add':
             case 'channel_leave':
             case 'channel_join':
             case 'file_share':
