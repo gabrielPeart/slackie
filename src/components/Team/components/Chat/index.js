@@ -34,7 +34,7 @@ default React.createClass({
         if (!this.refs['messages'])
             return;
         
-        this.shouldScrollBottom = this.refs['messages'].scrollTop + this.refs['messages'].offsetHeight >= this.refs['messages'].scrollHeight - 5;
+        this.shouldScrollBottom = this.refs['messages'].scrollTop + this.refs['messages'].offsetHeight >= this.refs['messages'].scrollHeight - 15;
     },
 
     checkAndSroll() {
