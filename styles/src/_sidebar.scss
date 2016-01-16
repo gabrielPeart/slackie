@@ -21,7 +21,7 @@
 }
 
 .sidebar h1:first-of-type {
-    margin-top: 20px;
+    margin-top: 25px;
 }
 
 .sidebar ul {
@@ -52,7 +52,7 @@
     background-color: #D8D8D8;
 }
 
-.sidebar ul li .user-status {
+.sidebar .user-status {
     float: left;
     position: relative;
     top: 4.5px;
@@ -63,15 +63,15 @@
     
 }
 
-.sidebar ul li .user-status.away{
+.sidebar .user-status.away{
     background-color: gray;
 }
 
-.sidebar ul li .user-status.active{
+.sidebar .user-status.active{
     background-color: green;
 }
 
-.sidebar ul li .user-status.hidden{
+.sidebar .user-status.hidden{
     display: none;
 }
 
@@ -80,4 +80,27 @@
     text-align: center;
     font-weight: 600;
     font-size: 12px;
+}
+
+.sidebar .team-title{
+    font-weight: 500;
+    font-size: 19px;
+    margin-left: 20px;
+    margin-bottom: 5px;
+    margin-top: 10px;
+    color: #262626;
+}
+
+.sidebar .team-user p{
+    font-weight: 500;
+    font-size: 13px;
+    color: rgba(38, 38, 38, 0.68);
+    position: relative;
+    top: 2px;
+}
+
+.sidebar .team-user{
+    margin-left: 20px;
+    margin-bottom: 20px;
+    position: relative;
 }

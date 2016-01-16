@@ -51,7 +51,7 @@ const SidebarTab = React.createClass({
 export
 default React.createClass({
     getChannels(starred) {
-        var team = this.props.team.slack;
+        const team = this.props.team.slack;
         var channels = [];
 
         if (team.channels)
@@ -73,7 +73,7 @@ default React.createClass({
         return channels;
     },
     getDMS() {
-        var team = this.props.team.slack;
+        const team = this.props.team.slack;
         var dms = [];
 
         if (team.dms)
@@ -86,7 +86,7 @@ default React.createClass({
         return dms;
     },
     getGroups(starred) {
-        var team = this.props.team.slack;
+        const team = this.props.team.slack;
         var groups = [];
 
         if (team.groups)
@@ -106,19 +106,23 @@ default React.createClass({
         return groups;
     },
     getStarred() {
-        var starredChannels = this.getChannels(true);
-        var starredGroups = this.getGroups(true);
+        const starredChannels = this.getChannels(true);
+        const starredGroups = this.getGroups(true);
 
         return [].concat(starredChannels, starredGroups);
     },
     render() {
-        var Starred = this.getStarred();
-        var Groups = this.getGroups();
-        var Channels = this.getChannels();
-        var DMs = this.getDMS();
-
+        const Starred = this.getStarred();
+        const Groups = this.getGroups();
+        const Channels = this.getChannels();
+        const DMs = this.getDMS();
         return (
             <aside className="sidebar">
+                <div className="team-title">{this.props.team.slack.team.name}</div>
+                <div className="team-user">
+                    <i className={"user-status " + (this.props.team.slack.self.manual_presence ? 'active' : 'away')}/>
+                    <p>{this.props.team.slack.self.name}</p>
+                </div>
 
                 <If test={(Starred && Starred.length > 0)}>
                     <div>
