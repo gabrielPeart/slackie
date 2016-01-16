@@ -73,7 +73,11 @@ default React.createClass({
             time: edit.ts,
             edited: edit.edited ? true : false,
         });
-        _.defer(this.handelListenEvents);
+
+        _.defer(() =>{
+            this.props.Emmiter.emit('message:loaded');
+            this.handelListenEvents();
+        });
     },
 
     handelInLineToggle() {
@@ -85,7 +89,6 @@ default React.createClass({
 
     getInline() {
         let inline = [];
-
         switch (this.state.subtype) {
             case 'file_share':
                 const file = this.state.file;
