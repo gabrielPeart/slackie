@@ -96,8 +96,16 @@ default React.createClass({
 
                 break;
             default:
-                if (this.state.attachments && this.state.attachments.length > 0) 
-                    inline.push(<InlineDescription {...this.state.attachments[0]} />);
+            	if(!this.state.attachments || !this.state.attachments.length > 0)
+            		return inline;
+            	const attachment = this.state.attachments[0];
+
+            	if(!attachment.text && attachment.image_url){
+                	inline.push(<InlineImage {...attachment} />);
+            	}
+              	else if(attachment.text){
+              		inline.push(<InlineDescription {...attachment} />);
+              	}
         }
 
         return inline;

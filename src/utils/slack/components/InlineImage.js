@@ -12,20 +12,21 @@ default React.createClass({
 
     handelInLineToggle() {
         this.setState({
-            attachmentExpanded: !this.state.attachmentExpanded
+            expanded: !this.state.expanded
         });
     },
 
     render() {
-        const fileSize = prettyBytes(this.props.size);
+        const fileSize = this.props.size ? <span className="inline-size">({prettyBytes(this.props.size)})</span> : null;
+        const imageURL = this.props.image_url ? this.props.image_url : this.props.url_private;
         return (
             <span key={this.props.id}>
-                <span className="inline-size">({fileSize})</span>
+                {fileSize}
                 <i onClick={this.handelInLineToggle} className={"toggle-inline " + (this.state.expanded ? 'ion-arrow-down-b' : 'ion-arrow-right-b')} />
 
                 <ImageLoader
                     className={"inline-image " + this.state.expanded}
-                    src={this.props.url_private} />
+                    src={imageURL} />
             </span>
         );
     }
