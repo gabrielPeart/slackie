@@ -5,7 +5,7 @@ export
 default React.createClass({
     getInitialState() {
         return {
-            loading: 'Loading'
+            dots: ''
         };
     },
 
@@ -13,16 +13,15 @@ default React.createClass({
         if (!this.isMounted())
             return clearInterval(this.animateDotsAni);
 
-        const maxDots = 7 + 2;
-        const numDots = this.state.loading.length;
+        const maxDots = 3;
 
         this.setState({
-            loading: (numDots <= maxDots) ? (this.state.loading + '.') : 'Loading'
+            dots: (this.state.dots.length < maxDots) ? (this.state.dots + '.') : ''
         });
     },
 
     componentDidMount() {
-        this.animateDotsAni = setInterval(this.animateDots, 300);
+        this.animateDotsAni = setInterval(this.animateDots, 400);
     },
 
     componentWillUnmount() {
@@ -32,7 +31,7 @@ default React.createClass({
     render() {
         return (
             <div className={'slack-loading' + (this.props.team && this.props.channel ? ' chat' : '' )}>
-                <p className="loading-text">{this.state.loading}</p>
+                <p className="loading-text">Loading<span>{this.state.dots}</span></p>
                 <img src="../images/slack_load.gif" />
         	</div>
         );

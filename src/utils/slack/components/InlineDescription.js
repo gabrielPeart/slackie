@@ -5,7 +5,6 @@ import _ from 'lodash';
 export
 default React.createClass({
     render() {
-        console.log(this.props.thumb_url)
         let text = [];
 
         if (this.props.mrkdwn_in && this.props.mrkdwn_in.includes('pretext'))
