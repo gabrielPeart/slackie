@@ -25,7 +25,7 @@ default React.createClass({
                 <i onClick={this.handelInLineToggle} className={"toggle-inline " + (this.state.expanded ? 'ion-arrow-down-b' : 'ion-arrow-right-b')} />
 
                 <ImageLoader
-                    onLoad={() => this.props.Emmiter.emit('message:loaded', true, this.state.time)}
+                    onLoad={() => this.props.Emmiter.emit('message:loaded', true)}
                     className={"inline-image " + this.state.expanded}
                     src={imageURL} />
             </span>

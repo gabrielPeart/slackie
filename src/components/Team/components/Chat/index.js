@@ -35,6 +35,8 @@ default React.createClass({
             return;
         
         this.shouldScrollBottom = this.refs['messages'].scrollTop + this.refs['messages'].offsetHeight >= this.refs['messages'].scrollHeight - 15;
+
+        console.log(this.shouldScrollBottom)
     },
 
     checkAndSroll() {
@@ -52,7 +54,7 @@ default React.createClass({
         this.props.emitter.removeAllListeners('message:loaded');
         this.props.emitter.removeAllListeners('inline:toggle');
 
-        const throttle = _.throttle(should => _.defer(this.checkAndSroll), 300);
+        var throttle = _.throttle(should => _.defer(this.checkAndSroll), 300);
 
         this.props.emitter.on('inline:toggle', () => {
             this.checkShouldScrollBottom();

@@ -1,4 +1,5 @@
 import React from 'react';
+import {v1 as uuid} from 'node-uuid';
 import ImageLoader from 'react-imageloader';
 import messageFormatUtil from '../parseFormattingUtil';
 import _ from 'lodash';
@@ -9,9 +10,9 @@ default React.createClass({
         let text = [];
 
         if (this.props.mrkdwn_in && this.props.mrkdwn_in.includes('pretext'))
-            text.push(<p>{this.props.pretext}</p>)
+            text.push(<p key={uuid()}>{this.props.pretext}</p>)
 
-        text.push(<p dangerouslySetInnerHTML={{__html: new messageFormatUtil(_.unescape(this.props.text), this.props.users, false).parsed }}/>)
+        text.push(<p key={uuid()} dangerouslySetInnerHTML={{__html: new messageFormatUtil(_.unescape(this.props.text), this.props.users, false).parsed }}/>)
 
         let image = null;
         let thumb = null;
@@ -22,11 +23,11 @@ default React.createClass({
         }
 
         if (this.props.image_url) 
-           image =  <ImageLoader onLoad={() => this.props.Emmiter.emit('message:loaded', true)} className="description-image" src={this.props.image_url} />;
+           image = <ImageLoader onLoad={() => this.props.Emmiter.emit('message:loaded', true)} className="description-image" src={this.props.image_url} />;
         
 
         return (
-            <div className="inline-description">
+            <div key={uuid()} className="inline-description">
                 {thumb}
                 <span className={this.props.thumb_url ? 'thumb' : ''}>
                     <h2>{this.props.service_name}</h2>

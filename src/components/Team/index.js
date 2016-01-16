@@ -21,8 +21,8 @@ export
 default React.createClass({
 
     getInitialState() {
-        var TeamEngine = teamsEngineStore.getState();
-        var SidebarState = SidebarStore.getState();
+        const TeamEngine = teamsEngineStore.getState();
+        const SidebarState = SidebarStore.getState();
         return {
             noTeams: TeamEngine.noTeams,
             loading: (TeamEngine.selectedTeam && SidebarState.activeChannel) ? false : true,
@@ -67,8 +67,8 @@ default React.createClass({
     },
     updateChannel() {
         if (this.isMounted()) {
-            var TeamEngine = teamsEngineStore.getState();
-            var SidebarState = SidebarStore.getState();
+            const TeamEngine = teamsEngineStore.getState();
+            const SidebarState = SidebarStore.getState();
 
             this.setState({
                 channel: (SidebarState.activeChannel && SidebarState.activeChannel[TeamEngine.selectedTeam]) ? SidebarState.activeChannel[TeamEngine.selectedTeam] : false,
@@ -79,7 +79,7 @@ default React.createClass({
     },
     updateTeam() {
         if (this.isMounted()) {
-            var TeamEngine = teamsEngineStore.getState();
+            const TeamEngine = teamsEngineStore.getState();
 
             if(this.state.selectedTeam === TeamEngine.selectedTeam)
                 return;
@@ -99,7 +99,7 @@ default React.createClass({
             return;
 
         if(!this.state.channel){
-            var general = _(this.state.team.slack.channels)
+            const general = _(this.state.team.slack.channels)
                 .filter(channel => { return channel.is_general; })
                 .value()[0];
 

@@ -102,6 +102,9 @@ default React.createClass({
               	else if(attachment.text){
               		inline.push(<InlineDescription Emmiter={this.props.Emmiter} {...attachment} />);
               	}
+
+                if(inline.length === 0)
+                    this.props.Emmiter.emit('message:loaded', false)             
         }
 
         return inline;
@@ -125,7 +128,7 @@ default React.createClass({
 
     render() {
         const text = new messageFormatUtil(_.unescape(this.state.text), this.props.users, false).parsed;
-        const removedProps = this.props.removed || {}
+        const removedProps = this.props.removed || {};
         const removed = this.state.removed || (removedProps[this.props.channel] && removedProps[this.props.channel].includes(this.props.user + ':' + this.props.ts));
 
         const inline = this.getInline();
