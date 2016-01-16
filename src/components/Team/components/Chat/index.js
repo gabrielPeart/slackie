@@ -9,9 +9,14 @@ import Input from './components/input';
 export
 default React.createClass({
 
+    componentWillMount() {
+        this.shouldScrollBottom = true;
+    },
+
     componentDidMount() {
         window.addEventListener('resize', this.checkAndSroll);
         this.refs['messages'].scrollTop = this.refs['messages'].scrollHeight;
+        this.refreshListeners();
     },
 
     componentWillUnmount() {
@@ -19,32 +24,15 @@ default React.createClass({
     },
 
     componentDidUpdate() {
-        this.checkAndSroll();
-    },
-
-    componentWillUpdate() {
-        if (!this.refs['messages'])
-            return;
-
-        this.refreshListeners();
-        this.checkShouldScrollBottom();
-    },
-
-    checkShouldScrollBottom() {
-        if (!this.refs['messages'])
-            return;
-        
-        this.shouldScrollBottom = this.refs['messages'].scrollTop + this.refs['messages'].offsetHeight >= this.refs['messages'].scrollHeight - 15;
-
-        console.log(this.shouldScrollBottom)
-    },
-
-    checkAndSroll() {
-        if (!this.refs['messages'])
-            return;
-
         if (this.shouldScrollBottom)
             this.refs['messages'].scrollTop = this.refs['messages'].scrollHeight;
+    },
+
+    handelScroll() {
+        if (!this.refs['messages'])
+            return;
+
+        this.shouldScrollBottom = this.refs['messages'].scrollTop + this.refs['messages'].offsetHeight >= this.refs['messages'].scrollHeight - 15;
     },
 
     refreshListeners() {
@@ -54,13 +42,18 @@ default React.createClass({
         this.props.emitter.removeAllListeners('message:loaded');
         this.props.emitter.removeAllListeners('inline:toggle');
 
-        var throttle = _.throttle(should => _.defer(this.checkAndSroll), 300);
-
         this.props.emitter.on('inline:toggle', () => {
-            this.checkShouldScrollBottom();
-            _.defer(this.checkAndSroll);
+            if (!this.refs['messages']) return;
+
+            if (this.shouldScrollBottom) 
+                _.defer(() => this.refs['messages'].scrollTop = this.refs['messages'].scrollHeight)
         });
-        this.props.emitter.on('message:loaded', throttle);
+        this.props.emitter.on('message:loaded', () => {
+            if (!this.refs['messages']) return;
+
+            if (this.shouldScrollBottom) 
+                _.defer(() => this.refs['messages'].scrollTop = this.refs['messages'].scrollHeight)
+        });
     },
 
 
@@ -75,7 +68,7 @@ default React.createClass({
                         <span className="topic-inner">{_.unescape(this.props.topic ? this.props.topic[0] : '')}</span>
                     </div>
                 </div>
-                <div ref="messages" className="messages">
+                <div ref="messages" onWheel={this.handelScroll} className="messages">
                     {messages}
                 </div>
                 <Input {...this.props} />

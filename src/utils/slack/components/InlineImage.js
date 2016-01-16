@@ -16,6 +16,10 @@ default React.createClass({
         });
     },
 
+    handelLoaded() {
+        this.props.Emmiter.emit('message:loaded', true);
+    },
+
     render() {
         const fileSize = this.props.size ? <span className="inline-size">({prettyBytes(this.props.size)})</span> : null;
         const imageURL = this.props.image_url ? this.props.image_url : this.props.url_private;
@@ -25,7 +29,7 @@ default React.createClass({
                 <i onClick={this.handelInLineToggle} className={"toggle-inline " + (this.state.expanded ? 'ion-arrow-down-b' : 'ion-arrow-right-b')} />
 
                 <ImageLoader
-                    onLoad={() => this.props.Emmiter.emit('message:loaded', true)}
+                    onLoad={this.handelLoaded}
                     className={"inline-image " + this.state.expanded}
                     src={imageURL} />
             </span>

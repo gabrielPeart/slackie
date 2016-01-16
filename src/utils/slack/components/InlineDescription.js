@@ -6,6 +6,11 @@ import _ from 'lodash';
 
 export
 default React.createClass({
+
+    handelLoaded() {
+        this.props.Emmiter.emit('message:loaded', true);
+    },
+    
     render() {
         let text = [];
 
@@ -23,7 +28,7 @@ default React.createClass({
         }
 
         if (this.props.image_url) 
-           image = <ImageLoader onLoad={() => this.props.Emmiter.emit('message:loaded', true)} className="description-image" src={this.props.image_url} />;
+           image = <ImageLoader onLoad={this.handelLoaded} className="description-image" src={this.props.image_url} />;
         
 
         return (
