@@ -32,7 +32,9 @@ default React.createClass({
     componentWillMount() {
         this.handelListenEvents();
     },
-
+    componentDidMount() {
+        this.props.Emmiter.emit('message:loaded')  
+    },
     componentWillUnmount() {
         this.handelUnlistenEvents();
     },
@@ -101,10 +103,7 @@ default React.createClass({
             	}
               	else if(attachment.text){
               		inline.push(<InlineDescription Emmiter={this.props.Emmiter} {...attachment} />);
-              	}
-
-                if(inline.length === 0)
-                    this.props.Emmiter.emit('message:loaded', false)             
+              	}                               
         }
 
         return inline;
@@ -132,7 +131,7 @@ default React.createClass({
         const removed = this.state.removed || (removedProps[this.props.channel] && removedProps[this.props.channel].includes(this.props.user + ':' + this.props.ts));
 
         const inline = this.getInline();
-
+        
         const edited = (this.state.edited && !removed) ? <div className="edited">(edited)</div> : null
 
         return (
