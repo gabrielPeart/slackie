@@ -15,8 +15,9 @@
 * [x] Emoji Support
 * [x] Notification Support
 * [x] Sending and retrieving of Channel/Group & DM History
+* [x] Update messages if edited/removed
 * [ ] Slack formatting parser (60% done)
-* [ ] Display all inline message formats (40% done)
+* [ ] Display inline message formats (60% done)
 * [ ] Add IRC channel support
 
 ## Contributing
