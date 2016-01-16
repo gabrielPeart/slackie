@@ -1,5 +1,4 @@
 import React from 'react';
-import {v1 as uuid} from 'node-uuid';
 import ImageLoader from 'react-imageloader';
 import messageFormatUtil from '../parseFormattingUtil';
 import _ from 'lodash';
@@ -23,7 +22,7 @@ default React.createClass({
         if (this.props.image_url) 
            image = <ImageLoader onLoad={this.handelLoaded} className="description-image" src={this.props.image_url} />;
         return (
-            <div key={uuid()} style={{borderColor: (this.props.color ? ('#' + this.props.color) : void 0)}} className="inline-description">
+            <div style={{borderColor: (this.props.color ? ('#' + this.props.color) : void 0)}} className="inline-description">
                 {thumb}
                 <span className={this.props.thumb_url ? 'thumb' : ''}>
                     <h2>{this.props.service_name}</h2>
