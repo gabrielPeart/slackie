@@ -30,13 +30,15 @@ default React.createClass({
         return text;
     },
 
-    handelSend(msg_uuid) {
-        if (!this.message)
-            this.message = {};
-
+    handelSend() {
         if (this.refs['chat-input'].value.replace(/(\r\n|\n|\r)/gm, '').length === 0) {
             return;
         }
+
+        if (!this.message)
+            this.message = {};
+
+        const msg_uuid = uuid();
 
         this.message[msg_uuid] = this.props.team.getChannelGroupOrDMByID(this.props.channel.id).send(this.formatMessage(this.refs['chat-input'].value));
 
@@ -47,7 +49,7 @@ default React.createClass({
     handelKeyDown(event) {
         if (event.keyCode == 13 && !event.shiftKey) {
             event.preventDefault();
-            return this.handelSend(uuid());
+            return this.handelSend();
         }
     },
     render() {
