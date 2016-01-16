@@ -6,6 +6,10 @@ import _ from 'lodash';
 export
 default React.createClass({
 
+    componentDidMount() {
+        this.props.Emmiter.emit('message:loaded'); 
+    },
+
     handelLoaded() {
         this.props.Emmiter.emit('message:loaded', true);
     },
