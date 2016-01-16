@@ -117,8 +117,9 @@ $MessagesContainer-height: $Header-height + $ChatInput-height + 5; // - 100%
     font-size: 12px;
     background-color: #f7f7f9;
     padding: 0px 4px;
-    border: 1px solid #e1e1e8;
+    border: 1px solid #DADADA;
     display: block;
+    border-radius: 4px;
 }
 
 .page .messages .message .channel_event .slack-user {
@@ -148,41 +149,50 @@ $MessagesContainer-height: $Header-height + $ChatInput-height + 5; // - 100%
     -webkit-transition: opacity 0.125s linear;
 }
 
-.page .messages .message .inline-size{
+.page .messages .message .inline-size {
    margin-left: 5px;
 }
 
 
 
-.page .messages .message .inline-description{
-    padding-left: 8px;
-    margin-left: 2px;
-    margin-top: 10px;
-    display: block;
-    margin-bottom: 15px;
-    border-left: solid;
-    border-color: gray;
+.page .messages .message .inline-description {
+    margin-left: 3px;
+    margin-top: 8px;
+    display: table;
 }
 
-.page .messages .message .inline-description .thumb{
+.page .messages .message .inline-description .color-bar {
+    background-color: #A2A2A2;
+    border-radius: 4px;
+    display: table-cell;
+    width: 4px;
+}
+
+.page .messages .message .inline-description-inner {
+    display: table-cell;
+    padding-bottom: 6px;
+    padding-left: 8px;
+}
+
+.page .messages .message .inline-description .thumb {
     width: 80%;
     display: block;
 }
 
-.page .messages .message .inline-description .description-image img{
+.page .messages .message .inline-description .description-image img {
     max-width: 70vw;
     max-height: 30vh;
     display: block;
     margin-top: 5px;
 }
 
-.page .messages .message .inline-description .description-thumb img{
+.page .messages .message .inline-description .description-thumb img {
     max-width: 15%;
     max-height: 100px;
 }
 
 
-.page .messages .message .inline-description .description-title{
+.page .messages .message .inline-description .description-title {
     font-size: 16px;
     display: block;
     font-weight: 600;
@@ -242,7 +252,7 @@ $MessagesContainer-height: $Header-height + $ChatInput-height + 5; // - 100%
     min-height: 14px;
     font-weight: 400;
     word-break: break-word;
-    margin: 3px 4px 0px 65px;
+    margin: 2px 4px 0px 65px;
     white-space: pre-wrap;
     padding-right: 10px;
     border-radius: 3px;
