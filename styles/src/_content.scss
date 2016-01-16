@@ -30,20 +30,31 @@ $MessagesContainer-height: $Header-height + $ChatInput-height + 5; // - 100%
     padding: 12px 0;
     height: $Header-height;
     box-sizing: border-box;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
 }
 
 .page .header h1 {
-    display: inline-block;
     color: black;
     margin-left: 11px;
     font-size: 20px;
     font-weight: 400;
-    vertical-align: text-bottom;
 }
 
-.page .header span {
-    color: black;
+.page .header .topic-container {
+    flex-grow: 1;
     margin-left: 16px;
+    margin-right: 11px;
+    display: inline-flex;
+    width: 0;
+}
+
+.page .header .topic-inner {
+    color: black;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .page .messages {

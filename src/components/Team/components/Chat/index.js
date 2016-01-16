@@ -69,7 +69,9 @@ default React.createClass({
             <div className="page">
                 <div className="header">
                     <h1>{this.props.name}</h1>
-                    <span>{this.props.topic ? this.props.topic[0] : ''}</span>
+                    <div className="topic-container">
+                        <span className="topic-inner">{_.unescape(this.props.topic ? this.props.topic[0] : '')}</span>
+                    </div>
                 </div>
                 <div ref="messages" className="messages">
                     {messages}
