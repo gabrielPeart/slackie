@@ -1,4 +1,5 @@
 import React from 'react';
+import ImageLoader from 'react-imageloader';
 import messageFormatUtil from '../parseFormattingUtil';
 import _ from 'lodash';
 
@@ -15,10 +16,13 @@ default React.createClass({
         let image = null;
         let thumb = null;
 
-        if (this.props.thumb_url) 
-           thumb = <img className="description-thumb" src={this.props.thumb_url} />;
+        if (this.props.thumb_url) {
+            this.props.Emmiter.emit('message:loaded', false)
+            thumb = <ImageLoader className="description-thumb" src={this.props.thumb_url} />; 
+        }
+
         if (this.props.image_url) 
-           image = <img className="description-image" src={this.props.image_url} />;
+           image =  <ImageLoader onLoad={() => this.props.Emmiter.emit('message:loaded', true)} className="description-image" src={this.props.image_url} />;
         
 
         return (

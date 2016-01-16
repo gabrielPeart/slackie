@@ -169,17 +169,16 @@ $MessagesContainer-height: $Header-height + $ChatInput-height + 5; // - 100%
     display: block;
 }
 
-.page .messages .message .inline-description .description-image{
+.page .messages .message .inline-description .description-image img{
     max-width: 70vw;
     max-height: 30vh;
     display: block;
     margin-top: 5px;
 }
 
-.page .messages .message .inline-description .description-thumb{
-    width: 100px;
-    height: 100px;
-
+.page .messages .message .inline-description .description-thumb img{
+    max-width: 15%;
+    max-height: 100px;
 }
 
 

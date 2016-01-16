@@ -81,10 +81,6 @@ default React.createClass({
         this.props.Emmiter.emit('inline:toggle');
     },
 
-    handelMessageLoaded(inline) {
-        this.props.Emmiter.emit('message:loaded', inline, this.state.time);
-    },
-
     getInline() {
         let inline = [];
 
@@ -92,7 +88,7 @@ default React.createClass({
             case 'file_share':
                 const file = this.state.file;
                 if(file.mimetype.includes('image/'))
-                	inline.push(<InlineImage {...this.state.file} />);
+                	inline.push(<InlineImage Emmiter={this.props.Emmiter} {...this.state.file} />);
 
                 break;
             default:
@@ -101,10 +97,10 @@ default React.createClass({
             	const attachment = this.state.attachments[0];
 
             	if(!attachment.text && attachment.image_url){
-                	inline.push(<InlineImage {...attachment} />);
+                	inline.push(<InlineImage Emmiter={this.props.Emmiter} {...attachment} />);
             	}
               	else if(attachment.text){
-              		inline.push(<InlineDescription {...attachment} />);
+              		inline.push(<InlineDescription Emmiter={this.props.Emmiter} {...attachment} />);
               	}
         }
 
