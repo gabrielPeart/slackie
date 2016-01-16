@@ -42,8 +42,6 @@ const Framework = React.createClass({
        TeamsUtil.reload();
     },
 
-    componentWillUnmount() {},
-
     update() {
         if (this.isMounted()) {
             this.setState({
