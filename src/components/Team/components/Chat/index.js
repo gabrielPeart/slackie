@@ -42,18 +42,19 @@ default React.createClass({
         this.props.emitter.removeAllListeners('message:loaded');
         this.props.emitter.removeAllListeners('inline:toggle');
 
-        this.props.emitter.on('inline:toggle', () => {
+        const throttle = _.throttle(() => {
             if (!this.refs['messages']) return;
 
-            if (this.shouldScrollBottom) 
+            if (this.shouldScrollBottom)
                 _.defer(() => this.refs['messages'].scrollTop = this.refs['messages'].scrollHeight)
+        }, 100, {
+            leading: false,
+            trailing: true,
+            maxWait: 300
         });
-        this.props.emitter.on('message:loaded', () => {
-            if (!this.refs['messages']) return;
 
-            if (this.shouldScrollBottom) 
-                _.defer(() => this.refs['messages'].scrollTop = this.refs['messages'].scrollHeight)
-        });
+        this.props.emitter.on('inline:toggle', throttle);
+        this.props.emitter.on('message:loaded', throttle);
     },
 
 
