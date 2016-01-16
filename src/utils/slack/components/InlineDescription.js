@@ -12,13 +12,6 @@ default React.createClass({
     },
     
     render() {
-        let text = [];
-
-        if (this.props.mrkdwn_in && this.props.mrkdwn_in.includes('pretext'))
-            text.push(<p key={uuid()}>{this.props.pretext}</p>)
-
-        text.push(<p key={uuid()} dangerouslySetInnerHTML={{__html: new messageFormatUtil(_.unescape(this.props.text), this.props.users, false).parsed }}/>)
-
         let image = null;
         let thumb = null;
 
@@ -37,7 +30,7 @@ default React.createClass({
                 <span className={this.props.thumb_url ? 'thumb' : ''}>
                     <h2>{this.props.service_name}</h2>
                     <a className="description-title" href={this.props.title_link}>{this.props.title}</a>
-                    {text}
+                    <p dangerouslySetInnerHTML={{__html: new messageFormatUtil(_.unescape(this.props.text), this.props.users, false).parsed }}/>
                 </span>
                 {image}
             </div>

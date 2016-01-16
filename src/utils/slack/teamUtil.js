@@ -163,7 +163,8 @@ class SlackTeam extends EventEmitter {
                 break;
             case 'bot_message':
                 message.user = message.bot_id;
-                message.text = (message.attachments && message.attachments[0]) ? message.attachments[0].fallback : '';
+                if(!message.text)
+                    message.text = (message.attachments && message.attachments[0] && message.attachments[0].pretext) ? message.attachments[0].pretext : '';
                 this.MessageQueue.push(message);
                 break;
             default:
