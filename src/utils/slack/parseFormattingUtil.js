@@ -160,7 +160,7 @@ default class {
     }
 
     _matchCodeBlock(match) {
-        return this._safeMatch(match, this._generateTag("codeBlock", this._payloads(match[1])));
+        return this._safeMatch(match, this._generateTag("codeBlock", this._payloads(match[1].trim())));
     }
 
     _isWhiteSpace(input) {
