@@ -6,6 +6,9 @@ import _ from 'lodash';
 import messageFormatUtil from '../parseFormattingUtil';
 import moment from 'moment';
 
+import InlineImage from './inlineImage';
+import InlineDescription from './inlineDescription';
+
 const If = React.createClass({
     render() {
         return this.props.test ? this.props.children : false;
@@ -22,7 +25,6 @@ default React.createClass({
             text: this.props.text,
             time: this.props.ts,
             edited: false,
-            attachmentExpanded: true,
             removed: false
         };
     },
@@ -80,40 +82,25 @@ default React.createClass({
     },
 
     handelMessageLoaded(inline) {
-        if (inline)
-            _.delay(() => this.props.Emmiter.emit('message:loaded', inline, this.state.time), 300);
-        else
-            this.props.Emmiter.emit('message:loaded', inline, this.state.time);
+        this.props.Emmiter.emit('message:loaded', inline, this.state.time);
     },
 
     getInline() {
+        let inline = [];
+
         switch (this.state.subtype) {
             case 'file_share':
-                if (this.state.file && this.state.file.mimetype && this.state.file.mimetype.includes('image'))
-                    return (
-                        <span>
-                			<i onClick={this.handelInLineToggle} className={"toggle-inline " + (this.state.attachmentExpanded ? 'ion-arrow-down-b' : 'ion-arrow-right-b')} />
-                			<ImageLoader
-                				onLoad={this.handelMessageLoaded.bind(this,true)}
-                				className={"inline-image " + this.state.attachmentExpanded}
-                			 	src={this.state.file.url} />
-                		</span>
-                    );
+                const file = this.state.file;
+                if(file.mimetype.includes('image/'))
+                	inline.push(<InlineImage {...this.state.file} />);
+
                 break;
             default:
-                if (this.state.attachments && this.state.attachments[0] && this.state.attachments[0].image_url)
-                    return (
-                        <span>
-                			<i onClick={this.handelInLineToggle} className={"toggle-inline " + (this.state.attachmentExpanded ? 'ion-arrow-down-b' : 'ion-arrow-right-b')} />
-                            <ImageLoader
-                                onLoad={this.handelMessageLoaded.bind(this,true)}
-                                className={"inline-image " + this.state.attachmentExpanded}
-                                src={this.state.attachments[0].image_url} />
-                		</span>
-                    );
-                this.handelMessageLoaded(false);
-                return null;
+                if (this.state.attachments && this.state.attachments.length > 0) 
+                    inline.push(<InlineDescription {...this.state.attachments[0]} />);
         }
+
+        return inline;
     },
 
     getClassName() {
@@ -135,15 +122,18 @@ default React.createClass({
     render() {
         const text = new messageFormatUtil(_.unescape(this.state.text), this.props.users, false).parsed;
         const removedProps = this.props.removed || {}
-        const removed = this.state.removed || (removedProps[this.props.channel] && removedProps[this.props.channel].includes(this.props.user + ':' + this.props.ts))
+        const removed = this.state.removed || (removedProps[this.props.channel] && removedProps[this.props.channel].includes(this.props.user + ':' + this.props.ts));
+
+        const inline = this.getInline();
+
+        const edited = (this.state.edited && !removed) ? <div className="edited">(edited)</div> : null
+
         return (
             <div className={'message ' + (this.state.removed ? 'removed' : null)}>
         		<div className="time">{moment.unix(this.state.time).format('h:mm')}</div> 
                 <span className={this.getClassName()} dangerouslySetInnerHTML={{__html: removed ? 'Message removed.' : text }} />
-                {this.getInline()}
-                <If test={this.state.edited && !removed}>
-                	<div className="edited">(edited)</div>
-                </If>
+                {inline}
+                {edited}
         	</div>
         );
     }

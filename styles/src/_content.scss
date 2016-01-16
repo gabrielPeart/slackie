@@ -148,6 +148,11 @@ $MessagesContainer-height: $Header-height + $ChatInput-height + 5; // - 100%
     -webkit-transition: opacity 0.125s linear;
 }
 
+.inline-size{
+   margin-left: 5px;
+    
+}
+
 .page .messages .message .inline-image img {
     max-width: 70vw;
     max-height: 30vh;
