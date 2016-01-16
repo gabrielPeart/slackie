@@ -22,10 +22,8 @@ default React.createClass({
 
         if (this.props.image_url) 
            image = <ImageLoader onLoad={this.handelLoaded} className="description-image" src={this.props.image_url} />;
-        
-
         return (
-            <div key={uuid()} className="inline-description">
+            <div key={uuid()} style={{borderColor: (this.props.color ? ('#' + this.props.color) : void 0)}} className="inline-description">
                 {thumb}
                 <span className={this.props.thumb_url ? 'thumb' : ''}>
                     <h2>{this.props.service_name}</h2>
