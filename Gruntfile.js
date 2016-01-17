@@ -11,6 +11,9 @@ module.exports = function(grunt) {
 
     var BASENAME = 'Slackie';
     var arch = grunt.option('arch') ? grunt.option('arch') : 'ia32';
+
+    var platform = grunt.option('platform') ? grunt.option('platform') : process.platform;
+
     var env = process.env;
     env.NODE_ENV = 'development';
 
@@ -21,7 +24,7 @@ module.exports = function(grunt) {
 
     grunt.initConfig({
         electron: {
-            windows: {
+            win32: {
                 options: {
                     name: BASENAME,
                     dir: 'build/',
@@ -169,9 +172,8 @@ module.exports = function(grunt) {
 
     grunt.registerTask('run', ['newer:babel', 'shell:electron', 'watchChokidar']);
 
-    if (process.platform === 'win32') {
-        grunt.registerTask('release', ['clean:build', 'clean:dist', 'babel', 'sass', 'copy:release', 'npm-command:release', 'electron:windows', 'compress:windows']);
-    }
+    grunt.registerTask('release', ['clean:build', 'clean:dist', 'babel', 'sass', 'copy:release', 'npm-command:release', 'electron:' + platform, 'compress:' + platform]);
+
 
     process.on('SIGINT', function() {
         grunt.task.run(['shell:electron:kill']);
