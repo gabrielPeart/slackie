@@ -130,28 +130,15 @@ module.exports = function(grunt) {
                 tasks: ['newer:copy:dev']
             }
         },
-        debian_package: {
+
+        'electron-debian-installer': {
+          app: {
             options: {
-                maintainer: {
-                    name: "Luigi Poole",
-                    email: "luigipoole@outlook.com"
-                },
-                name: "package_name",
-                short_description: BASENAME + '-' + arch,
-                long_description: packagejson.description,
-                version: packagejson.version,
-                build_number: "1",
-                target_architecture: ((arch == 'x64') ? 'amd64' : 'i386'),
-                category: "productivity",
-                dependencies: ""
+              arch: ((arch == 'x64') ? 'amd64' : 'i386')
             },
-            build: { 
-                files: [{
-                    cwd: 'dist/'+BASENAME+'-Linux-'+arch+'',
-                    src: '**/*',
-                    dest: 'release'
-                }]
-            }
+            src: 'dist/'+BASENAME+'-Linux-'+arch,
+            dest: 'release/'
+          }
         }
     });
 
