@@ -153,25 +153,29 @@ $MessagesContainer-height: $Header-height + $ChatInput-height + 5; // - 100%
    margin-left: 5px;
 }
 
-
-
-.page .messages .message .inline-description {
-    margin-left: 3px;
-    margin-top: 8px;
-    display: table;
+.page .messages .message .inline-container {
+    position: relative;
 }
 
-.page .messages .message .inline-description .color-bar {
+.page .messages .message .inline-description {
+    margin-left: 4px;
+    margin-top: 8px;
+}
+
+.page .messages .message .inline-container .color-bar {
     background-color: #A2A2A2;
     border-radius: 4px;
-    display: table-cell;
     width: 4px;
+    position: absolute;
+    height: 100%;
 }
 
 .page .messages .message .inline-description-inner {
-    display: table-cell;
-    padding-bottom: 6px;
-    padding-left: 8px;
+    padding: 2px 0 4px 10px;
+}
+
+.page .messages .message .inline-description-inner p {
+    line-height: 1.3;
 }
 
 .page .messages .message .inline-description .thumb {
@@ -183,7 +187,9 @@ $MessagesContainer-height: $Header-height + $ChatInput-height + 5; // - 100%
     max-width: 70vw;
     max-height: 30vh;
     display: block;
-    margin-top: 5px;
+    margin-top: 3px;
+    margin-left: 8px;
+    padding-bottom: 5px;
 }
 
 .page .messages .message .inline-description .description-thumb img {

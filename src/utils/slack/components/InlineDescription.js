@@ -26,15 +26,17 @@ default React.createClass({
         if (this.props.image_url) 
            image = <ImageLoader onLoad={this.handelLoaded} className="description-image" src={this.props.image_url} />;
         return (
-            <div className="inline-description">
+            <div className="inline-container">
                 <div className="color-bar" style={{backgroundColor: (this.props.color ? ('#' + this.props.color) : void 0)}}></div>
-                {thumb}
-                <div className={this.props.thumb_url ? 'inline-description-inner thumb' : 'inline-description-inner'}>
-                    <h2>{this.props.service_name}</h2>
-                    <a className="description-title" href={this.props.title_link}>{this.props.title}</a>
-                    <p dangerouslySetInnerHTML={{__html: new messageFormatUtil(_.unescape(this.props.text), this.props.users, false).parsed }}/>
+                <div className="inline-description">
+                    {thumb}
+                    <div className={'inline-description-inner ' + (this.props.thumb_url ? 'thumb' : '')}>
+                        {this.props.service_name ? <h2>this.props.service_name</h2> : null}
+                        {(this.props.title_link && this.props.title) ? <a className="description-title" href={this.props.title_link}>{this.props.title}</a> : null}
+                        <p dangerouslySetInnerHTML={{__html: new messageFormatUtil(_.unescape(this.props.text).trim(), this.props.users, false).parsed }}/>
+                    </div>
+                    {image}
                 </div>
-                {image}
             </div>
         );
     }
