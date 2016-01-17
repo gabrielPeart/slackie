@@ -130,25 +130,26 @@ module.exports = function(grunt) {
                 tasks: ['newer:copy:dev']
             }
         },
-        deb_package: {
+        debian_package: {
             options: {
-                maintainer: "Luigi Poole <luigipoole@outlook.com>",
-                version: packagejson.version,
-                name: BASENAME,
+                maintainer: {
+                    name: "Luigi Poole",
+                    email: "luigipoole@outlook.com"
+                },
+                name: "package_name",
                 short_description: BASENAME + '-' + arch,
                 long_description: packagejson.description,
+                version: packagejson.version,
+                build_number: "1",
                 target_architecture: ((arch == 'x64') ? 'amd64' : 'i386'),
                 category: "productivity",
-                build_number: "69",
-                dependencies: [],         
-                tmp_dir: 'build/deb_package',          
-                output: 'release'        
+                dependencies: ""
             },
             build: { 
                 files: [{
                     cwd: 'dist/'+BASENAME+'-Linux-'+arch+'',
                     src: '**/*',
-                    dest: '/opt/' + BASENAME
+                    dest: 'release'
                 }]
             }
         }
