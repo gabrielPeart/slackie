@@ -10,6 +10,6 @@ before_install:
 install:
   -  npm install --no-optional
 script:
-  -  grunt clean:all && mkdir release
-  -  chmod +x util/linux.sh && util/linux.sh
-  -  chmod +x util/win32.sh && util/win32.sh
+  -  grunt clean:all && mkdir release && chmod +x util/*
+  -  util/linux.sh
+  -  util/win32.sh
