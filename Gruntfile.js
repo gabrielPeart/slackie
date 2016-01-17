@@ -6,7 +6,6 @@ try{
 }catch(e){}
 
 
-
 module.exports = function(grunt) {
     require('load-grunt-tasks')(grunt);
     var target = grunt.option('target') || 'development';
