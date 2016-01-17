@@ -4,7 +4,8 @@ node_js:
   -  stable
 before_install:
   -  echo -e "deb http://ppa.launchpad.net/pali/pali/ubuntu precise main\ndeb-src http://ppa.launchpad.net/pali/pali/ubuntu precise main" | sudo tee -a /etc/apt/sources.list
-  -  sudo apt-get update -y && sudo apt-get install nsis -y
+  -  sudo apt-get update --force-yes
+  -  sudo apt-get install nsis --force-yes
 install:
   -  npm install --no-optional
 script:
