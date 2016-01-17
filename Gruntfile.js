@@ -129,20 +129,6 @@ module.exports = function(grunt) {
             dist: ['dist/'],
             release: ['release/']
         },
-        compress: {
-            windows: {
-                options: {
-                    archive: './release/' + BASENAME + '-' + packagejson.version + '-Windows-' + arch + '.zip',
-                    mode: 'zip'
-                },
-                files: [{
-                    expand: true,
-                    dot: true,
-                    cwd: './dist/' + BASENAME + '-win32-' + arch,
-                    src: '**/*'
-                }]
-            }
-        },
         watchChokidar: {
             options: {
                 spawn: true
@@ -172,7 +158,9 @@ module.exports = function(grunt) {
 
     grunt.registerTask('run', ['newer:babel', 'shell:electron', 'watchChokidar']);
 
-    grunt.registerTask('release', ['clean:build', 'clean:dist', 'babel', 'sass', 'copy:release', 'npm-command:release', 'electron:' + platform, 'compress:' + platform]);
+    grunt.registerTask('clean:all', ['clean:build', 'clean:dist', 'clean:release']); 
+
+    grunt.registerTask('release', ['clean:build', 'clean:dist', 'babel', 'sass', 'copy:release', 'npm-command:release', 'electron:' + platform]);
 
 
     process.on('SIGINT', function() {
