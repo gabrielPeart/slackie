@@ -18,7 +18,7 @@ module.exports = function(grunt) {
     env.NODE_ENV = 'development';
 
     console.log(' ');
-    console.log('Compiling For:', (process.platform === 'win32') ? 'Windows' : 'Mac', arch);
+    console.log('Compiling For:', (platform === 'win32') ? 'Windows' : 'Mac', arch);
     console.log(' ');
 
 
