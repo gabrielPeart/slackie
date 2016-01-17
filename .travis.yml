@@ -10,4 +10,4 @@ install:
   -  npm install --no-optional
 script:
   -  grunt clean:all && mkdir release
-  -  chmod +x util/travis/windows.sh && ./util/travis/windows.sh
+  -  chmod +x util/travis/windows.sh && util/travis/windows.sh
