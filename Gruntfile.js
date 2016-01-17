@@ -1,7 +1,9 @@
 var path = require('path');
 var execFile = require('child_process').execFile;
 var packagejson = require('./package.json');
-var electron = require('electron-prebuilt');
+try{
+    var electron = require('electron-prebuilt');
+}catch(e){}
 
 
 
@@ -16,11 +18,6 @@ module.exports = function(grunt) {
 
     var env = process.env;
     env.NODE_ENV = 'development';
-
-    console.log(' ');
-    console.log('Compiling For:', (platform === 'win32') ? 'Windows' : 'Mac', arch);
-    console.log(' ');
-
 
     grunt.initConfig({
         electron: {
@@ -160,8 +157,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('clean:all', ['clean:build', 'clean:dist', 'clean:release']); 
 
-    grunt.registerTask('release', ['clean:build', 'clean:dist', 'babel', 'sass', 'copy:release', 'npm-command:release', 'electron:' + platform]);
-
+    grunt.registerTask('release', ['clean:build', 'babel', 'sass', 'copy:release', 'npm-command:release', 'electron:' + platform]);
 
     process.on('SIGINT', function() {
         grunt.task.run(['shell:electron:kill']);

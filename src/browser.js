@@ -26,7 +26,8 @@ app.on('ready', () => {
         icon: path.join(__dirname, '../images/icon.png'),
         title: 'Slackie',
         center: true,
-        frame: false,
+        'auto-hide-menu-bar': true,
+        frame: true,
         show: false
     });
 
@@ -70,15 +71,8 @@ app.on('ready', () => {
         event.returnValue = mainWindow.isFocused();
     });
 
-    ipcMain.on('app:get:maximized', event => {
-        event.returnValue = mainWindow.isMaximized();
-    });
-
-    ipcMain.on('app:maximize', (event, state) => {
-        state ? mainWindow.maximize() : mainWindow.unmaximize();
-    });
-
-    ipcMain.on('app:minimize', () => {
+    mainWindow.on('minimize', event => {
+        event.preventDefault();
         mainWindow.hide();
         if (!minimzeInfoShown) {
             minimzeInfoShown = true;

@@ -1,5 +1,4 @@
 @import 'electron';
-@import 'header';
 @import 'sidebar';
 @import 'content';
 @import 'teams';
@@ -40,7 +39,6 @@ body {
     width: calc(100vw - 70px);
     left: 70px;
     position: absolute;
-    top: 30px;
-    height: calc(100vh - 30px);
+    height: 100vh;
     background-color: #f1f1f1;
 }

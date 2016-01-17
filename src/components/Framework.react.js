@@ -20,7 +20,6 @@ import TeamsUtil from '../utils/teamUtil';
 import updaterActions from '../actions/updateActions';
 import analyticsActions from '../actions/analyticsActions';
 
-import Header from './Header';
 import TeamSelector from './TeamSelector';
 import Modal from './Modal';
 
@@ -54,7 +53,6 @@ const Framework = React.createClass({
     render() {
         return (
             <div className="full-contain">
-              <Header/>
               <TeamSelector/>
               <div className="main">
               	{React.cloneElement(this.props.children, {query: this.props.query})}
