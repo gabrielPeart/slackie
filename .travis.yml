@@ -1,11 +1,11 @@
 language: node_js'
 sudo: required
 node_js:
-  - "stable"
+  -  stable
 before_install:
-  - 'echo -e "deb http://ppa.launchpad.net/pali/pali/ubuntu precise main\ndeb-src http://ppa.launchpad.net/pali/pali/ubuntu precise main" | sudo tee -a /etc/apt/sources.list'
-  -  "sudo apt-get update -y && sudo apt-get install nsis -y"
+  -  echo -e "deb http://ppa.launchpad.net/pali/pali/ubuntu precise main\ndeb-src http://ppa.launchpad.net/pali/pali/ubuntu precise main" | sudo tee -a /etc/apt/sources.list
+  -  sudo apt-get update -y && sudo apt-get install nsis -y
 install:
-  -  "npm install --no-optional"
+  -  npm install --no-optional
 script:
-  -  "grunt clean:all && mkdir release"
+  -  grunt clean:all && mkdir release
