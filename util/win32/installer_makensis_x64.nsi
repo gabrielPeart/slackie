@@ -18,17 +18,17 @@ Unicode True
 
 ;Parse package.json
 !ifdef WIN_PATHS
-    !searchparse /file "..\package.json" '"version": "' SLACKIE_VERSION '",'
+    !searchparse /file "..\..\package.json" '"version": "' SLACKIE_VERSION '",'
 !else
-    !searchparse /file "../package.json" '"version": "' SLACKIE_VERSION '",'
+    !searchparse /file "../../package.json" '"version": "' SLACKIE_VERSION '",'
 !endif
 !searchreplace SLACKIE_VERSION_CLEAN "${SLACKIE_VERSION}" "-" ".0"
 !ifdef WIN_PATHS
-    !searchparse /file "..\package.json" '"homepage": "' APP_URL '",'
-    !searchparse /file "..\package.json" '"name": "' DATA_FOLDER '",'
+    !searchparse /file "..\..\package.json" '"homepage": "' APP_URL '",'
+    !searchparse /file "..\..\package.json" '"name": "' DATA_FOLDER '",'
 !else
-    !searchparse /file "../package.json" '"homepage": "' APP_URL '",'
-    !searchparse /file "../package.json" '"name": "' DATA_FOLDER '",'
+    !searchparse /file "../../package.json" '"homepage": "' APP_URL '",'
+    !searchparse /file "../../package.json" '"name": "' DATA_FOLDER '",'
 !endif
 
 ; ------------------- ;
@@ -52,9 +52,9 @@ VIAddVersionKey "CompanyName" "${COMPANY_NAME}"
 VIAddVersionKey "LegalCopyright" "${APP_URL}"
 VIProductVersion "${SLACKIE_VERSION_CLEAN}.0"
 !ifdef WIN_PATHS
-    OutFile "..\release\${APP_NAME}-${SLACKIE_VERSION}-Windows-ia32-Setup.exe"
+    OutFile "..\release\${APP_NAME}-${SLACKIE_VERSION}-Windows-x64-Setup.exe"
 !else
-    OutFile "../release/${APP_NAME}-${SLACKIE_VERSION}-Windows-ia32-Setup.exe"
+    OutFile "../release/${APP_NAME}-${SLACKIE_VERSION}-Windows-x64-Setup.exe"
 !endif
 
 CRCCheck on
@@ -75,12 +75,12 @@ RequestExecutionLevel user
 ;Define UI settings
 !ifdef WIN_PATHS
     !define MUI_UI_HEADERIMAGE_RIGHT "..\images\SLACKIE_icon.ico"
-    !define MUI_ICON "..\images\SLACKIE_icon.ico"
-    !define MUI_UNICON "..\images\SLACKIE_icon.ico"
+    !define MUI_ICON "..\..\images\SLACKIE_icon.ico"
+    !define MUI_UNICON "..\..\images\SLACKIE_icon.ico"
 !else
     !define MUI_UI_HEADERIMAGE_RIGHT "../images/SLACKIE_icon.ico"
-    !define MUI_ICON "../images/SLACKIE_icon.ico"
-    !define MUI_UNICON "../images/SLACKIE_icon.ico"
+    !define MUI_ICON "../../images/SLACKIE_icon.ico"
+    !define MUI_UNICON "../../images/SLACKIE_icon.ico"
 !endif
 !define MUI_ABORTWARNING
 !define MUI_FINISHPAGE_LINK "${APP_URL}"
@@ -94,9 +94,9 @@ RequestExecutionLevel user
 ;Define the pages
 !insertmacro MUI_PAGE_WELCOME
 !ifdef WIN_PATHS
-    !insertmacro MUI_PAGE_LICENSE "..\LICENSE"
+    !insertmacro MUI_PAGE_LICENSE "..\..\LICENSE"
 !else
-    !insertmacro MUI_PAGE_LICENSE "../LICENSE"
+    !insertmacro MUI_PAGE_LICENSE "../../LICENSE"
 !endif
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
@@ -156,7 +156,7 @@ Section
 
     ;Add the files
     !ifdef WIN_PATHS
-        File /r "..\dist\Slackie-win32-ia32\"
+        File /r "..\..\dist\Slackie-win32-x64\"
     !endif
 
     ;Create uninstaller

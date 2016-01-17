@@ -20,38 +20,20 @@ module.exports = function(grunt) {
 
     grunt.initConfig({
         electron: {
-            win32: {
+            release: {
                 options: {
                     name: BASENAME,
                     dir: 'build/',
                     out: 'dist',
                     version: packagejson['electron-version'],
-                    platform: 'win32',
+                    platform: platform,
                     arch: arch,
                     asar: false
                 }
             }
         },
         copy: {
-            dev: {
-                files: [{
-                    expand: true,
-                    cwd: '.',
-                    src: ['package.json', 'index.html'],
-                    dest: 'build/'
-                }, {
-                    expand: true,
-                    cwd: 'images/',
-                    src: ['**/*'],
-                    dest: 'build/images/'
-                }, {
-                    expand: true,
-                    cwd: 'fonts/',
-                    src: ['**/*'],
-                    dest: 'build/fonts/'
-                }]
-            },
-            release: {
+            build: {
                 files: [{
                     expand: true,
                     cwd: '.',
@@ -147,16 +129,38 @@ module.exports = function(grunt) {
                 files: ['images/*', 'index.html', 'fonts/*'],
                 tasks: ['newer:copy:dev']
             }
+        },
+        deb_package: {
+            options: {
+                maintainer: "Luigi Poole <luigipoole@outlook.com>",
+                version: packagejson.version,
+                name: BASENAME,
+                short_description: BASENAME + '-' + arch,
+                long_description: packagejson.description,
+                target_architecture: ((arch == 'x64') ? 'amd64' : 'i386'),
+                category: "productivity",
+                build_number: "69",
+                dependencies: [],         
+                tmp_dir: 'build/deb_package',          
+                output: 'release'        
+            },
+            build: { 
+                files: [{
+                    cwd: 'dist/'+BASENAME+'-Linux-'+arch+'',
+                    src: '**/*',
+                    dest: '/opt/' + BASENAME
+                }]
+            }
         }
     });
 
-    grunt.registerTask('default', ['clean:build', 'newer:babel', 'sass', 'newer:copy:dev', 'shell:electron', 'watchChokidar']);
+    grunt.registerTask('default', ['clean:build', 'newer:babel', 'sass', 'newer:copy:build', 'shell:electron', 'watchChokidar']);
 
     grunt.registerTask('run', ['newer:babel', 'shell:electron', 'watchChokidar']);
 
     grunt.registerTask('clean:all', ['clean:build', 'clean:dist', 'clean:release']); 
 
-    grunt.registerTask('release', ['clean:build', 'babel', 'sass', 'copy:release', 'npm-command:release', 'electron:' + platform]);
+    grunt.registerTask('release', ['clean:build', 'babel', 'sass', 'copy:build', 'npm-command:release', 'electron:release']);
 
     process.on('SIGINT', function() {
         grunt.task.run(['shell:electron:kill']);
