@@ -1,6 +1,6 @@
 #Slackie
 
-[![Build Status](http://ci.magics.io/buildStatus/icon?job=Slackie)](http://ci.magics.io/job/Slackie/)
+[![Build Status](https://travis-ci.org/luigiplr/slackie.svg?branch=master)](https://travis-ci.org/luigiplr/slackie)
 [![Dependency Status](https://david-dm.org/luigiplr/slackie.svg)](https://david-dm.org/luigiplr/slakie) 
 [![devDependency Status](https://david-dm.org/luigiplr/slackie/dev-status.svg)](https://david-dm.org/luigiplr/slakie#info=devDependencies) 
 [![license](https://img.shields.io/badge/license-GPLv3-brightgreen.svg)](LICENSE) 
