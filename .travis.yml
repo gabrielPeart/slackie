@@ -1,15 +1,19 @@
 language: node_js
 sudo: required
 dist: trusty
+
 node_js:
   -  stable
+
 before_install:
   -  echo -e "deb http://ppa.launchpad.net/pali/pali/ubuntu precise main\ndeb-src http://ppa.launchpad.net/pali/pali/ubuntu precise main" | sudo tee -a /etc/apt/sources.list
   -  sudo apt-get update -y --force-yes
   -  sudo apt-get install nsis -y --force-yes
+
 install:
   -  npm install --no-optional
+  
 script:
-  -  grunt clean:all && mkdir release && chmod +x util/*/**.sh
+  -  grunt clean:all && mkdir release && chmod +x util/*/**
   -  util/linux.sh
   -  util/win32.sh
