@@ -128,6 +128,10 @@ default React.createClass({
         }
     },
 
+    handelClick() {
+        console.log("Click", this.state);
+    },
+
     render() {
         const text = new messageFormatUtil(_.unescape(this.state.text), this.props.users, false).parsed;
         const removedProps = this.props.removed || {};
@@ -138,7 +142,7 @@ default React.createClass({
         const edited = (this.state.edited && !removed) ? <div className="edited">(edited)</div> : null
 
         return (
-            <div className={'message ' + (this.state.removed ? 'removed' : null)}>
+            <div onClick={this.handelClick} className={'message ' + (this.state.removed ? 'removed' : '')}>
         		<div className="time">{moment.unix(this.state.time).format('h:mm')}</div> 
                 <span className={this.getClassName()} dangerouslySetInnerHTML={{__html: removed ? 'Message removed.' : text }} />
                 {inline}
