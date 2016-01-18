@@ -152,11 +152,7 @@ dpkg-deb --build $package_name
 
 ###Move Build to Release
 cd ../../../
-ls
 mv $cwd/$package_name.deb release
-
-ls release
 }
-
 
 build
