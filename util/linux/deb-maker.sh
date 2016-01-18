@@ -2,22 +2,21 @@
 # launch 'deb-maker.sh 0.12.3 linux64 0.0.1' for example
 # requires: fakeroot, dpkg-deb
 
-nw=$1
-arch=$2
+arch=$1
 if [[ $arch == *"32"* ]]; then
   real_arch="i386"
 else
   real_arch="amd64"
 fi
-cwd="releases/deb-package/$arch"
+cwd="build/deb-package/$arch"
 name="slackie"
 projectName="slackie"
 author= "Luigi Poole <luigipoole@outlook.com>"
-version=$3
-package_name=${name}_${version}_${real_arch}
+version=$2
+package_name=${name}-${version}-Linux-${real_arch}
 
 ### RESET
-rm -rf releases/deb-package
+rm -rf build/deb-package
 
 build () {
 
@@ -190,10 +189,4 @@ mv $cwd/$name*.deb releases
 }
 
 
-if [ -e /usr/bin/fakeroot ] && [ "$4" != "--fakeroot" ]; then
-	echo "'fakeroot' was found on the machine"
-	fakeroot bash $0 $1 $2 $3 --fakeroot
-else
-	build
-fi
-rm -rf releases/deb-package
+build
