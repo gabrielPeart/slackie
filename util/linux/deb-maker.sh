@@ -9,9 +9,11 @@ else
 fi
 cwd="build/deb-package/$arch"
 name="slackie"
+github="https://github.com/luigiplr/slackie"
 projectName="slackie"
+description="Alternative desktop multi-platform slack client; Without the massive RAM leaks."
 icon="images/icon.png"
-author= "Luigi Poole <luigipoole@outlook.com>"
+author="Luigi Poole <luigipoole@outlook.com>"
 version=$2
 package_name=${name}-${version}-Linux-${real_arch}
 
@@ -46,7 +48,7 @@ cd ../../../../../../
 
 #desktop
 echo "[Desktop Entry]
-Comment=Alternative desktop multi-platform slack client; Without the massive RAM leaks.
+Comment=$description
 Name=$projectName
 Exec=/opt/$projectName/$projectName
 Icon=$projectName.png
@@ -70,14 +72,14 @@ Installed-Size: $size
 Depends:
 Maintainer: $author
 Description: $projectName
- Alternative desktop multi-platform slack client; Without the massive RAM leaks.
+ $description
 " > $cwd/$package_name/DEBIAN/control
 
 #copyright
 echo "Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0
 Upstream-Name: $projectName
 Upstream-Contact: $author
-Source: https://github.com/luigiplr/slackie
+Source: $github
 
 Files: *
 Copyright: (c) 2015, $author
