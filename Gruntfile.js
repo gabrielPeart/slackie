@@ -93,6 +93,14 @@ module.exports = function(grunt) {
                     }
                 }
             }
+            packageDEB: {
+                command: function () {
+                    return [
+                        'util/linux/deb-maker.sh <%= arch %> <%= app_version %>',
+                        'echo "Linux<%= arch %> DEB Sucessfully packaged" || echo "Linux<%= arch %> DEB failed to package"'
+                    ].join(' && ');
+                }
+            },
         },
         'npm-command': {
             release: {
@@ -129,16 +137,6 @@ module.exports = function(grunt) {
                 files: ['images/*', 'index.html', 'fonts/*'],
                 tasks: ['newer:copy:dev']
             }
-        },
-
-        'electron-debian-installer': {
-          app: {
-            options: {
-              arch: ((arch == 'x64') ? 'amd64' : 'i386')
-            },
-            src: 'dist/'+BASENAME+'-Linux-'+arch,
-            dest: 'release/'
-          }
         }
     });
 
