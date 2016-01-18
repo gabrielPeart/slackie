@@ -110,6 +110,7 @@ $MessagesContainer-height: $Header-height + $ChatInput-height + 5; // - 100%
     background-color: #f7f7f9;
     border: 1px solid #e1e1e8;
     padding: 0px 4px;
+    font-family: monospace;
 }
 
 .page .messages .message codeBlock {
@@ -120,6 +121,7 @@ $MessagesContainer-height: $Header-height + $ChatInput-height + 5; // - 100%
     border: 1px solid #DADADA;
     display: block;
     border-radius: 4px;
+    font-family: monospace;
 }
 
 .page .messages .message .channel_event .slack-user {
