@@ -52,9 +52,9 @@ VIAddVersionKey "CompanyName" "${COMPANY_NAME}"
 VIAddVersionKey "LegalCopyright" "${APP_URL}"
 VIProductVersion "${SLACKIE_VERSION_CLEAN}.0"
 !ifdef WIN_PATHS
-    OutFile "..\release\${APP_NAME}-${SLACKIE_VERSION}-Windows-ia32-Setup.exe"
+    OutFile "..\..\release\${APP_NAME}-${SLACKIE_VERSION}-Windows-ia32-Setup.exe"
 !else
-    OutFile "../release/${APP_NAME}-${SLACKIE_VERSION}-Windows-ia32-Setup.exe"
+    OutFile "../../release/${APP_NAME}-${SLACKIE_VERSION}-Windows-ia32-Setup.exe"
 !endif
 
 CRCCheck on
