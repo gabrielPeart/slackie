@@ -13,6 +13,10 @@ default React.createClass({
     handelLoaded() {
         this.props.Emmiter.emit('message:loaded', true);
     },
+
+    handelClick() {
+        console.log("Click", this.state);
+    },
     
     render() {
         let image = null, thumb = null, title = null;
@@ -32,7 +36,7 @@ default React.createClass({
         }
 
         return (
-            <div className="inline-container">
+            <div className="inline-container" onClick={this.handelClick}>
                 <div className="color-bar" style={{backgroundColor: (this.props.color ? ('#' + this.props.color) : void 0)}}></div>
                 <div className="inline-description">
                     {thumb}

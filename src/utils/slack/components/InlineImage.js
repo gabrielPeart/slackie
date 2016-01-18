@@ -20,11 +20,15 @@ default React.createClass({
         this.props.Emmiter.emit('message:loaded', true);
     },
 
+    handelClick() {
+        console.log("Click", this.state);
+    },
+
     render() {
         const fileSize = this.props.size ? <span className="inline-size">({prettyBytes(this.props.size)})</span> : null;
         const imageURL = this.props.image_url ? this.props.image_url : this.props.url_private;
         return (
-            <span key={this.props.id}>
+            <span key={this.props.id} onClick={this.handelClick}>
                 {fileSize}
                 <i onClick={this.handelInLineToggle} className={"toggle-inline " + (this.state.expanded ? 'ion-arrow-down-b' : 'ion-arrow-right-b')} />
 
