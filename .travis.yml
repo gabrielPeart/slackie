@@ -14,6 +14,6 @@ install:
   -  npm install --no-optional
 
 script:
-  -  grunt clean:all && mkdir release && chmod -R +x util/
+  -  grunt clean:all && mkdir release && chmod +x util/* && chmod +x util/linux/*
   -  util/linux.sh
   -  util/win32.sh
