@@ -150,13 +150,12 @@ chown -R 0755 $cwd/$package_name 2> /dev/null || echo "'chown -R 0755' failed, c
 cd $cwd
 dpkg-deb --build $package_name
 
+###Move Build to Release
 cd ../../../
 ls
+mv $cwd/$package_name.deb release
 
-
-mv $cwd/$package_name.deb ./releases/
-
-ls releases/
+ls release
 }
 
 
