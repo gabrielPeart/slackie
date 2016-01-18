@@ -18,3 +18,5 @@ script:
   -  mkdir release && chmod -R 755 util
   -  util/linux.sh
   -  util/win32.sh
+after_success:
+  - ls -sh release
