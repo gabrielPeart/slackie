@@ -155,7 +155,7 @@ cd ../../../
 pwd
 mv $cwd/$package_name.deb releases/
 
-ls ../../../releases/
+ls releases/
 }
 
 
