@@ -29,7 +29,6 @@ mkdir -p $cwd/$package_name
 #create dir tree
 mkdir -p $cwd/$package_name/usr/share/applications #desktop
 mkdir -p $cwd/$package_name/opt/$projectName #app files
-mkdir -p $cwd/$package_name/opt/$projectName/node_modules #n_m
 mkdir -p $cwd/$package_name/usr/share/icons #icon
 
 ### COPY FILES
@@ -42,8 +41,9 @@ cp $icon $cwd/$package_name/usr/share/icons/$projectName.png
 ### CLEAN
 shopt -s globstar
 cd $cwd/$package_name/opt/$projectName
+pwd
 cd ../../../../../../
-
+pwd
 ### CREATE FILES
 
 #desktop
@@ -154,6 +154,7 @@ dpkg-deb --build $package_name
 
 ### CLEAN
 cd ../../../
+pwd
 mv $cwd/$name*.deb releases
 }
 
