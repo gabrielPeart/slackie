@@ -15,6 +15,6 @@ install:
   -  grunt clean:all
 
 script:
-  -  mkdir release && chmod +x util/*/**
+  -  mkdir release && chmod +x util/**/*
   -  util/linux.sh
   -  util/win32.sh
