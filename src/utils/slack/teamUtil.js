@@ -153,15 +153,6 @@ class SlackTeam extends EventEmitter {
             case 'message_changed':
                 this.emit(message.channel + ':' + message.previous_message.user + ':' + message.previous_message.ts, message);
                 break;
-            case 'channel_purpose':
-            case 'channel_topic':
-            case 'bot_add':
-            case 'channel_leave':
-            case 'channel_join':
-            case 'file_share':
-            case 'me_message':
-                this.MessageQueue.push(message);
-                break;
             case 'bot_message':
                 message.user = message.bot_id;
                 if(!message.text)
@@ -169,7 +160,7 @@ class SlackTeam extends EventEmitter {
                 this.MessageQueue.push(message);
                 break;
             default:
-                console.log(message)
+            	this.MessageQueue.push(message);
         }
     }
 
