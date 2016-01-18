@@ -338,4 +338,5 @@ $MessagesContainer-height: $Header-height + $ChatInput-height + 5; // - 100%
     -webkit-appearance: none;
     resize: none;
     min-height: 40px;
+    max-height: 13em;
 }
