@@ -1,6 +1,5 @@
 #!/bin/bash
-# launch 'deb-maker.sh 0.12.3 linux64 0.0.1' for example
-# requires: fakeroot, dpkg-deb
+# launch 'deb-maker.sh ia32 0.0.1' 
 
 arch=$1
 if [[ $arch == *"32"* ]]; then
@@ -11,6 +10,7 @@ fi
 cwd="build/deb-package/$arch"
 name="slackie"
 projectName="slackie"
+icon="images/icon.png"
 author= "Luigi Poole <luigipoole@outlook.com>"
 version=$2
 package_name=${name}-${version}-Linux-${real_arch}
@@ -35,7 +35,7 @@ mkdir -p $cwd/$package_name/usr/share/icons #icon
 cp -r dist/Slackie-linux-ia32/ $cwd/$package_name/opt/$projectName/
 
 #icon
-#cp app/images/os-icon.png $cwd/$package_name/usr/share/icons/opensubtitles-uploader.png
+cp $icon $cwd/$package_name/usr/share/icons/$projectName.png
 
 ### CLEAN
 shopt -s globstar
@@ -46,10 +46,10 @@ cd ../../../../../../
 
 #desktop
 echo "[Desktop Entry]
-Comment=Upload your subtitles to OpenSubtitles.org
+Comment=Alternative desktop multi-platform slack client; Without the massive RAM leaks.
 Name=$projectName
 Exec=/opt/$projectName/$projectName
-Icon=opensubtitles-uploader.png
+Icon=$projectName.png
 StartupNotify=false
 Categories=Productivity
 Type=Application
@@ -143,11 +143,6 @@ fi
 if [ -e /opt/$projectName/$projectName ]; then
 	chmod +x /opt/$projectName/$projectName
 fi
-
-if [ ! -e /lib/$(arch)-linux-gnu/libudev.so.1 ]; then
-	ln -s /lib/$(arch)-linux-gnu/libudev.so.0 /opt/$projectName/libudev.so.1
-	sed -i 's,Exec=,Exec=env LD_LIBRARY_PATH=/opt/$projectName ,g' /usr/share/applications/$name.desktop
-fi
 " > $cwd/$package_name/DEBIAN/postinst
 
 #pre-remove script
@@ -158,7 +153,7 @@ set -e
 rm -rf /opt/$projectName
 
 #remove icon
-rm -rf /usr/share/icons/opensubtitles-uploader.png
+rm -rf /usr/share/icons/$projectName.png
 
 #remove desktop
 rm -rf /usr/share/applications/$name.desktop
