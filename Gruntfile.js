@@ -96,7 +96,7 @@ module.exports = function(grunt) {
             packageDEB: {
                 command: function () {
                     return [
-                        'util/linux/deb-maker.sh <%= arch %> <%= app_version %>',
+                        'util/linux/deb-maker.sh '+ arch +'  ' + packagejson.version,
                         'echo "Linux<%= arch %> DEB Sucessfully packaged" || echo "Linux<%= arch %> DEB failed to package"'
                     ].join(' && ');
                 }
