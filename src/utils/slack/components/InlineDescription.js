@@ -19,7 +19,7 @@ default React.createClass({
     },
     
     render() {
-        let image = null, thumb = null, title = null;
+        let image = null, thumb = null, title = null, fields = null;
 
         if (this.props.thumb_url) {
             this.props.Emmiter.emit('message:loaded', false);
@@ -35,15 +35,29 @@ default React.createClass({
                 <div className="description-title">{this.props.title}</div>;
         }
 
+        if (this.props.fields) {
+            let out = []
+            _.forEach(this.props.fields, field => {
+                out.push(
+                    <div className={'field ' + (field.short ? 'short' : '')}>
+                        <h3>{field.title || ''}</h3>
+                        <p>{field.value || ''}</p>
+                    </div>
+                );
+            });
+            fields = <div className='fields'>{out}</div>;
+        }
+
         return (
             <div className="inline-container" onClick={this.handelClick}>
                 <div className="color-bar" style={{backgroundColor: (this.props.color ? ('#' + this.props.color) : void 0)}}></div>
-                <div className="inline-description">
+                <div className={"inline-description " + (this.props.thumb_url ? 'thumb' : '')}>
                     {thumb}
-                    <div className={'inline-description-inner ' + (this.props.thumb_url ? 'thumb' : '')}>
+                    <div className='inline-description-inner'>
                         {this.props.service_name ? <h2>this.props.service_name</h2> : ''}
                         {title}
                         <p dangerouslySetInnerHTML={{__html: new messageFormatUtil(_.unescape(this.props.text).trim(), this.props.users, false).parsed }}/>
+                        {fields}
                     </div>
                     {image}
                 </div>
