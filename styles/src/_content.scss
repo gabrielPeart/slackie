@@ -226,7 +226,6 @@ $MessagesContainer-height: $Header-height + $ChatInput-height + 5; // - 100%
     display: inline-block;
     width: 42%;
 }
-
 .page .messages .message .inline-description-inner .fields .field h3 {
     font-weight: 700;
     margin-bottom: 1px;
@@ -348,4 +347,16 @@ $MessagesContainer-height: $Header-height + $ChatInput-height + 5; // - 100%
 @-webkit-keyframes fadeout {
     from { opacity: 1; }
     to   { opacity: 0; }
+}
+
+.page .messages .message-header .profile.failed:before {
+    content: "?";
+    position: absolute;
+    color: black;
+    font-weight: 900;
+    font-size: 100%;
+    font-size: 40px;
+    color: grey;
+    width: 100%;
+    text-align: center;
 }

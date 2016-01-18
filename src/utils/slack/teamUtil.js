@@ -93,7 +93,9 @@ class SlackTeam extends EventEmitter {
                 if (message.user !== this.LastMessage[message.channel].user) 
                 	header = <MessageHeader 
                         time={message.ts} 
-                        user={Object.assign(this.slack.users, this.slack.bots)[message.user]} />;
+                        user={Object.assign(this.slack.users, this.slack.bots)[message.user]} 
+                        username={message.username}
+                        icons={message.icons} />;
 
                 Historys[message.channel][message.user + ':' + message.ts] = (
                     <div key={message.user + ':' + message.ts}> 
@@ -119,8 +121,9 @@ class SlackTeam extends EventEmitter {
                 if (message.user !== this.LastMessage[message.channel].user) 
                     header = <MessageHeader 
                         time={message.ts} 
-                        users={Object.assign(this.slack.users, this.slack.bots)} 
-                        user={Object.assign(this.slack.users, this.slack.bots)[message.user]} />
+                        user={Object.assign(this.slack.users, this.slack.bots)[message.user]} 
+                        username={message.username}
+                        icons={message.icons} />
 
                 this._addMessage({
                 	message: {
@@ -155,7 +158,7 @@ class SlackTeam extends EventEmitter {
                 break;
             case 'bot_message':
                 message.user = message.bot_id;
-                if(!message.text)
+                if (!message.text)
                     message.text = (message.attachments && message.attachments[0] && message.attachments[0].pretext) ? message.attachments[0].pretext : '';
                 this.MessageQueue.push(message);
                 break;

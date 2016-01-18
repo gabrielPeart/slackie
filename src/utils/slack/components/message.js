@@ -129,7 +129,7 @@ default React.createClass({
     },
 
     handelClick() {
-        console.log("Click", this.state);
+        console.log("Click message", this.state);
     },
 
     render() {
