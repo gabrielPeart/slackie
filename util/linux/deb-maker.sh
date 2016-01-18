@@ -41,9 +41,7 @@ cp $icon $cwd/$package_name/usr/share/icons/$projectName.png
 ### CLEAN
 shopt -s globstar
 cd $cwd/$package_name/opt/$projectName
-pwd
 cd ../../../../../../
-pwd
 ### CREATE FILES
 
 #desktop
@@ -151,6 +149,8 @@ chown -R 0755 $cwd/$package_name 2> /dev/null || echo "'chown -R root:root' fail
 ### BUILD
 cd $cwd
 dpkg-deb --build $package_name
+
+ls
 
 ### CLEAN
 cd ../../../

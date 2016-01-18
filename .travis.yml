@@ -22,5 +22,5 @@ script:
   -  util/linux.sh
 after_success:
   - ls -sh release
-  - ncftpput -R -v -u $FTP_USER -p $FTP_PASSWORD ftp.gridhost.co.uk /slackie/travis ./release
+  - ncftpput -R -v -u $FTP_USER -p $FTP_PASSWORD ftp.gridhost.co.uk /slackie/travis release
 
