@@ -57,6 +57,7 @@
     "grunt-babel": "^6.0.0",
     "grunt-cli": "^0.1.13",
     "grunt-contrib-clean": "^0.7.0",
+    "grunt-contrib-compress": "^0.14.0",
     "grunt-contrib-copy": "^0.8.2",
     "grunt-contrib-watch-chokidar": "^1.0.0",
     "grunt-electron": "^2.0.1",

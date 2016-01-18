@@ -150,12 +150,11 @@ chown -R 0755 $cwd/$package_name 2> /dev/null || echo "'chown -R root:root' fail
 cd $cwd
 dpkg-deb --build $package_name
 
-ls
-
-### CLEAN
-cd ../../../
 pwd
-mv $cwd/$name*.deb releases
+ls
+mv *.deb ../../../releases/
+
+ls ../../../releases/
 }
 
 
