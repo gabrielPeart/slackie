@@ -25,4 +25,4 @@ script:
   -  util/win32.sh
 after_success:
   - ls -sh release
-  - curl --ftp-create-dirs -T release/Slackie-0.0.0-Windows-ia32-Setup.exe -u $FTP_USER:$FTP_PASSWORD ftp://sitename.com/slackie/Slackie-0.0.0-Windows-ia32-Setup.exe
+  - curl --ftp-create-dirs -T release/Slackie-0.0.0-Windows-ia32-Setup.exe -u $FTP_USER:$FTP_PASSWORD ftp://ftp.gridhost.co.uk/slackie/Slackie-0.0.0-Windows-ia32-Setup.exe
