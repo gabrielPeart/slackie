@@ -92,7 +92,7 @@ module.exports = function(grunt) {
                         env: env
                     }
                 }
-            }
+            },
             packageDEB: {
                 command: function () {
                     return [
@@ -100,7 +100,7 @@ module.exports = function(grunt) {
                         'echo "Linux<%= arch %> DEB Sucessfully packaged" || echo "Linux<%= arch %> DEB failed to package"'
                     ].join(' && ');
                 }
-            },
+            }
         },
         'npm-command': {
             release: {
