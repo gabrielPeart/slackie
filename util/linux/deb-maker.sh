@@ -146,7 +146,7 @@ fi
 ### PERMISSIONS
 chmod +x $cwd/$package_name/usr/share/applications/$name.desktop
 chmod -R 0755 $cwd/$package_name/DEBIAN
-chown -R root:root $cwd/$package_name 2> /dev/null || echo "'chown -R root:root' failed, continuing..."
+chown -R 0755 $cwd/$package_name 2> /dev/null || echo "'chown -R root:root' failed, continuing..."
 
 ### BUILD
 cd $cwd
