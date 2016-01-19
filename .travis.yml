@@ -18,8 +18,7 @@ install:
 script:
   -  mkdir release && chmod -R 755 util
   -  util/linux.sh
-  -  util/win32.sh
 after_success:
   - ls -sh release
-  - ncftpput -R -v -u $FTP_USER -p $FTP_PASSWORD $FTP_URL /slackie/travis release/*
+  - ncftpput -R -v -u $FTP_USER -p $FTP_PASSWORD $FTP_URL /slackie/travis/$TRAVIS_JOB_NUMBER release/*
 
