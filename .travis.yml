@@ -11,7 +11,7 @@ notifications:
 before_install:
   -  echo -e "deb http://ppa.launchpad.net/pali/pali/ubuntu precise main\ndeb-src http://ppa.launchpad.net/pali/pali/ubuntu precise main" | sudo tee -a /etc/apt/sources.list
   -  sudo apt-get update -y --force-yes
-  -  sudo apt-get install ncftp nsis -y --force-yes
+  -  sudo apt-get install nsis -y --force-yes
 install:
   -  npm install --no-optional
   -  grunt clean:all
@@ -20,5 +20,4 @@ script:
   -  util/linux.sh
 after_success:
   - ls -sh release
-  - ncftpput -R -v -u $FTP_USER -p $FTP_PASSWORD $FTP_URL /slackie/travis/$TRAVIS_JOB_NUMBER release/*
-
+  - find release -type f -exec curl -u $FTP_USER:$FTP_PASSWORD --ftp-create-dirs -T {} ftp://$FTP_URL/slackie/travis/$TRAVIS_JOB_NUMBER/{} \
