@@ -10,14 +10,17 @@ default React.createClass({
     },
 
     render() {
-
-    	const profileImage = (this.props.user && this.props.user.profile) ? this.props.user.profile['image_72'] : ((this.props.user && this.props.user.icons) ? this.props.user.icons[Object.keys(this.props.user.icons)[Object.keys(this.props.user.icons).length - 1]] : '')
+        let profileImage = null;
+        if(this.props.user && (this.props.user.profile || this.props.user.icons))
+            profileImage = (this.props.user.profile) ? this.props.user.profile['image_72'] : (this.props.user.icons ? this.props.user.icons[Object.keys(this.props.user.icons)[Object.keys(this.props.user.icons).length - 1]] : '')
+        else if(this.props.icons)
+            profileImage = this.props.icons[Object.keys(this.props.icons)[Object.keys(this.props.icons).length - 1]]
 
         return (
             <div className="message-header" onClick={this.handelClick}>
             	<ImageLoader
                 	className="profile"
-                	src={profileImage ? profileImage : void 0} />
+                	src={profileImage} />
                 <h1>{(this.props.user && this.props.user.name) ? this.props.user.name : this.props.username ? this.props.username : 'Undefined'}</h1>
                 <span className="time">{moment.unix(this.props.time).calendar()}</span>
             </div>
