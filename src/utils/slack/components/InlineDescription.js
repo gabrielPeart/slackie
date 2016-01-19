@@ -2,6 +2,7 @@ import React from 'react';
 import ImageLoader from 'react-imageloader';
 import messageFormatUtil from '../parseFormattingUtil';
 import _ from 'lodash';
+import {v4 as uuid} from 'node-uuid';
 
 export
 default React.createClass({
@@ -37,14 +38,12 @@ default React.createClass({
 
         if (this.props.fields) {
             let out = []
-            _.forEach(this.props.fields, field => {
-                out.push(
-                    <div className={'field ' + (field.short ? 'short' : '')}>
-                        <h3>{field.title || ''}</h3>
-                        <p>{field.value || ''}</p>
-                    </div>
-                );
-            });
+            _.forEach(this.props.fields, field => out.push(
+                <div key={uuid()} className={'field ' + (field.short ? 'short' : '')}>
+                    <h3>{field.title || ''}</h3>
+                    <p>{field.value || ''}</p>
+                </div>
+            ));
             fields = <div className='fields'>{out}</div>;
         }
 
