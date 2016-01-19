@@ -11,14 +11,13 @@
 <img src="preview/add_team_OAuth.png" alt="Add Team" width="41%"/>
 
 ### Todo
-* [ ] Add native window controls for OSX Linux & Windows (1/3 completed)
 * [x] Get Slack Teams loading w/ OAuth
 * [x] Emoji Support
 * [x] Notification Support
 * [x] Sending and retrieving of Channel/Group & DM History
 * [x] Update messages if edited/removed
 * [ ] Slack formatting parser (60% done)
-* [ ] Display inline message formats (60% done)
+* [ ] Display inline message formats (70% done)
 * [ ] Add IRC channel support
 
 ## Contributing
