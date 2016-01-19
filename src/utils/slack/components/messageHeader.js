@@ -11,7 +11,13 @@ default React.createClass({
 
     render() {
 
-    	const profileImage = (this.props.user && this.props.user.profile) ? this.props.user.profile['image_72'] : ((this.props.user && this.props.user.icons) ? this.props.user.icons[Object.keys(this.props.user.icons)[Object.keys(this.props.user.icons).length - 1]] : '')
+        const profileImage = (this.props.user && this.props.user.profile) ? 
+            this.props.user.profile.image_72 :
+            (this.props.user && this.props.user.icons) ?
+                this.props.user.icons[Object.keys(this.props.user.icons)[Object.keys(this.props.user.icons).length - 1]] : 
+                (this.props.icons && this.props.icons.image_64) ?
+                    this.props.icons.image_64 :
+                    'null';
 
         return (
             <div className="message-header" onClick={this.handelClick}>
