@@ -20,7 +20,7 @@ default React.createClass({
             <div className="message-header" onClick={this.handelClick}>
             	<ImageLoader
                 	className="profile"
-                	src={profileImage} />
+                	src={profileImage || 'noavatar.jpg'} />
                 <h1>{(this.props.user && this.props.user.name) ? this.props.user.name : this.props.username ? this.props.username : 'Undefined'}</h1>
                 <span className="time">{moment.unix(this.props.time).calendar()}</span>
             </div>
