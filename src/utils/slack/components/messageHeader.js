@@ -12,7 +12,7 @@ default React.createClass({
     render() {
         let profileImage = null;
         if(this.props.user && (this.props.user.profile || this.props.user.icons))
-            profileImage = (this.props.user.profile) ? this.props.user.profile['image_72'] : (this.props.user.icons ? this.props.user.icons[Object.keys(this.props.user.icons)[Object.keys(this.props.user.icons).length - 1]] : '')
+            profileImage = (this.props.user.profile) ? this.props.user.profile['image_72'] : this.props.user.icons[Object.keys(this.props.user.icons)[Object.keys(this.props.user.icons).length - 1]]
         else if(this.props.icons)
             profileImage = this.props.icons[Object.keys(this.props.icons)[Object.keys(this.props.icons).length - 1]]
 
