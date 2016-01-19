@@ -18,6 +18,7 @@ install:
 script:
   -  mkdir release && chmod -R 755 util
   -  util/linux.sh
+  -  util/win32.sh
 after_success:
   - ls -sh release
   - mkdir -p travis_upload/$TRAVIS_JOB_NUMBER && mv release/* travis_upload/$TRAVIS_JOB_NUMBER
