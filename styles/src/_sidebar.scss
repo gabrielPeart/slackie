@@ -6,7 +6,26 @@
     margin: 5px 5px 5px 0;
     background-color: #f1f1f1;
     overflow-y: auto;
+    overflow-x: hidden;
 }
+.sidebar .toggle-collapse-btn {
+    position: absolute;
+    font-size: 19px;
+    top: 0;
+    right: 5px;
+    transition: transform 0.5s ease-in-out;
+}
+.sidebar .toggle-collapse-btn.rotate {
+    transform: rotate(-180deg);
+}
+.sidebar .toggle-collapse-btn i {
+    color: rgb(85, 85, 85);
+    cursor: pointer;
+}
+.sidebar .toggle-collapse-btn:hover i {
+    color: rgb(100, 100, 100);
+}
+
 
 .sidebar::-webkit-scrollbar{
     width:6px;

@@ -118,6 +118,9 @@ default React.createClass({
         const DMs = this.getDMS();
         return (
             <aside className="sidebar">
+                <div className="toggle-collapse-btn">
+                    <i className="ion ion-arrow-left-b"></i>
+                </div>
                 <div className="team-title">{this.props.team.slack.team.name}</div>
                 <div className="team-user">
                     <i className={"user-status " + (this.props.team.slack.self.manual_presence ? 'active' : 'away')}/>
