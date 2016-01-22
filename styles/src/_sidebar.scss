@@ -15,6 +15,9 @@
 .sidebar.collapsed li.active {
     background-color: transparent;
 }
+.sidebar.collapsed > div:not(:first-of-type) {
+    pointer-events: none;
+}
 
 .sidebar .toggle-collapse-btn {
     position: absolute;
