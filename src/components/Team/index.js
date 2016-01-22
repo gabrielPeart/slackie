@@ -70,8 +70,13 @@ default React.createClass({
             const TeamEngine = teamsEngineStore.getState();
             const SidebarState = SidebarStore.getState();
 
+            const newChannel = (SidebarState.activeChannel && SidebarState.activeChannel[TeamEngine.selectedTeam]) ? SidebarState.activeChannel[TeamEngine.selectedTeam] : false
+
+            if(this.state.channel && newChannel && newChannel.id === this.state.channel.id)
+                return;
+
             this.setState({
-                channel: (SidebarState.activeChannel && SidebarState.activeChannel[TeamEngine.selectedTeam]) ? SidebarState.activeChannel[TeamEngine.selectedTeam] : false,
+                channel: newChannel,
                 messages: []
             });
             _.defer(this.getMessages);
