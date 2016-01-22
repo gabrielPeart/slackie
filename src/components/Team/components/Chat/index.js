@@ -4,13 +4,20 @@ import _ from 'lodash';
 
 import ChatStore from './store';
 import ChatActions from './actions';
+import SidebarStore from '../Sidebar/store';
 import Input from './components/input';
 
 export
 default React.createClass({
+    getInitialState() {
+        return {
+            sidebarCollapsed: SidebarStore.getState().sidebarCollapsed
+        };
+    },
 
     componentWillMount() {
         this.shouldScrollBottom = true;
+        SidebarStore.listen(this.update);
     },
 
     componentDidMount() {
@@ -21,9 +28,19 @@ default React.createClass({
 
     componentWillUnmount() {
         window.removeEventListener('resize', this.checkAndSroll);
+        SidebarStore.unlisten(this.update);
     },
 
-    componentDidUpdate() {
+    update() {
+        if (this.isMounted()) {
+            this.setState({
+                sidebarCollapsed: SidebarStore.getState().sidebarCollapsed
+            });
+        }
+        console.log('sidebarCollapsed', this.state.sidebarCollapsed)
+    },
+
+    componentWillUpdate(nextState, nextProps) {
         if (this.shouldScrollBottom)
             this.refs['messages'].scrollTop = this.refs['messages'].scrollHeight;
     },

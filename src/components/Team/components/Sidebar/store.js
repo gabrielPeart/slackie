@@ -17,12 +17,9 @@ class SidebarStore {
 	}
 
 	onSidebarToggle() {
-		console.log("onSidebarToggle", this.sidebarCollapsed);
-		this.sidebarCollapsed = this.sidebarCollapsed ? false : true;
 		this.setState({
-			sidebarCollapsed: this.sidebarCollapsed
+			sidebarCollapsed: !this.sidebarCollapsed
 		});
-		console.log("New value", this.sidebarCollapsed);
 	}
 }
 

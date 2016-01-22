@@ -56,11 +56,19 @@ default React.createClass({
             sidebarCollapsed: SidebarStore.getState().sidebarCollapsed
         };
     },
+    componentWillMount() {
+        SidebarStore.listen(this.update);
+    },
+    componentWillUnmount() {
+        SidebarStore.unlisten(this.update);
+    },
     update() {
-        console.log("Update sidebar");
-        this.setState({
-            sidebarCollapsed: SidebarStore.getState().sidebarCollapsed
-        });
+    	if (this.isMounted()) {
+        	console.log("Update sidebar");
+        	this.setState({
+        	    sidebarCollapsed: SidebarStore.getState().sidebarCollapsed
+        	});
+    	}
     },
     getChannels(starred) {
         const team = this.props.team.slack;
