@@ -8,12 +8,19 @@
     overflow-y: auto;
     overflow-x: hidden;
 }
+.sidebar.collapsed .toggle-collapse-btn {
+    left: 6px;
+    right: auto;
+}
+.sidebar.collapsed li.active {
+    background-color: transparent;
+}
+
 .sidebar .toggle-collapse-btn {
     position: absolute;
     font-size: 19px;
     top: 0;
     right: 5px;
-    transition: transform 0.5s ease-in-out;
 }
 .sidebar .toggle-collapse-btn.rotate {
     transform: rotate(-180deg);

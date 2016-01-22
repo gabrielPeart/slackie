@@ -79,7 +79,7 @@ default React.createClass({
         let messages = []
         _.forEach(this.props.messages, msg => messages.push(msg));
         return (
-            <div className="page">
+            <div className={"page" + (this.state.sidebarCollapsed ? ' expanded' : '')}>
                 <div className="header">
                     <h1>{this.props.name}</h1>
                     <div className="topic-container">

@@ -18,6 +18,7 @@
 $TeamSelect-width: 70px;
 $ChannelSelect-width: 210px;
 $Page-width: $TeamSelect-width + $ChannelSelect-width; // - 100%
+$PageExpanded-width: $TeamSelect-width + 20;
 
 $Header-height: 44px;
 $ChatInput-height: 56px;
@@ -30,6 +31,10 @@ $MessagesContainer-height: $Header-height + $ChatInput-height + 5; // - 100%
     height: 100%;
     position: absolute;
     background-color: #ffffff;
+    transition: width 0.3s ease-in-out;
+}
+.page.expanded {
+    width: calc(100vw - #{$PageExpanded-width});
 }
 
 .page .header {
