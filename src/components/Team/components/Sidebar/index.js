@@ -24,6 +24,7 @@ const SidebarTab = React.createClass({
         SidebarStore.unlisten(this.update);
     },
     update() {
+        console.log("Update active");
         if (this.isMounted()) {
             this.setState({
                 activeChannel: SidebarStore.getState().activeChannel[this.props.slack]
@@ -50,6 +51,17 @@ const SidebarTab = React.createClass({
 
 export
 default React.createClass({
+    getInitialState() {
+        return {
+            sidebarCollapsed: SidebarStore.getState().sidebarCollapsed
+        };
+    },
+    update() {
+        console.log("Update sidebar");
+        this.setState({
+            sidebarCollapsed: SidebarStore.getState().sidebarCollapsed
+        });
+    },
     getChannels(starred) {
         const team = this.props.team.slack;
         var channels = [];
@@ -112,13 +124,14 @@ default React.createClass({
         return [].concat(starredChannels, starredGroups);
     },
     render() {
+        console.log(this.state);
         const Starred = this.getStarred();
         const Groups = this.getGroups();
         const Channels = this.getChannels();
         const DMs = this.getDMS();
         return (
-            <aside className="sidebar">
-                <div className="toggle-collapse-btn">
+            <aside className={"sidebar" + (this.state.sidebarCollapsed ? ' collapsed' : '')}>
+                <div className={"toggle-collapse-btn" + (this.state.sidebarCollapsed ? ' rotate' : '')} onClick={SidebarActions.sidebarToggle}>
                     <i className="ion ion-arrow-left-b"></i>
                 </div>
                 <div className="team-title">{this.props.team.slack.team.name}</div>
