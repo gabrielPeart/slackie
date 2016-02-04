@@ -53,7 +53,7 @@ default React.createClass({
                 <div className={"inline-description " + (this.props.thumb_url ? 'thumb' : '')}>
                     {thumb}
                     <div className='inline-description-inner'>
-                        {this.props.service_name ? <h2>this.props.service_name</h2> : ''}
+                        {this.props.service_name ? <h2>{this.props.service_name}</h2> : ''}
                         {title}
                         <p dangerouslySetInnerHTML={{__html: new messageFormatUtil(_.unescape(this.props.text).trim(), this.props.users, false).parsed }}/>
                         {fields}
